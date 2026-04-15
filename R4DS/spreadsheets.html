@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund">
+<title>20&nbsp; スプレッドシート – R for Data Science (2e)</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./databases.html" rel="next">
+<link href="./import.html" rel="prev">
+<link href="./cover.jpg" rel="icon" type="image/jpeg">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a8da12e74b29c2e7b17644f84b91567b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-674e3cc0c687a3cc22528ff3730883a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "-f"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script defer="" data-domain="r4ds.hadley.nz" src="https://plausible.io/js/plausible.js"></script><link rel="stylesheet" href="custom.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./import.html">データの読み込み</a></li><li class="breadcrumb-item"><a href="./spreadsheets.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Data Science (2e)</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/hadley/r4ds/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ようこそ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface-2e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第2版へのまえがき</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">はじめに</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./whole-game.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの全体像</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">データ可視化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ワークフロー：基本</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">データ変形</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-style.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ワークフロー：コードスタイル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-tidy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">データの整然化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-scripts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">ワークフロー：スクリプトとプロジェクト</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データのインポート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-help.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">ワークフロー：助けを求める</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">可視化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./layers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">レイヤー</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./EDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">探索的データ分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">共有</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データ変形</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logicals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">論理ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">数値ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">文字列</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regexps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">正規表現</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ファクター</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datetimes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">日付と時刻</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">欠損値</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">結合</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの読み込み</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./spreadsheets.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Arrow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rectangling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">階層データ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./webscraping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">プログラミング</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">関数</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">反復</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./base-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">ベースRへのフィールドガイド</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./communicate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">共有</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto-formats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Quartoの出力形式</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB" id="toc-はじめに" class="nav-link active" data-scroll-target="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB"><span class="header-section-number">20.1</span> はじめに</a></li>
+  <li>
+<a href="#excel" id="toc-excel" class="nav-link" data-scroll-target="#excel"><span class="header-section-number">20.2</span> Excel</a>
+  <ul class="collapse">
+<li><a href="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99" id="toc-事前準備" class="nav-link" data-scroll-target="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99"><span class="header-section-number">20.2.1</span> 事前準備</a></li>
+  <li><a href="#%E3%81%AF%E3%81%98%E3%82%81%E6%96%B9" id="toc-はじめ方" class="nav-link" data-scroll-target="#%E3%81%AF%E3%81%98%E3%82%81%E6%96%B9"><span class="header-section-number">20.2.2</span> はじめ方</a></li>
+  <li><a href="#sec-reading-spreadsheets-excel" id="toc-sec-reading-spreadsheets-excel" class="nav-link" data-scroll-target="#sec-reading-spreadsheets-excel"><span class="header-section-number">20.2.3</span> Excel スプレッドシートの読み込み</a></li>
+  <li><a href="#%E3%83%AF%E3%83%BC%E3%82%AF%E3%82%B7%E3%83%BC%E3%83%88%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" id="toc-ワークシートの読み込み" class="nav-link" data-scroll-target="#%E3%83%AF%E3%83%BC%E3%82%AF%E3%82%B7%E3%83%BC%E3%83%88%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF"><span class="header-section-number">20.2.4</span> ワークシートの読み込み</a></li>
+  <li><a href="#%E3%82%B7%E3%83%BC%E3%83%88%E3%81%AE%E4%B8%80%E9%83%A8%E3%82%92%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%82%80" id="toc-シートの一部を読み込む" class="nav-link" data-scroll-target="#%E3%82%B7%E3%83%BC%E3%83%88%E3%81%AE%E4%B8%80%E9%83%A8%E3%82%92%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%82%80"><span class="header-section-number">20.2.5</span> シートの一部を読み込む</a></li>
+  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E5%9E%8B" id="toc-データ型" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E5%9E%8B"><span class="header-section-number">20.2.6</span> データ型</a></li>
+  <li><a href="#sec-writing-to-excel" id="toc-sec-writing-to-excel" class="nav-link" data-scroll-target="#sec-writing-to-excel"><span class="header-section-number">20.2.7</span> Excel への書き出し</a></li>
+  <li><a href="#%E6%9B%B8%E5%BC%8F%E8%A8%AD%E5%AE%9A%E3%81%95%E3%82%8C%E3%81%9F%E5%87%BA%E5%8A%9B" id="toc-書式設定された出力" class="nav-link" data-scroll-target="#%E6%9B%B8%E5%BC%8F%E8%A8%AD%E5%AE%9A%E3%81%95%E3%82%8C%E3%81%9F%E5%87%BA%E5%8A%9B"><span class="header-section-number">20.2.8</span> 書式設定された出力</a></li>
+  <li><a href="#%E6%BC%94%E7%BF%92%E5%95%8F%E9%A1%8C" id="toc-演習問題" class="nav-link" data-scroll-target="#%E6%BC%94%E7%BF%92%E5%95%8F%E9%A1%8C"><span class="header-section-number">20.2.9</span> 演習問題</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#google-%E3%82%B9%E3%83%97%E3%83%AC%E3%83%83%E3%83%89%E3%82%B7%E3%83%BC%E3%83%88" id="toc-google-スプレッドシート" class="nav-link" data-scroll-target="#google-%E3%82%B9%E3%83%97%E3%83%AC%E3%83%83%E3%83%89%E3%82%B7%E3%83%BC%E3%83%88"><span class="header-section-number">20.3</span> Google スプレッドシート</a>
+  <ul class="collapse">
+<li><a href="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99-1" id="toc-事前準備-1" class="nav-link" data-scroll-target="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99-1"><span class="header-section-number">20.3.1</span> 事前準備</a></li>
+  <li><a href="#%E3%81%AF%E3%81%98%E3%82%81%E6%96%B9-1" id="toc-はじめ方-1" class="nav-link" data-scroll-target="#%E3%81%AF%E3%81%98%E3%82%81%E6%96%B9-1"><span class="header-section-number">20.3.2</span> はじめ方</a></li>
+  <li><a href="#google-%E3%82%B9%E3%83%97%E3%83%AC%E3%83%83%E3%83%89%E3%82%B7%E3%83%BC%E3%83%88%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" id="toc-google-スプレッドシートの読み込み" class="nav-link" data-scroll-target="#google-%E3%82%B9%E3%83%97%E3%83%AC%E3%83%83%E3%83%89%E3%82%B7%E3%83%BC%E3%83%88%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF"><span class="header-section-number">20.3.3</span> Google スプレッドシートの読み込み</a></li>
+  <li><a href="#google-%E3%82%B9%E3%83%97%E3%83%AC%E3%83%83%E3%83%89%E3%82%B7%E3%83%BC%E3%83%88%E3%81%B8%E3%81%AE%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97" id="toc-google-スプレッドシートへの書き出し" class="nav-link" data-scroll-target="#google-%E3%82%B9%E3%83%97%E3%83%AC%E3%83%83%E3%83%89%E3%82%B7%E3%83%BC%E3%83%88%E3%81%B8%E3%81%AE%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97"><span class="header-section-number">20.3.4</span> Google スプレッドシートへの書き出し</a></li>
+  <li><a href="#%E8%AA%8D%E8%A8%BC" id="toc-認証" class="nav-link" data-scroll-target="#%E8%AA%8D%E8%A8%BC"><span class="header-section-number">20.3.5</span> 認証</a></li>
+  <li><a href="#%E6%BC%94%E7%BF%92%E5%95%8F%E9%A1%8C-1" id="toc-演習問題-1" class="nav-link" data-scroll-target="#%E6%BC%94%E7%BF%92%E5%95%8F%E9%A1%8C-1"><span class="header-section-number">20.3.6</span> 演習問題</a></li>
+  </ul>
+</li>
+  <li><a href="#%E3%81%BE%E3%81%A8%E3%82%81" id="toc-まとめ" class="nav-link" data-scroll-target="#%E3%81%BE%E3%81%A8%E3%82%81"><span class="header-section-number">20.4</span> まとめ</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/spreadsheets.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./import.html">データの読み込み</a></li><li class="breadcrumb-item"><a href="./spreadsheets.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-import-spreadsheets" class="quarto-section-identifier"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="はじめに" class="level2" data-number="20.1"><h2 data-number="20.1" class="anchored" data-anchor-id="はじめに">
+<span class="header-section-number">20.1</span> はじめに</h2>
+<p><a href="data-import.html" class="quarto-xref"><span>Chapter 7</span></a> では、<code>.csv</code> や <code>.tsv</code> といったプレーンテキストファイルからのデータインポートについて学びました。 ここでは、Excel スプレッドシートや Google スプレッドシートからデータを取り出す方法を学びます。 これは <a href="data-import.html" class="quarto-xref"><span>Chapter 7</span></a> で学んだことの多くを土台にしていますが、スプレッドシートのデータを扱う際の追加の考慮事項や複雑さについても議論します。 もしあなたや共同作業者がデータの整理にスプレッドシートを使用している場合は、Karl Broman と Kara Woo による論文「Data Organization in Spreadsheets」（<a href="https://doi.org/10.1080/00031305.2017.1375989">https://doi.org/10.1080/00031305.2017.1375989</a>）を読むことを強くお勧めします。 この論文で紹介されているベストプラクティスは、スプレッドシートから R にデータをインポートして分析や可視化を行う際の多くの悩みを解決してくれるでしょう。</p>
+</section><section id="excel" class="level2" data-number="20.2"><h2 data-number="20.2" class="anchored" data-anchor-id="excel">
+<span class="header-section-number">20.2</span> Excel</h2>
+<p>Microsoft Excel は、スプレッドシートファイル内のワークシートにデータが整理されている、広く使用されているスプレッドシートソフトウェアプログラムです。</p>
+<section id="事前準備" class="level3" data-number="20.2.1"><h3 data-number="20.2.1" class="anchored" data-anchor-id="事前準備">
+<span class="header-section-number">20.2.1</span> 事前準備</h3>
+<p>このセクションでは、<strong>readxl</strong> パッケージを使用して R で Excel スプレッドシートからデータを読み込む方法を学びます。 このパッケージは tidyverse のコアパッケージではないため、明示的にロードする必要がありますが、tidyverse パッケージをインストールすると自動的にインストールされます。 後ほど、Excel スプレッドシートを作成できる <strong>writexl</strong> パッケージも使用します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'readxl' was built under R version 4.5.3</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.5.3</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ropensci.r-universe.dev/writexl">writexl</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'writexl' was built under R version 4.5.3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="はじめ方" class="level3" data-number="20.2.2"><h3 data-number="20.2.2" class="anchored" data-anchor-id="はじめ方">
+<span class="header-section-number">20.2.2</span> はじめ方</h3>
+<p>readxl のほとんどの関数を使用すると、Excel スプレッドシートを R に読み込むことができます。</p>
+<ul>
+<li>
+<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xls()</a></code> は、<code>xls</code> 形式の Excel ファイルを読み込みます。</li>
+<li>
+<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx()</a></code> は、<code>xlsx</code> 形式の Excel ファイルを読み込みます。</li>
+<li>
+<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> は、<code>xls</code> と <code>xlsx</code> の両方の形式のファイルを読み込むことができます。入力に基づいてファイル形式を推測します。</li>
+</ul>
+<p>これらの関数はすべて、以前に紹介した他の種類のファイルを読み込むための関数（例：<code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code>、<code><a href="https://readr.tidyverse.org/reference/read_table.html">read_table()</a></code> など）と同様の構文を持っています。 この章の残りの部分では、<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> の使用に焦点を当てます。</p>
+</section><section id="sec-reading-spreadsheets-excel" class="level3" data-number="20.2.3"><h3 data-number="20.2.3" class="anchored" data-anchor-id="sec-reading-spreadsheets-excel">
+<span class="header-section-number">20.2.3</span> Excel スプレッドシートの読み込み</h3>
+<p><a href="#fig-students-excel" class="quarto-xref">Figure&nbsp;<span>20.1</span></a> は、R に読み込もうとしているスプレッドシートが Excel でどのように見えるかを示しています。 このスプレッドシートは、Excel ファイルとして <a href="https://docs.google.com/spreadsheets/d/1V1nPp1tzOuutXFLb3G9Eyxi3qxeEhnOXUzL5_BcCQ0w/">https://docs.google.com/spreadsheets/d/1V1nPp1tzOuutXFLb3G9Eyxi3qxeEhnOXUzL5_BcCQ0w/</a> からダウンロードできます。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-students-excel" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Excelでの students スプレッドシートの様子。 スプレッドシートには 6 人の学生に関する情報（ID、フルネーム、好きな食べ物、 食事プラン、年齢）が含まれています。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-students-excel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="screenshots/import-spreadsheets-students.png" class="img-fluid figure-img" alt="Excelでの students スプレッドシートの様子。 スプレッドシートには 6 人の学生に関する情報（ID、フルネーム、好きな食べ物、 食事プラン、年齢）が含まれています。" width="1200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-students-excel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20.1: Excelでの students.xlsx という名前のスプレッドシート。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p><code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> の最初の引数は、読み込むファイルへのパスです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">students</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/students.xlsx"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> は、ファイルを tibble として読み込みます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">students</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   `Student ID` `Full Name`      favourite.food     mealPlan            AGE  </span></span>
+<span><span class="co">#&gt;          &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1            1 Sunil Huffmann   Strawberry yoghurt Lunch only          4    </span></span>
+<span><span class="co">#&gt; 2            2 Barclay Lynn     French fries       Lunch only          5    </span></span>
+<span><span class="co">#&gt; 3            3 Jayendra Lyne    N/A                Breakfast and lunch 7    </span></span>
+<span><span class="co">#&gt; 4            4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt; </span></span>
+<span><span class="co">#&gt; 5            5 Chidiegwu Dunkel Pizza              Breakfast and lunch five </span></span>
+<span><span class="co">#&gt; 6            6 Güvenç Attila    Ice cream          Lunch only          6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>データには 6 人の学生が含まれており、各学生に対して 5 つの変数があります。 しかし、このデータセットには対処したい点がいくつかあります。</p>
+<ol type="1">
+<li>列名がバラバラです。 一貫した形式に従った列名を提供できます。<code>col_names</code> 引数を使用して <code>snake_case</code>（スネークケース）にすることをお勧めします。</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span></span>
+<span>  <span class="st">"data/students.xlsx"</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"full_name"</span>, <span class="st">"favourite_food"</span>, <span class="st">"meal_plan"</span>, <span class="st">"age"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 5</span></span>
+<span><span class="co">#&gt;   student_id full_name        favourite_food     meal_plan           age  </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 Student ID Full Name        favourite.food     mealPlan            AGE  </span></span>
+<span><span class="co">#&gt; 2 1          Sunil Huffmann   Strawberry yoghurt Lunch only          4    </span></span>
+<span><span class="co">#&gt; 3 2          Barclay Lynn     French fries       Lunch only          5    </span></span>
+<span><span class="co">#&gt; 4 3          Jayendra Lyne    N/A                Breakfast and lunch 7    </span></span>
+<span><span class="co">#&gt; 5 4          Leon Rossini     Anchovies          Lunch only          &lt;NA&gt; </span></span>
+<span><span class="co">#&gt; 6 5          Chidiegwu Dunkel Pizza              Breakfast and lunch five </span></span>
+<span><span class="co">#&gt; 7 6          Güvenç Attila    Ice cream          Lunch only          6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>残念ながら、これだけではうまくいきませんでした。
+目的の変数名は得られましたが、以前のヘッダー行がデータの最初の観測値として表示されてしまっています。
+`skip` 引数を使用して、その行を明示的にスキップできます。</code></pre>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span></span>
+<span>  <span class="st">"data/students.xlsx"</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"full_name"</span>, <span class="st">"favourite_food"</span>, <span class="st">"meal_plan"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   student_id full_name        favourite_food     meal_plan           age  </span></span>
+<span><span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4    </span></span>
+<span><span class="co">#&gt; 2          2 Barclay Lynn     French fries       Lunch only          5    </span></span>
+<span><span class="co">#&gt; 3          3 Jayendra Lyne    N/A                Breakfast and lunch 7    </span></span>
+<span><span class="co">#&gt; 4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt; </span></span>
+<span><span class="co">#&gt; 5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five </span></span>
+<span><span class="co">#&gt; 6          6 Güvenç Attila    Ice cream          Lunch only          6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li>
+<code>favourite_food</code> 列では、観測値の 1 つが <code>N/A</code> になっています。これは「利用不可（not available）」を意味しますが、現在は <code>NA</code> として認識されていません（この <code>N/A</code> と、リストの 4 番目の学生の年齢との対比に注目してください）。 <code>na</code> 引数を使用して、どの文字列を <code>NA</code> として認識させるかを指定できます。 デフォルトでは、<code>""</code>（空の文字列、またはスプレッドシートから読み込む場合は、空のセルまたは式 <code>=NA()</code> が入ったセル）のみが <code>NA</code> として認識されます。</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span></span>
+<span>  <span class="st">"data/students.xlsx"</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"full_name"</span>, <span class="st">"favourite_food"</span>, <span class="st">"meal_plan"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"N/A"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   student_id full_name        favourite_food     meal_plan           age  </span></span>
+<span><span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4    </span></span>
+<span><span class="co">#&gt; 2          2 Barclay Lynn     French fries       Lunch only          5    </span></span>
+<span><span class="co">#&gt; 3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and lunch 7    </span></span>
+<span><span class="co">#&gt; 4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt; </span></span>
+<span><span class="co">#&gt; 5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five </span></span>
+<span><span class="co">#&gt; 6          6 Güvenç Attila    Ice cream          Lunch only          6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="3" type="1">
+<li>もう 1 つの残っている問題は、<code>age</code> が文字変数として読み込まれていますが、本来は数値であるべきだということです。 フラットファイルからデータを読み込むための <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> などと同様に、<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> に <code>col_types</code> 引数を渡して、読み込む変数の列型を指定できます。 ただし、構文は少し異なります。 選択肢は、<code>"skip"</code>、<code>"guess"</code>、<code>"logical"</code>、<code>"numeric"</code>、<code>"date"</code>、<code>"text"</code>、または <code>"list"</code> です。</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span></span>
+<span>  <span class="st">"data/students.xlsx"</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"full_name"</span>, <span class="st">"favourite_food"</span>, <span class="st">"meal_plan"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"N/A"</span><span class="op">)</span>,</span>
+<span>  col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"numeric"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"numeric"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Expecting numeric in E6 / R6C5: got 'five'</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   student_id full_name        favourite_food     meal_plan             age</span></span>
+<span><span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1          1 Sunil Huffmann   Strawberry yoghurt Lunch only              4</span></span>
+<span><span class="co">#&gt; 2          2 Barclay Lynn     French fries       Lunch only              5</span></span>
+<span><span class="co">#&gt; 3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and lunch     7</span></span>
+<span><span class="co">#&gt; 4          4 Leon Rossini     Anchovies          Lunch only             NA</span></span>
+<span><span class="co">#&gt; 5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch    NA</span></span>
+<span><span class="co">#&gt; 6          6 Güvenç Attila    Ice cream          Lunch only              6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>しかし、これも完全な結果ではありませんでした。
+`age` を数値として指定したことで、数値ではないエントリ（値が `five` だったもの）を含む 1 つのセルが `NA` に変換されてしまいました。
+この場合は、`age` を `"text"` として読み込み、データが R にロードされた後に変更を行うべきです。</code></pre>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">students</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span></span>
+<span>  <span class="st">"data/students.xlsx"</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"full_name"</span>, <span class="st">"favourite_food"</span>, <span class="st">"meal_plan"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"N/A"</span><span class="op">)</span>,</span>
+<span>  col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"numeric"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">students</span> <span class="op">&lt;-</span> <span class="va">students</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">age</span> <span class="op">==</span> <span class="st">"five"</span>, <span class="st">"5"</span>, <span class="va">age</span><span class="op">)</span>,</span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_number.html">parse_number</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">students</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   student_id full_name        favourite_food     meal_plan             age</span></span>
+<span><span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1          1 Sunil Huffmann   Strawberry yoghurt Lunch only              4</span></span>
+<span><span class="co">#&gt; 2          2 Barclay Lynn     French fries       Lunch only              5</span></span>
+<span><span class="co">#&gt; 3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and lunch     7</span></span>
+<span><span class="co">#&gt; 4          4 Leon Rossini     Anchovies          Lunch only             NA</span></span>
+<span><span class="co">#&gt; 5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch     5</span></span>
+<span><span class="co">#&gt; 6          6 Güvenç Attila    Ice cream          Lunch only              6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>望み通りの形式でデータを読み込むまでに、複数のステップと試行錯誤が必要でしたが、これは予想外のことではありません。 データサイエンスは反復的なプロセスであり、スプレッドシートからのデータ読み込みの反復プロセスは、他のプレーンテキストの矩形データファイルに比べてさらに退屈なものになる可能性があります。なぜなら、人間はスプレッドシートを単なるデータストレージとしてだけでなく、共有やコミュニケーションのためにも使用し、データを入力する傾向があるからです。 データを読み込んで確認するまで、データがどのようになっているかを正確に知る方法はありません。 まあ、実際には 1 つの方法があります。 Excel でファイルを開いて覗いてみることです。 もしそうするのであれば、Excel ファイルのコピーを作成して対話的に閲覧し、元のデータファイルはそのままにして、R にはその手つかずのファイルを読み込ませることをお勧めします。 これにより、検査中にスプレッドシート内の何かを誤って上書きしてしまうことがなくなります。 また、ここで行ったように、データを読み込み、中身を確認し、コードを調整し、再度読み込むという作業を、結果に満足するまで繰り返すことを恐れないでください。</p>
+</section><section id="ワークシートの読み込み" class="level3" data-number="20.2.4"><h3 data-number="20.2.4" class="anchored" data-anchor-id="ワークシートの読み込み">
+<span class="header-section-number">20.2.4</span> ワークシートの読み込み</h3>
+<p>スプレッドシートをフラットファイルと区別する重要な機能は、ワークシートと呼ばれる複数のシートという概念です。 <a href="#fig-penguins-islands" class="quarto-xref">Figure&nbsp;<span>20.2</span></a> は、複数のワークシートを持つ Excel スプレッドシートを示しています。 データは <strong>palmerpenguins</strong> パッケージからのもので、このスプレッドシートは Excel ファイルとして <a href="https://docs.google.com/spreadsheets/d/1aFu8lnD_g0yjF5O-K6SFgSEWiHPpgvFCF0NY9D6LXnY/">https://docs.google.com/spreadsheets/d/1aFu8lnD_g0yjF5O-K6SFgSEWiHPpgvFCF0NY9D6LXnY/</a> からダウンロードできます。 各ワークシートには、データが収集された異なる島のペンギンに関する情報が含まれています。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-penguins-islands" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Excelでの penguins スプレッドシートの様子。スプレッドシートには Torgersen Island、Biscoe Island、Dream Island の 3 つのワークシートがあります。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-penguins-islands-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="screenshots/import-spreadsheets-penguins-islands.png" class="img-fluid figure-img" alt="Excelでの penguins スプレッドシートの様子。スプレッドシートには Torgersen Island、Biscoe Island、Dream Island の 3 つのワークシートがあります。" width="1514">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-penguins-islands-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20.2: 3つのワークシートを含む Excel での penguins.xlsx という名前のスプレッドシート。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p><code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> の <code>sheet</code> 引数を使用して、スプレッドシートから単一のワークシートを読み込むことができます。 これまで私たちが頼ってきたデフォルトの設定は、最初のシートです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/penguins.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Torgersen Island"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 52 × 8</span></span>
+<span><span class="co">#&gt;   species island    bill_length_mm     bill_depth_mm      flipper_length_mm</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;              &lt;chr&gt;              &lt;chr&gt;            </span></span>
+<span><span class="co">#&gt; 1 Adelie  Torgersen 39.1               18.7               181              </span></span>
+<span><span class="co">#&gt; 2 Adelie  Torgersen 39.5               17.399999999999999 186              </span></span>
+<span><span class="co">#&gt; 3 Adelie  Torgersen 40.299999999999997 18                 195              </span></span>
+<span><span class="co">#&gt; 4 Adelie  Torgersen NA                 NA                 NA               </span></span>
+<span><span class="co">#&gt; 5 Adelie  Torgersen 36.700000000000003 19.3               193              </span></span>
+<span><span class="co">#&gt; 6 Adelie  Torgersen 39.299999999999997 20.6               190              </span></span>
+<span><span class="co">#&gt; # ℹ 46 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: body_mass_g &lt;chr&gt;, sex &lt;chr&gt;, year &lt;dbl&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>数値データを含んでいるように見えるいくつかの変数は、文字列 <code>"NA"</code> が真の <code>NA</code> として認識されていないため、文字として読み込まれます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins_torgersen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/penguins.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Torgersen Island"</span>, na <span class="op">=</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">penguins_torgersen</span></span>
+<span><span class="co">#&gt; # A tibble: 52 × 8</span></span>
+<span><span class="co">#&gt;   species island    bill_length_mm bill_depth_mm flipper_length_mm</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Adelie  Torgersen           39.1          18.7               181</span></span>
+<span><span class="co">#&gt; 2 Adelie  Torgersen           39.5          17.4               186</span></span>
+<span><span class="co">#&gt; 3 Adelie  Torgersen           40.3          18                 195</span></span>
+<span><span class="co">#&gt; 4 Adelie  Torgersen           NA            NA                  NA</span></span>
+<span><span class="co">#&gt; 5 Adelie  Torgersen           36.7          19.3               193</span></span>
+<span><span class="co">#&gt; 6 Adelie  Torgersen           39.3          20.6               190</span></span>
+<span><span class="co">#&gt; # ℹ 46 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: body_mass_g &lt;dbl&gt;, sex &lt;chr&gt;, year &lt;dbl&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>あるいは、<code><a href="https://readxl.tidyverse.org/reference/excel_sheets.html">excel_sheets()</a></code> を使用して Excel スプレッドシート内のすべてのワークシートに関する情報を取得し、関心のあるものを読み込むこともできます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/excel_sheets.html">excel_sheets</a></span><span class="op">(</span><span class="st">"data/penguins.xlsx"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Torgersen Island" "Biscoe Island"    "Dream Island"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ワークシートの名前がわかれば、<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> で個別に読み込むことができます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins_biscoe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/penguins.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Biscoe Island"</span>, na <span class="op">=</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span><span class="va">penguins_dream</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/penguins.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Dream Island"</span>, na <span class="op">=</span> <span class="st">"NA"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>このケースでは、完全なペンギンのデータセットがスプレッドシート内の 3 つのワークシートに分散しています。 各ワークシートの列数は同じですが、行数は異なります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">penguins_torgersen</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 52  8</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">penguins_biscoe</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 168   8</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">penguins_dream</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 124   8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これらは <code><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows()</a></code> で結合できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">penguins_torgersen</span>, <span class="va">penguins_biscoe</span>, <span class="va">penguins_dream</span><span class="op">)</span></span>
+<span><span class="va">penguins</span></span>
+<span><span class="co">#&gt; # A tibble: 344 × 8</span></span>
+<span><span class="co">#&gt;   species island    bill_length_mm bill_depth_mm flipper_length_mm</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Adelie  Torgersen           39.1          18.7               181</span></span>
+<span><span class="co">#&gt; 2 Adelie  Torgersen           39.5          17.4               186</span></span>
+<span><span class="co">#&gt; 3 Adelie  Torgersen           40.3          18                 195</span></span>
+<span><span class="co">#&gt; 4 Adelie  Torgersen           NA            NA                  NA</span></span>
+<span><span class="co">#&gt; 5 Adelie  Torgersen           36.7          19.3               193</span></span>
+<span><span class="co">#&gt; 6 Adelie  Torgersen           39.3          20.6               190</span></span>
+<span><span class="co">#&gt; # ℹ 338 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: body_mass_g &lt;dbl&gt;, sex &lt;chr&gt;, year &lt;dbl&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><a href="iteration.html" class="quarto-xref"><span>Chapter 26</span></a> では、このようなタスクを繰り返しの多いコードなしで行う方法について説明します。</p>
+</section><section id="シートの一部を読み込む" class="level3" data-number="20.2.5"><h3 data-number="20.2.5" class="anchored" data-anchor-id="シートの一部を読み込む">
+<span class="header-section-number">20.2.5</span> シートの一部を読み込む</h3>
+<p>多くの人が Excel スプレッドシートをデータストレージとしてだけでなくプレゼンテーション用にも使用するため、スプレッドシートの中に R に読み込みたいデータの一部ではないセルエントリが含まれていることはよくあります。 <a href="#fig-deaths-excel" class="quarto-xref">Figure&nbsp;<span>20.3</span></a> はそのようなスプレッドシートを示しています。シートの中央にはデータフレームのように見えるものがありますが、データの上下のセルには余分なテキストがあります。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-deaths-excel" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Excelでの deaths スプレッドシートの様子。スプレッドシートの上部には データ以外の情報を含む 4 つの行があります。 'For the sake of consistency in the data layout, which is really a beautiful thing, I will keep making notes up here.' というテキストが、これら上部 4 行のセルに分散しています。 その下に、10 人の有名人の死に関する情報（名前、職業、年齢、子供の有無、 生年月日、命日）を含むデータフレームがあります。 下部には、さらに 4 行のデータ以外の情報があります。 'This has been really fun, but we're signing off now!' というテキストが、これら下部 4 行のセルに分散しています。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-deaths-excel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="screenshots/import-spreadsheets-deaths.png" class="img-fluid figure-img" alt="Excelでの deaths スプレッドシートの様子。スプレッドシートの上部には データ以外の情報を含む 4 つの行があります。 'For the sake of consistency in the data layout, which is really a beautiful thing, I will keep making notes up here.' というテキストが、これら上部 4 行のセルに分散しています。 その下に、10 人の有名人の死に関する情報（名前、職業、年齢、子供の有無、 生年月日、命日）を含むデータフレームがあります。 下部には、さらに 4 行のデータ以外の情報があります。 'This has been really fun, but we're signing off now!' というテキストが、これら下部 4 行のセルに分散しています。" width="1614">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deaths-excel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20.3: Excelでの deaths.xlsx という名前のスプレッドシート。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>このスプレッドシートは、readxl パッケージで提供されているサンプルスプレッドシートの 1 つです。 <code><a href="https://readxl.tidyverse.org/reference/readxl_example.html">readxl_example()</a></code> 関数を使用して、パッケージがインストールされているディレクトリ内のシステム上にあるスプレッドシートの場所を特定できます。 この関数はスプレッドシートへのパスを返し、それを通常どおり <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> で使用できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">deaths_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/readxl_example.html">readxl_example</a></span><span class="op">(</span><span class="st">"deaths.xlsx"</span><span class="op">)</span></span>
+<span><span class="va">deaths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">deaths_path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; New names:</span></span>
+<span><span class="co">#&gt; • `` -&gt; `...2`</span></span>
+<span><span class="co">#&gt; • `` -&gt; `...3`</span></span>
+<span><span class="co">#&gt; • `` -&gt; `...4`</span></span>
+<span><span class="co">#&gt; • `` -&gt; `...5`</span></span>
+<span><span class="co">#&gt; • `` -&gt; `...6`</span></span>
+<span><span class="va">deaths</span></span>
+<span><span class="co">#&gt; # A tibble: 18 × 6</span></span>
+<span><span class="co">#&gt;   `Lots of people`    ...2       ...3  ...4     ...5          ...6           </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;               &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;          </span></span>
+<span><span class="co">#&gt; 1 simply cannot resi… &lt;NA&gt;       &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;          some notes     </span></span>
+<span><span class="co">#&gt; 2 at                  the        top   &lt;NA&gt;     of            their spreadsh…</span></span>
+<span><span class="co">#&gt; 3 or                  merging    &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;          cells          </span></span>
+<span><span class="co">#&gt; 4 Name                Profession Age   Has kids Date of birth Date of death  </span></span>
+<span><span class="co">#&gt; 5 David Bowie         musician   69    TRUE     17175         42379          </span></span>
+<span><span class="co">#&gt; 6 Carrie Fisher       actor      60    TRUE     20749         42731          </span></span>
+<span><span class="co">#&gt; # ℹ 12 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>上部の 3 行と下部の 4 行はデータフレームの一部ではありません。 <code>skip</code> 引数と <code>n_max</code> 引数を使用してこれらの余分な行を除去することも可能ですが、セル範囲を使用することをお勧めします。 Excel では、左上のセルは <code>A1</code> です。 列を右に移動するにつれて、セルのラベルはアルファベット順に進みます（例：<code>B1</code>、<code>C1</code> など）。 そして、列を下に移動するにつれて、セルラベルの数字が増加します（例：<code>A2</code>、<code>A3</code> など）。</p>
+<p>ここで読み込みたいデータはセル <code>A5</code> から始まり、セル <code>F15</code> で終わります。 スプレッドシートの表記では、これは <code>A5:F15</code> であり、これを <code>range</code> 引数に渡します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">deaths_path</span>, range <span class="op">=</span> <span class="st">"A5:F15"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 6</span></span>
+<span><span class="co">#&gt;   Name          Profession   Age `Has kids` `Date of birth`    </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt;      &lt;dttm&gt;             </span></span>
+<span><span class="co">#&gt; 1 David Bowie   musician      69 TRUE       1947-01-08 00:00:00</span></span>
+<span><span class="co">#&gt; 2 Carrie Fisher actor         60 TRUE       1956-10-21 00:00:00</span></span>
+<span><span class="co">#&gt; 3 Chuck Berry   musician      90 TRUE       1926-10-18 00:00:00</span></span>
+<span><span class="co">#&gt; 4 Bill Paxton   actor         61 TRUE       1955-05-17 00:00:00</span></span>
+<span><span class="co">#&gt; 5 Prince        musician      57 TRUE       1958-06-07 00:00:00</span></span>
+<span><span class="co">#&gt; 6 Alan Rickman  actor         69 FALSE      1946-02-21 00:00:00</span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: `Date of death` &lt;dttm&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="データ型" class="level3" data-number="20.2.6"><h3 data-number="20.2.6" class="anchored" data-anchor-id="データ型">
+<span class="header-section-number">20.2.6</span> データ型</h3>
+<p>CSV ファイルでは、すべての値は文字列です。 これは必ずしもデータに対して正確ではありませんが、すべてが文字列であるという点はシンプルです。 Excel スプレッドシートの基になるデータはより複雑です。 セルは次の 4 つのいずれかになります。</p>
+<ul>
+<li>論理値（<code>TRUE</code>、<code>FALSE</code>、または <code>NA</code>）。</li>
+<li>数値（“10” や “10.5” など）。</li>
+<li>日時（“11/1/21” や “11/1/21 3:00 PM” のように時刻を含むこともできます）。</li>
+<li>テキスト文字列（“ten” など）。</li>
+</ul>
+<p>スプレッドシートのデータを扱う際は、基になるデータがセルに表示されているものと大きく異なる可能性があることを念頭に置くことが重要です。 たとえば、Excel には整数という概念がありません。 すべての数値は浮動小数点として保存されますが、カスタマイズした小数点以下の桁数でデータを表示することを選択できます。 同様に、日付は実際には数値として保存されており、具体的には 1900 年 1 月 1 日からの経過日数です。 Excel でフォーマットを適用することで、日付の表示方法をカスタマイズできます。 紛らわしいことに、数値のように見えて実際には文字列であるものを持つことも可能です（例：Excel のセルに <code>'10</code> と入力するなど）。 基になるデータの保存方法と表示方法の違いにより、データが R に読み込まれたときに驚くようなことが起こる可能性があります。 デフォルトでは、readxl は特定の列のデータ型を推測します。 推奨されるワークフローは、readxl に列型を推測させ、推測された列型に満足できるかを確認し、満足できない場合は戻って <a href="#sec-reading-spreadsheets-excel" class="quarto-xref"><span>Section 20.2.3</span></a> で示したように <code>col_types</code> を指定して再インポートすることです。 もう 1 つの課題は、Excel スプレッドシートの中に、数値、テキスト、日付などの型が混在している列がある場合です。 データを R にインポートする際、readxl は何らかの決定を下す必要があります。 このような場合、この列の型を <code>"list"</code> に設定すると、列を長さ 1 のベクトルのリストとして読み込み、各ベクトルの要素の型が推測されます。</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>データの保存方法として、セルの背景色やテキストが太字かどうかなど、より特殊な方法が使われている場合があります。 そのような場合には、<a href="https://nacnudus.github.io/tidyxl/">tidyxl パッケージ</a>が役立つかもしれません。 Excel からの非表形式データの操作戦略については、<a href="https://nacnudus.github.io/spreadsheet-munging-strategies/">https://nacnudus.github.io/spreadsheet-munging-strategies/</a> を参照してください。</p>
+</div>
+</div>
+</div>
+</section><section id="sec-writing-to-excel" class="level3" data-number="20.2.7"><h3 data-number="20.2.7" class="anchored" data-anchor-id="sec-writing-to-excel">
+<span class="header-section-number">20.2.7</span> Excel への書き出し</h3>
+<p>書き出すための小さなデータフレームを作成してみましょう。 <code>item</code> は因子（factor）型であり、<code>quantity</code> は整数型であることに注意してください。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bake_sale</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  item     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"brownie"</span>, <span class="st">"cupcake"</span>, <span class="st">"cookie"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  quantity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bake_sale</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span><span class="co">#&gt;   item    quantity</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 brownie       10</span></span>
+<span><span class="co">#&gt; 2 cupcake        5</span></span>
+<span><span class="co">#&gt; 3 cookie         8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><a href="https://docs.ropensci.org/writexl/">writexl パッケージ</a> の <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">write_xlsx()</a></code> 関数を使用して、データを Excel ファイルとしてディスクに書き戻すことができます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">write_xlsx</a></span><span class="op">(</span><span class="va">bake_sale</span>, path <span class="op">=</span> <span class="st">"data/bake-sale.xlsx"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><a href="#fig-bake-sale-excel" class="quarto-xref">Figure&nbsp;<span>20.4</span></a> は、Excel でデータがどのように見えるかを示しています。 列名が含まれ、太字になっていることに注目してください。 これらは、<code>col_names</code> 引数と <code>format_headers</code> 引数を <code>FALSE</code> に設定することでオフにできます。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-bake-sale-excel" class="quarto-float quarto-figure quarto-figure-center anchored" alt="以前に作成された、Excelでの菓子販売（bake sale）データフレーム。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bake-sale-excel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="screenshots/import-spreadsheets-bake-sale.png" class="img-fluid figure-img" alt="以前に作成された、Excelでの菓子販売（bake sale）データフレーム。" width="917">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bake-sale-excel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20.4: Excelでの bake-sale.xlsx という名前のスプレッドシート。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>CSV からの読み込みと同様に、データを読み戻すとデータ型に関する情報は失われます。 このため、Excel ファイルは中間結果のキャッシュ用としても信頼性が低くなります。 代替案については、<a href="data-import.html#sec-writing-to-a-file" class="quarto-xref"><span>Section 7.5</span></a> を参照してください。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/bake-sale.xlsx"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span><span class="co">#&gt;   item    quantity</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 brownie       10</span></span>
+<span><span class="co">#&gt; 2 cupcake        5</span></span>
+<span><span class="co">#&gt; 3 cookie         8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="書式設定された出力" class="level3" data-number="20.2.8"><h3 data-number="20.2.8" class="anchored" data-anchor-id="書式設定された出力">
+<span class="header-section-number">20.2.8</span> 書式設定された出力</h3>
+<p>writexl パッケージはシンプルな Excel スプレッドシートを書き出すための軽量なソリューションですが、スプレッドシート内のシートへの書き込みやスタイリングなどの追加機能に関心がある場合は、<a href="https://ycphs.github.io/openxlsx">openxlsx パッケージ</a> を使用することをお勧めします。 ここではこのパッケージの使用に関する詳細には触れませんが、openxlsx を使用して R から Excel に書き出されるデータのさらなるフォーマット機能についての広範な議論については、<a href="https://ycphs.github.io/openxlsx/articles/Formatting.html">https://ycphs.github.io/openxlsx/articles/Formatting.html</a> を読むことをお勧めします。 このパッケージは tidyverse の一部ではないため、関数やワークフローがなじみのないものに感じるかもしれないことに注意してください。 たとえば、関数名は camelCase（キャメルケース）であり、複数の関数をパイプラインで構成することはできず、引数の順序も tidyverse で一般的であるものとは異なります。 しかし、これは問題ありません。 あなたの R の学習と使用が本書の範囲を超えて広がるにつれて、特定の目標を達成するために使用するさまざまな R パッケージで使われている多くの異なるスタイルに遭遇することでしょう。 新しいパッケージで使われているコーディングスタイルに慣れるための良い方法は、関数のドキュメントで提供されている例を実行して、構文や出力形式の感覚をつかむこと、またパッケージに付属している可能性のある vignette（ビネット）を読むことです。</p>
+</section><section id="演習問題" class="level3" data-number="20.2.9"><h3 data-number="20.2.9" class="anchored" data-anchor-id="演習問題">
+<span class="header-section-number">20.2.9</span> 演習問題</h3>
+<ol type="1">
+<li>Excel ファイルで次のデータセットを作成し、<code>survey.xlsx</code> として保存してください。あるいは、<a href="https://docs.google.com/spreadsheets/d/1yc5gL-a2OOBr8M7B3IsDNX5uR17vBHOyWZq6xSTG2G8">ここ</a> から Excel ファイルとしてダウンロードすることもできます。</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="screenshots/import-spreadsheets-survey.png" class="img-fluid figure-img" alt="3つの列（group、subgroup、id）と12の行を持つスプレッドシート。 group列には、1（7つの結合された行にわたる）と2（5つの結合された行にわたる） の2つの値があります。subgroup列には、A（3つの結合された行にわたる）、 B（4つの結合された行にわたる）、A（2つの結合された行にわたる）、 B（3つの結合された行にわたる）の4つの値があります。 id列には、1から12までの12個の数値があります。" width="263"></p>
+</figure>
+</div>
+</div>
+</div>
+<pre><code>次に、`survey_id` を文字変数として、`n_pets` を数値変数として R に読み込んでください。</code></pre>
+<div class="cell">
+<pre><code>#&gt; # A tibble: 6 × 2
+#&gt;   survey_id n_pets
+#&gt;   &lt;chr&gt;      &lt;dbl&gt;
+#&gt; 1 1              0
+#&gt; 2 2              1
+#&gt; 3 3             NA
+#&gt; 4 4              2
+#&gt; 5 5              2
+#&gt; 6 6             NA</code></pre>
+</div>
+<ol start="2" type="1">
+<li>別の Excel ファイルで次のデータセットを作成し、<code>roster.xlsx</code> として保存してください。あるいは、<a href="https://docs.google.com/spreadsheets/d/1LgZ0Bkg9d_NK8uTdP2uHXm07kAlwx8-Ictf8NocebIE">ここ</a> から Excel ファイルとしてダウンロードすることもできます。</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="screenshots/import-spreadsheets-roster.png" class="img-fluid figure-img" alt="3つの列（group、subgroup、id）と12の行を持つスプレッドシート。 group列には、1（7つの結合された行にわたる）と2（5つの結合された行にわたる） の2つの値があります。 subgroup列には、A（3つの結合された行にわたる）、 B（4つの結合された行にわたる）、A（2つの結合された行にわたる）、 B（3つの結合された行にわたる）の4つの値があります。 id列には、1から12までの12個の数値があります。" width="255"></p>
+</figure>
+</div>
+</div>
+</div>
+<pre><code>次に、それを R に読み込んでください。結果のデータフレームは `roster` という名前にし、次のような見た目になるはずです。</code></pre>
+<div class="cell">
+<pre><code>#&gt; # A tibble: 12 × 3
+#&gt;    group subgroup    id
+#&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+#&gt;  1     1 A            1
+#&gt;  2     1 A            2
+#&gt;  3     1 A            3
+#&gt;  4     1 B            4
+#&gt;  5     1 B            5
+#&gt;  6     1 B            6
+#&gt;  7     1 B            7
+#&gt;  8     2 A            8
+#&gt;  9     2 A            9
+#&gt; 10     2 B           10
+#&gt; 11     2 B           11
+#&gt; 12     2 B           12</code></pre>
+</div>
+<ol start="3" type="1">
+<li>新しい Excel ファイルで次のデータセットを作成し、<code>sales.xlsx</code> として保存してください。あるいは、<a href="https://docs.google.com/spreadsheets/d/1oCqdXUNO8JR3Pca8fHfiz_WXWxMuZAp3YiYFaKze5V0">ここ</a> から Excel ファイルとしてダウンロードすることもできます。</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="screenshots/import-spreadsheets-sales.png" class="img-fluid figure-img" alt="2つの列と13の行を持つスプレッドシート。 最初の2行にはシートに関する情報を含むテキストがあります。 1行目には &quot;This file contains information on sales&quot; とあります。 2行目には &quot;Data are organized by brand name, and for each brand, we have the ID number for the item sold, and how many are sold.&quot; とあります。 その後、2つの空の行があり、その後に9行のデータがあります。" width="317"></p>
+</figure>
+</div>
+</div>
+</div>
+<pre><code>a. `sales.xlsx` を読み込んで `sales` として保存してください。データフレームは、列名を `id` と `n` とし、9 行である、次のような見た目になるはずです。</code></pre>
+<div class="cell">
+<pre><code>#&gt; # A tibble: 9 × 2
+#&gt;   id      n    
+#&gt;   &lt;chr&gt;   &lt;chr&gt;
+#&gt; 1 Brand 1 n    
+#&gt; 2 1234    8    
+#&gt; 3 8721    2    
+#&gt; 4 1822    3    
+#&gt; 5 Brand 2 n    
+#&gt; 6 3333    1    
+#&gt; 7 2156    3    
+#&gt; 8 3987    6    
+#&gt; 9 3216    5</code></pre>
+</div>
+<pre><code>b. さらに `sales` を変更して、3 つの列（`brand`、`id`、`n`）と 7 行のデータを持つ、次のような整然とした（tidy）形式にしてください。`id` と `n` は数値、`brand` は文字変数であることに注意してください。</code></pre>
+<div class="cell">
+<pre><code>#&gt; # A tibble: 7 × 3
+#&gt;   brand      id     n
+#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 Brand 1  1234     8
+#&gt; 2 Brand 1  8721     2
+#&gt; 3 Brand 1  1822     3
+#&gt; 4 Brand 2  3333     1
+#&gt; 5 Brand 2  2156     3
+#&gt; 6 Brand 2  3987     6
+#&gt; 7 Brand 2  3216     5</code></pre>
+</div>
+<ol start="4" type="1">
+<li><p><code>bake_sale</code> データフレームを再作成し、openxlsx パッケージの <code>write.xlsx()</code> 関数を使用して Excel ファイルに書き出してください。</p></li>
+<li><p><a href="data-import.html" class="quarto-xref"><span>Chapter 7</span></a> では、列名をスネークケースに変換するための <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">janitor::clean_names()</a></code> 関数について学びました。このセクションで以前に紹介した <code>students.xlsx</code> ファイルを読み込み、この関数を使用して列名を「クリーン」にしてください。</p></li>
+<li><p>拡張子が <code>.xlsx</code> のファイルを <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xls()</a></code> で読み込もうとすると何が起こりますか？</p></li>
+</ol></section></section><section id="google-スプレッドシート" class="level2" data-number="20.3"><h2 data-number="20.3" class="anchored" data-anchor-id="google-スプレッドシート">
+<span class="header-section-number">20.3</span> Google スプレッドシート</h2>
+<p>Google スプレッドシートも、広く使用されているスプレッドシートプログラムです。無料でウェブベースです。 Excel と同様に、Google スプレッドシートでもデータはスプレッドシートファイル内のワークシート（シートとも呼ばれます）に整理されています。</p>
+<section id="事前準備-1" class="level3" data-number="20.3.1"><h3 data-number="20.3.1" class="anchored" data-anchor-id="事前準備-1">
+<span class="header-section-number">20.3.1</span> 事前準備</h3>
+<p>このセクションでもスプレッドシートに焦点を当てますが、今回は <strong>googlesheets4</strong> パッケージを使用して Google スプレッドシートからデータを読み込みます。 このパッケージも tidyverse のコアパッケージではないため、明示的にロードする必要があります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://googlesheets4.tidyverse.org">googlesheets4</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>パッケージの名前について簡単に補足します。googlesheets4 は、Google スプレッドシートへの R インターフェースを提供するために <a href="https://developers.google.com/sheets/api/">Sheets API v4</a> の v4 を使用しているため、この名前になっています。</p>
+</section><section id="はじめ方-1" class="level3" data-number="20.3.2"><h3 data-number="20.3.2" class="anchored" data-anchor-id="はじめ方-1">
+<span class="header-section-number">20.3.2</span> はじめ方</h3>
+<p>googlesheets4 パッケージの主な関数は <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> で、URL またはファイル ID から Google スプレッドシートを読み込みます。 この関数は <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">range_read()</a></code> という名前でも使えます。</p>
+<p>また、<code><a href="https://googlesheets4.tidyverse.org/reference/gs4_create.html">gs4_create()</a></code> で新しいシートを最初から作成したり、<code><a href="https://googlesheets4.tidyverse.org/reference/sheet_write.html">sheet_write()</a></code> などで既存のシートに書き込んだりすることもできます。 このセクションでは、Excel のセクションと同じデータセットを使用して、Excel と Google スプレッドシートからデータを読み込むワークフローの類似点と相違点を明らかにします。 readxl と googlesheets4 パッケージはどちらも、<a href="data-import.html" class="quarto-xref"><span>Chapter 7</span></a> で見た <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> 関数を提供する readr パッケージの機能を模倣するように設計されています。 したがって、多くのタスクは単に <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> を <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> に置き換えるだけで達成できます。 ただし、Excel と Google スプレッドシートはまったく同じように動作するわけではないこともわかるでしょう。したがって、他のタスクでは関数呼び出しにさらなる更新が必要になる場合があります。</p>
+</section><section id="google-スプレッドシートの読み込み" class="level3" data-number="20.3.3"><h3 data-number="20.3.3" class="anchored" data-anchor-id="google-スプレッドシートの読み込み">
+<span class="header-section-number">20.3.3</span> Google スプレッドシートの読み込み</h3>
+<p><a href="#fig-students-googlesheets" class="quarto-xref">Figure&nbsp;<span>20.5</span></a> は、R に読み込もうとしているスプレッドシートが Google スプレッドシートでどのように見えるかを示しています。 これは <a href="#fig-students-excel" class="quarto-xref">Figure&nbsp;<span>20.1</span></a> と同じデータセットですが、Excel ではなく Google スプレッドシートに保存されています。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-students-googlesheets" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Google スプレッドシートでの students スプレッドシートの様子。スプレッドシートには 6 人の学生に関する情報（ID、フルネーム、好きな食べ物、食事プラン、年齢）が含まれています。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-students-googlesheets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="screenshots/import-googlesheets-students.png" class="img-fluid figure-img" alt="Google スプレッドシートでの students スプレッドシートの様子。スプレッドシートには 6 人の学生に関する情報（ID、フルネーム、好きな食べ物、食事プラン、年齢）が含まれています。" width="986">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-students-googlesheets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20.5: ブラウザウィンドウに表示された students という名前の Google スプレッドシート。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p><code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> の最初の引数は、読み込むファイルの URL で、tibble を返します。 <a href="https://docs.google.com/spreadsheets/d/1V1nPp1tzOuutXFLb3G9Eyxi3qxeEhnOXUzL5_BcCQ0w">https://docs.google.com/spreadsheets/d/1V1nPp1tzOuutXFLb3G9Eyxi3qxeEhnOXUzL5_BcCQ0w</a> これらの URL は扱うのがあまり快適ではないため、ID でシートを特定したくなることがよくあります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_deauth.html">gs4_deauth</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">students_sheet_id</span> <span class="op">&lt;-</span> <span class="st">"1V1nPp1tzOuutXFLb3G9Eyxi3qxeEhnOXUzL5_BcCQ0w"</span></span>
+<span><span class="va">students</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet</a></span><span class="op">(</span><span class="va">students_sheet_id</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ✔ Reading from students.</span></span>
+<span><span class="co">#&gt; ✔ Range Sheet1.</span></span>
+<span><span class="va">students</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   `Student ID` `Full Name`      favourite.food     mealPlan            AGE   </span></span>
+<span><span class="co">#&gt;          &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;list&gt;</span></span>
+<span><span class="co">#&gt; 1            1 Sunil Huffmann   Strawberry yoghurt Lunch only          &lt;dbl&gt; </span></span>
+<span><span class="co">#&gt; 2            2 Barclay Lynn     French fries       Lunch only          &lt;dbl&gt; </span></span>
+<span><span class="co">#&gt; 3            3 Jayendra Lyne    N/A                Breakfast and lunch &lt;dbl&gt; </span></span>
+<span><span class="co">#&gt; 4            4 Leon Rossini     Anchovies          Lunch only          &lt;NULL&gt;</span></span>
+<span><span class="co">#&gt; 5            5 Chidiegwu Dunkel Pizza              Breakfast and lunch &lt;chr&gt; </span></span>
+<span><span class="co">#&gt; 6            6 Güvenç Attila    Ice cream          Lunch only          &lt;dbl&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> で行ったのと同様に、<code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> に列名、NA 文字列、および列型を指定できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">students</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet</a></span><span class="op">(</span></span>
+<span>  <span class="va">students_sheet_id</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"full_name"</span>, <span class="st">"favourite_food"</span>, <span class="st">"meal_plan"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"N/A"</span><span class="op">)</span>,</span>
+<span>  col_types <span class="op">=</span> <span class="st">"dcccc"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; ✔ Reading from students.</span></span>
+<span><span class="co">#&gt; ✔ Range 2:10000000.</span></span>
+<span></span>
+<span><span class="va">students</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   student_id full_name        favourite_food     meal_plan           age  </span></span>
+<span><span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4    </span></span>
+<span><span class="co">#&gt; 2          2 Barclay Lynn     French fries       Lunch only          5    </span></span>
+<span><span class="co">#&gt; 3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and lunch 7    </span></span>
+<span><span class="co">#&gt; 4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt; </span></span>
+<span><span class="co">#&gt; 5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five </span></span>
+<span><span class="co">#&gt; 6          6 Güvenç Attila    Ice cream          Lunch only          6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ここでは、ショートコードを使用して列型を少し異なる方法で定義したことに注意してください。 たとえば、“dcccc” は “double, character, character, character, character”（数値[倍精度]、文字、文字、文字、文字）の略です。 Google スプレッドシートからも個別のシートを読み込むことが可能です。 <a href="https://pos.it/r4ds-penguins">penguins Google スプレッドシート</a> から “Torgersen Island” シートを読み込んでみましょう。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins_sheet_id</span> <span class="op">&lt;-</span> <span class="st">"1aFu8lnD_g0yjF5O-K6SFgSEWiHPpgvFCF0NY9D6LXnY"</span></span>
+<span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet</a></span><span class="op">(</span><span class="va">penguins_sheet_id</span>, sheet <span class="op">=</span> <span class="st">"Torgersen Island"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ✔ Reading from penguins.</span></span>
+<span><span class="co">#&gt; ✔ Range ''Torgersen Island''.</span></span>
+<span><span class="co">#&gt; # A tibble: 52 × 8</span></span>
+<span><span class="co">#&gt;   species island    bill_length_mm bill_depth_mm flipper_length_mm</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;list&gt;         &lt;list&gt;        &lt;list&gt;           </span></span>
+<span><span class="co">#&gt; 1 Adelie  Torgersen &lt;dbl [1]&gt;      &lt;dbl [1]&gt;     &lt;dbl [1]&gt;        </span></span>
+<span><span class="co">#&gt; 2 Adelie  Torgersen &lt;dbl [1]&gt;      &lt;dbl [1]&gt;     &lt;dbl [1]&gt;        </span></span>
+<span><span class="co">#&gt; 3 Adelie  Torgersen &lt;dbl [1]&gt;      &lt;dbl [1]&gt;     &lt;dbl [1]&gt;        </span></span>
+<span><span class="co">#&gt; 4 Adelie  Torgersen &lt;chr [1]&gt;      &lt;chr [1]&gt;     &lt;chr [1]&gt;        </span></span>
+<span><span class="co">#&gt; 5 Adelie  Torgersen &lt;dbl [1]&gt;      &lt;dbl [1]&gt;     &lt;dbl [1]&gt;        </span></span>
+<span><span class="co">#&gt; 6 Adelie  Torgersen &lt;dbl [1]&gt;      &lt;dbl [1]&gt;     &lt;dbl [1]&gt;        </span></span>
+<span><span class="co">#&gt; # ℹ 46 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: body_mass_g &lt;list&gt;, sex &lt;chr&gt;, year &lt;dbl&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://googlesheets4.tidyverse.org/reference/sheet_properties.html">sheet_names()</a></code> を使用して、Google スプレッドシート内のすべてのシートのリストを取得できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/sheet_properties.html">sheet_names</a></span><span class="op">(</span><span class="va">penguins_sheet_id</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Torgersen Island" "Biscoe Island"    "Dream Island"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>最後に、<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> と同様に、<code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> で <code>range</code> を定義することで Google スプレッドシートの一部を読み込むことができます。 以下の例では、googlesheets4 パッケージに付属しているサンプルの Google スプレッドシートを特定するために <code><a href="https://googlesheets4.tidyverse.org/reference/gs4_examples.html">gs4_example()</a></code> 関数を使用していることにも注意してください。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">deaths_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_examples.html">gs4_example</a></span><span class="op">(</span><span class="st">"deaths"</span><span class="op">)</span></span>
+<span><span class="va">deaths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet</a></span><span class="op">(</span><span class="va">deaths_url</span>, range <span class="op">=</span> <span class="st">"A5:F15"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ✔ Reading from deaths.</span></span>
+<span><span class="co">#&gt; ✔ Range A5:F15.</span></span>
+<span><span class="va">deaths</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 6</span></span>
+<span><span class="co">#&gt;   Name          Profession   Age `Has kids` `Date of birth`    </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt;      &lt;dttm&gt;             </span></span>
+<span><span class="co">#&gt; 1 David Bowie   musician      69 TRUE       1947-01-08 00:00:00</span></span>
+<span><span class="co">#&gt; 2 Carrie Fisher actor         60 TRUE       1956-10-21 00:00:00</span></span>
+<span><span class="co">#&gt; 3 Chuck Berry   musician      90 TRUE       1926-10-18 00:00:00</span></span>
+<span><span class="co">#&gt; 4 Bill Paxton   actor         61 TRUE       1955-05-17 00:00:00</span></span>
+<span><span class="co">#&gt; 5 Prince        musician      57 TRUE       1958-06-07 00:00:00</span></span>
+<span><span class="co">#&gt; 6 Alan Rickman  actor         69 FALSE      1946-02-21 00:00:00</span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: `Date of death` &lt;dttm&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="google-スプレッドシートへの書き出し" class="level3" data-number="20.3.4"><h3 data-number="20.3.4" class="anchored" data-anchor-id="google-スプレッドシートへの書き出し">
+<span class="header-section-number">20.3.4</span> Google スプレッドシートへの書き出し</h3>
+<p><code><a href="https://googlesheets4.tidyverse.org/reference/sheet_write.html">write_sheet()</a></code> を使用して、R から Google スプレッドシートに書き込むことができます。 最初の引数は書き出すデータフレーム、2 番目の引数は書き込み先の Google スプレッドシートの名前（または他の識別子）です。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/sheet_write.html">write_sheet</a></span><span class="op">(</span><span class="va">bake_sale</span>, ss <span class="op">=</span> <span class="st">"bake-sale"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>データを Google スプレッドシート内の特定の（ワーク）シートに書き出したい場合は、<code>sheet</code> 引数でそれを指定することもできます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/sheet_write.html">write_sheet</a></span><span class="op">(</span><span class="va">bake_sale</span>, ss <span class="op">=</span> <span class="st">"bake-sale"</span>, sheet <span class="op">=</span> <span class="st">"Sales"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="認証" class="level3" data-number="20.3.5"><h3 data-number="20.3.5" class="anchored" data-anchor-id="認証">
+<span class="header-section-number">20.3.5</span> 認証</h3>
+<p>公開されている Google スプレッドシートからは、Google アカウントで認証せず、かつ <code><a href="https://googlesheets4.tidyverse.org/reference/gs4_deauth.html">gs4_deauth()</a></code> を使用することで読み取ることができますが、非公開のシートを読み取ったりシートに書き込んだりするには、googlesheets4 が <em>あなた</em> の Google スプレッドシートを表示および管理できるように認証が必要です。 認証が必要なシートを読み込もうとすると、googlesheets4 はウェブブラウザに誘導し、Google アカウントにサインインして、あなたに代わって Google スプレッドシートを操作する権限を付与するよう促します。 ただし、特定の Google アカウントや認証スコープなどを指定したい場合は、<code><a href="https://googlesheets4.tidyverse.org/reference/gs4_auth.html">gs4_auth()</a></code> で行うことができます（例：<code>gs4_auth(email = "mine@example.com")</code>）。これにより、特定のメールに関連付けられたトークンの使用が強制されます。 認証の詳細については、googlesheets4 の認証に関する vignette（<a href="https://googlesheets4.tidyverse.org/articles/auth.html">https://googlesheets4.tidyverse.org/articles/auth.html</a>）を読むことをお勧めします。</p>
+</section><section id="演習問題-1" class="level3" data-number="20.3.6"><h3 data-number="20.3.6" class="anchored" data-anchor-id="演習問題-1">
+<span class="header-section-number">20.3.6</span> 演習問題</h3>
+<ol type="1">
+<li><p>この章で以前に紹介した <code>students</code> データセットを、<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> および <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> 関数に追加の引数を渡さずに、Excel から、また Google スプレッドシートから読み込んでください。結果として得られる R のデータフレームはまったく同じですか？ もし違うなら、どのように違いますか？</p></li>
+<li><p><a href="https://pos.it/r4ds-survey">https://pos.it/r4ds-survey</a> から survey というタイトルの Google スプレッドシートを、<code>survey_id</code> を文字変数として、<code>n_pets</code> を数値変数として読み込んでください。</p></li>
+<li><p><a href="https://pos.it/r4ds-roster">https://pos.it/r4ds-roster</a> から roster というタイトルの Google スプレッドシートを読み込んでください。結果のデータフレームは <code>roster</code> という名前にし、次のような見た目になるはずです。</p></li>
+</ol>
+<div class="cell">
+<pre><code>#&gt; # A tibble: 12 × 3
+#&gt;    group subgroup    id
+#&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+#&gt;  1     1 A            1
+#&gt;  2     1 A            2
+#&gt;  3     1 A            3
+#&gt;  4     1 B            4
+#&gt;  5     1 B            5
+#&gt;  6     1 B            6
+#&gt;  7     1 B            7
+#&gt;  8     2 A            8
+#&gt;  9     2 A            9
+#&gt; 10     2 B           10
+#&gt; 11     2 B           11
+#&gt; 12     2 B           12</code></pre>
+</div>
+</section></section><section id="まとめ" class="level2" data-number="20.4"><h2 data-number="20.4" class="anchored" data-anchor-id="まとめ">
+<span class="header-section-number">20.4</span> まとめ</h2>
+<p>Microsoft Excel と Google スプレッドシートは、最も人気のあるスプレッドシートシステムの 2 つです。 Excel や Google スプレッドシートのファイルに保存されているデータを R から直接操作できることは、スーパーパワーです！ この章では、readxl パッケージの <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> を使用して Excel から、また googlesheets4 パッケージの <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet()</a></code> を使用して Google スプレッドシートから R にデータを読み込む方法を学びました。 これらの関数は互いに非常によく似た動作をし、列名、NA 文字列、読み込むファイルの先頭でスキップする行などを指定するための同様の引数を持っています。 さらに、どちらの関数もスプレッドシートから単一のシートを読み込むことが可能です。 一方で、Excel ファイルへの書き込みには別のパッケージと関数（<code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">writexl::write_xlsx()</a></code>）が必要ですが、Google スプレッドシートへの書き込みは googlesheets4 パッケージの <code><a href="https://googlesheets4.tidyverse.org/reference/sheet_write.html">write_sheet()</a></code> で行うことができます。 次の章では、別のデータソースについて学び、そのソースから R にデータを読み込む方法、つまりデータベースについて学びます。</p>
+
+
+</section></main><!-- /main --><script>
+	document.addEventListener('keydown', function (e) {
+		// 入力フォームの中では無効化
+		if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+		if (e.key === 'ArrowLeft') {
+			// 前のページへの「リンク（aタグ）」を探してクリック
+			const prev = document.querySelector('.nav-page-previous a');
+			if (prev) prev.click();
+		} else if (e.key === 'ArrowRight') {
+			// 次のページへの「リンク（aタグ）」を探してクリック
+			const next = document.querySelector('.nav-page-next a');
+			if (next) next.click();
+		}
+	});
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r4ds\.hadley\.nz\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./import.html" class="pagination-link" aria-label="データの読み込み">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">データの読み込み</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./databases.html" class="pagination-link" aria-label="データベース">
+        <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>R for Data Science (2e) was written by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/spreadsheets.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>

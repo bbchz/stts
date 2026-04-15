@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund">
+<title>24&nbsp; ウェブスクレイピング – R for Data Science (2e)</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./program.html" rel="next">
+<link href="./rectangling.html" rel="prev">
+<link href="./cover.jpg" rel="icon" type="image/jpeg">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a8da12e74b29c2e7b17644f84b91567b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-674e3cc0c687a3cc22528ff3730883a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "-f"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script defer="" data-domain="r4ds.hadley.nz" src="https://plausible.io/js/plausible.js"></script><link rel="stylesheet" href="custom.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./import.html">データの読み込み</a></li><li class="breadcrumb-item"><a href="./webscraping.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Data Science (2e)</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/hadley/r4ds/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ようこそ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface-2e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第2版へのまえがき</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">はじめに</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./whole-game.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの全体像</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">データ可視化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ワークフロー：基本</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">データ変形</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-style.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ワークフロー：コードスタイル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-tidy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">データの整然化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-scripts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">ワークフロー：スクリプトとプロジェクト</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データのインポート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-help.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">ワークフロー：助けを求める</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">可視化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./layers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">レイヤー</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./EDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">探索的データ分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">共有</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データ変形</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logicals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">論理ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">数値ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">文字列</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regexps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">正規表現</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ファクター</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datetimes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">日付と時刻</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">欠損値</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">結合</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの読み込み</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./spreadsheets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Arrow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rectangling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">階層データ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./webscraping.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">プログラミング</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">関数</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">反復</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./base-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">ベースRへのフィールドガイド</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./communicate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">共有</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto-formats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Quartoの出力形式</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB" id="toc-はじめに" class="nav-link active" data-scroll-target="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB"><span class="header-section-number">24.1</span> はじめに</a>
+  <ul class="collapse">
+<li><a href="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99" id="toc-事前準備" class="nav-link" data-scroll-target="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99"><span class="header-section-number">24.1.1</span> 事前準備</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E3%82%B9%E3%82%AF%E3%83%AC%E3%82%A4%E3%83%94%E3%83%B3%E3%82%B0%E3%81%AE%E5%80%AB%E7%90%86%E6%80%A7%E3%81%A8%E5%90%88%E6%B3%95%E6%80%A7" id="toc-スクレイピングの倫理性と合法性" class="nav-link" data-scroll-target="#%E3%82%B9%E3%82%AF%E3%83%AC%E3%82%A4%E3%83%94%E3%83%B3%E3%82%B0%E3%81%AE%E5%80%AB%E7%90%86%E6%80%A7%E3%81%A8%E5%90%88%E6%B3%95%E6%80%A7"><span class="header-section-number">24.2</span> スクレイピングの倫理性と合法性</a>
+  <ul class="collapse">
+<li><a href="#%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84" id="toc-利用規約" class="nav-link" data-scroll-target="#%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84"><span class="header-section-number">24.2.1</span> 利用規約</a></li>
+  <li><a href="#%E5%80%8B%E4%BA%BA%E3%82%92%E7%89%B9%E5%AE%9A%E3%81%A7%E3%81%8D%E3%82%8B%E6%83%85%E5%A0%B1" id="toc-個人を特定できる情報" class="nav-link" data-scroll-target="#%E5%80%8B%E4%BA%BA%E3%82%92%E7%89%B9%E5%AE%9A%E3%81%A7%E3%81%8D%E3%82%8B%E6%83%85%E5%A0%B1"><span class="header-section-number">24.2.2</span> 個人を特定できる情報</a></li>
+  <li><a href="#%E8%91%97%E4%BD%9C%E6%A8%A9" id="toc-著作権" class="nav-link" data-scroll-target="#%E8%91%97%E4%BD%9C%E6%A8%A9"><span class="header-section-number">24.2.3</span> 著作権</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#html-%E3%81%AE%E5%9F%BA%E6%9C%AC" id="toc-html-の基本" class="nav-link" data-scroll-target="#html-%E3%81%AE%E5%9F%BA%E6%9C%AC"><span class="header-section-number">24.3</span> HTML の基本</a>
+  <ul class="collapse">
+<li><a href="#%E8%A6%81%E7%B4%A0" id="toc-要素" class="nav-link" data-scroll-target="#%E8%A6%81%E7%B4%A0"><span class="header-section-number">24.3.1</span> 要素</a></li>
+  <li><a href="#%E5%B1%9E%E6%80%A7" id="toc-属性" class="nav-link" data-scroll-target="#%E5%B1%9E%E6%80%A7"><span class="header-section-number">24.3.2</span> 属性</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%8A%BD%E5%87%BA" id="toc-データの抽出" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%8A%BD%E5%87%BA"><span class="header-section-number">24.4</span> データの抽出</a>
+  <ul class="collapse">
+<li><a href="#%E8%A6%81%E7%B4%A0%E3%82%92%E8%A6%8B%E3%81%A4%E3%81%91%E3%82%8B" id="toc-要素を見つける" class="nav-link" data-scroll-target="#%E8%A6%81%E7%B4%A0%E3%82%92%E8%A6%8B%E3%81%A4%E3%81%91%E3%82%8B"><span class="header-section-number">24.4.1</span> 要素を見つける</a></li>
+  <li><a href="#%E9%81%B8%E6%8A%9E%E3%81%AE%E5%85%A5%E3%82%8C%E5%AD%90" id="toc-選択の入れ子" class="nav-link" data-scroll-target="#%E9%81%B8%E6%8A%9E%E3%81%AE%E5%85%A5%E3%82%8C%E5%AD%90"><span class="header-section-number">24.4.2</span> 選択の入れ子</a></li>
+  <li><a href="#%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%81%A8%E5%B1%9E%E6%80%A7" id="toc-テキストと属性" class="nav-link" data-scroll-target="#%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%81%A8%E5%B1%9E%E6%80%A7"><span class="header-section-number">24.4.3</span> テキストと属性</a></li>
+  <li><a href="#%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB" id="toc-テーブル" class="nav-link" data-scroll-target="#%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB"><span class="header-section-number">24.4.4</span> テーブル</a></li>
+  </ul>
+</li>
+  <li><a href="#sec-css-selectors" id="toc-sec-css-selectors" class="nav-link" data-scroll-target="#sec-css-selectors"><span class="header-section-number">24.5</span> 適切なセレクタを見つける</a></li>
+  <li>
+<a href="#%E3%81%99%E3%81%B9%E3%81%A6%E3%82%92%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B" id="toc-すべてをまとめる" class="nav-link" data-scroll-target="#%E3%81%99%E3%81%B9%E3%81%A6%E3%82%92%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B"><span class="header-section-number">24.6</span> すべてをまとめる</a>
+  <ul class="collapse">
+<li><a href="#%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%BA" id="toc-スターウォーズ" class="nav-link" data-scroll-target="#%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%BA"><span class="header-section-number">24.6.1</span> スター・ウォーズ</a></li>
+  <li><a href="#imdb-%E3%81%AE%E3%83%88%E3%83%83%E3%83%97%E6%98%A0%E7%94%BB" id="toc-imdb-のトップ映画" class="nav-link" data-scroll-target="#imdb-%E3%81%AE%E3%83%88%E3%83%83%E3%83%97%E6%98%A0%E7%94%BB"><span class="header-section-number">24.6.2</span> IMDb のトップ映画</a></li>
+  </ul>
+</li>
+  <li><a href="#%E5%8B%95%E7%9A%84%E3%81%AA%E3%82%B5%E3%82%A4%E3%83%88" id="toc-動的なサイト" class="nav-link" data-scroll-target="#%E5%8B%95%E7%9A%84%E3%81%AA%E3%82%B5%E3%82%A4%E3%83%88"><span class="header-section-number">24.7</span> 動的なサイト</a></li>
+  <li><a href="#%E3%81%BE%E3%81%A8%E3%82%81" id="toc-まとめ" class="nav-link" data-scroll-target="#%E3%81%BE%E3%81%A8%E3%82%81"><span class="header-section-number">24.8</span> まとめ</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/webscraping.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./import.html">データの読み込み</a></li><li class="breadcrumb-item"><a href="./webscraping.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-scraping" class="quarto-section-identifier"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="はじめに" class="level2" data-number="24.1"><h2 data-number="24.1" class="anchored" data-anchor-id="はじめに">
+<span class="header-section-number">24.1</span> はじめに</h2>
+<p>(https://rvest.tidyverse.org) を使ったウェブスクレイピングの基本を紹介します 。ウェブスクレイピングは、ウェブページからデータを抽出するための非常に便利なツールです 。一部のウェブサイトでは、API（構造化された HTTP リクエストのセットで、JSON としてデータを返すもの）を提供しており、これについては <a href="rectangling.html" class="quarto-xref"><span>Chapter 23</span></a> のテクニックを用いて処理します 。API が利用可能な場合は、通常より信頼性の高いデータが得られるため、そちらを使用すべきです 。残念ながら、ウェブ API を使ったプログラミングはこの本の範囲外です 。代わりに、この章ではサイトが API を提供しているかどうかにかかわらず機能するテクニックである、スクレイピングについて教えます 。</p>
+<p>この章では、HTML の基本に飛び込む前に、まずスクレイピングの倫理性と合法性について議論します 。次に、ページ上の特定の要素を特定するための CSS セレクタの基本と、rvest の関数を使って HTML からテキストや属性を取り出し R に取り込む方法を学びます 。その後、スクレイピングしたいページに必要な CSS セレクタを見つけるためのいくつかのテクニックを検討し、最後にいくつかのケーススタディと動的なウェブサイトに関する短い議論で締めくくります 。</p>
+<section id="事前準備" class="level3" data-number="24.1.1"><h3 data-number="24.1.1" class="anchored" data-anchor-id="事前準備">
+<span class="header-section-number">24.1.1</span> 事前準備</h3>
+<p>この章では、rvest パッケージが提供するツールに焦点を当てます 。rvest は tidyverse のメンバーですが、コアメンバーではないため、明示的にロードする必要があります 。また、スクレイピングしたデータを扱う際に全般的に役立つため、tidyverse もロードします 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvest.tidyverse.org/">rvest</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section><section id="スクレイピングの倫理性と合法性" class="level2" data-number="24.2"><h2 data-number="24.2" class="anchored" data-anchor-id="スクレイピングの倫理性と合法性">
+<span class="header-section-number">24.2</span> スクレイピングの倫理性と合法性</h2>
+<p>ウェブスクレイピングを実行するために必要なコードについて話し始める前に、それを行うことが法的および倫理的に問題ないかどうかについて話す必要があります 。全体として、これら両方に関する状況は複雑です。</p>
+<p>合法性は、あなたがどこに住んでいるかに大きく依存します 。しかし、一般的な原則として、データが公開されており、個人的なものではなく、事実に基づいたものであれば、おそらく問題ないでしょう 。これら3つの要因は、以下で説明するように、サイトの利用規約、個人を特定できる情報、および著作権に関連しているため重要です 。もしデータが公開されていない、個人的なものである、事実に基づいたものではない場合、あるいは特にそのデータを使ってお金を稼ぐためにスクレイピングを行う場合は、弁護士に相談する必要があります 。いかなる場合でも、スクレイピングしているページをホストしているサーバーのリソースを尊重すべきです 。最も重要なことは、多くのページをスクレイピングする場合、各リクエストの間に少し時間を置くようにすることです 。その簡単な方法の一つは、Dmytro Perepolkin による <a href="https://dmi3kno.github.io/polite/"><strong>polite</strong></a> パッケージを使用することです 。これはリクエスト間に自動的に一時停止を入れ、結果をキャッシュするため、同じページを二度要求することはありません 。</p>
+<section id="利用規約" class="level3" data-number="24.2.1"><h3 data-number="24.2.1" class="anchored" data-anchor-id="利用規約">
+<span class="header-section-number">24.2.1</span> 利用規約</h3>
+<p>注意深く見ると、多くのウェブサイトのページのどこかに「利用規約（terms and conditions）」や「サービス利用規約（terms of service）」へのリンクが含まれていることに気づくでしょう。そのページをよく読むと、サイトがウェブスクレイピングを明確に禁止していることがよくあります 。これらのページは、企業が非常に広範な主張を行う法的な先占（land grab）の場となる傾向があります 。可能な限りこれらの利用規約を尊重するのが礼儀ですが、いかなる主張も鵜呑みにはしないでください 。米国の裁判所は、単にウェブサイトのフッターに利用規約を記載するだけでは、ユーザーがそれに拘束されるには不十分であるとの判断を一般的に下しています（例：<a href="https://en.wikipedia.org/wiki/HiQ_Labs_v._LinkedIn">HiQ Labs v. LinkedIn</a>）。一般的に、利用規約に拘束されるためには、アカウントの作成やチェックボックスへのチェックなど、何らかの明示的な行動をとっている必要があります 。これが、データが<strong>公開（public）</strong>されているかどうかが重要である理由です 。データにアクセスするためにアカウントが必要ない場合、利用規約に拘束される可能性は低いです 。ただし、欧州では状況がかなり異なり、裁判所は明示的に同意しなくても利用規約に法的強制力があるとの判断を下していることに注意してください 。</p>
+</section><section id="個人を特定できる情報" class="level3" data-number="24.2.2"><h3 data-number="24.2.2" class="anchored" data-anchor-id="個人を特定できる情報">
+<span class="header-section-number">24.2.2</span> 個人を特定できる情報</h3>
+<p>たとえデータが公開されていても、名前、メールアドレス、電話番号、生年月日などの個人を特定できる情報（PII）のスクレイピングには細心の注意を払う必要があります。欧州にはこのようなデータの収集や保存に関する特に厳格な法律（<a href="https://gdpr-info.eu/">GDPR</a>）があり、あなたがどこに住んでいようとも、倫理的な泥沼に足を踏み入れる可能性があります 。たとえば2016年に、ある研究者グループがデートサイト OkCupid 上の約7万人に関する公開プロフィール情報（ユーザー名、年齢、性別、場所など）をスクレイピングし、匿名化の試みを一切行わずにこれらのデータを公開しました 。研究者たちは、データがすでに公開されていたため問題はないと考えていましたが、この研究はデータセット内で公開されたユーザーの特定可能性をめぐる倫理的な懸念から広く非難されました 。もしあなたの仕事に個人を特定できる情報のスクレイピングが含まれる場合は、OkCupid の研究 や、個人情報の取得と公開を伴う同様の倫理的に疑問のある研究について読むことを強くお勧めします。</p>
+</section><section id="著作権" class="level3" data-number="24.2.3"><h3 data-number="24.2.3" class="anchored" data-anchor-id="著作権">
+<span class="header-section-number">24.2.3</span> 著作権</h3>
+<p>最後に、著作権法についても考慮する必要があります 。著作権法は複雑ですが、何が保護されるかを正確に記述している <a href="https://www.law.cornell.edu/uscode/text/17/102">米国法</a> を見てみる価値があります。「[…] 表現の有形の媒体に固定された著作者の独創的な著作物 […]」とあります 。続いて、文学作品、音楽作品、映画などの適用される特定のカテゴリーが記述されています 。注目すべきことに、著作権保護から欠けているのはデータです。これは、事実（fact）のみをスクレイピングの対象とする限り、著作権保護は適用されないことを意味します 。（ただし、欧州にはデータベースを保護する独立した「<a href="https://en.wikipedia.org/wiki/Database_right">sui generis</a>（特有の）」権利があることに注意してください。）</p>
+<p>簡単な例として、米国では材料のリストや手順は著作権の対象にならないため、著作権を使ってレシピを保護することはできません 。しかし、そのレシピのリストにかなりの量の独創的な文学的内容が伴っている場合、それは著作権の対象となります 。インターネットでレシピを探すと、決まってその前に非常に多くのコンテンツがあるのはこのためです 。もし独創的なコンテンツ（テキストや画像など）をスクレイピングする必要がある場合でも、<a href="https://en.wikipedia.org/wiki/Fair_use">フェアユースの法理（doctrine of fair use）</a> の下で保護される可能性があります 。フェアユースは一律の規則ではなく、多くの要因を秤にかけます 。研究や非営利目的でデータを収集しており、スクレイピングするものを必要な範囲に限定していれば、適用される可能性が高くなります 。</p>
+</section></section><section id="html-の基本" class="level2" data-number="24.3"><h2 data-number="24.3" class="anchored" data-anchor-id="html-の基本">
+<span class="header-section-number">24.3</span> HTML の基本</h2>
+<p>ウェブページをスクレイピングするには、まずウェブページを記述する言語である <strong>HTML</strong> について少し理解する必要があります 。HTML は <strong>H</strong>yper<strong>T</strong>ext <strong>M</strong>arkup <strong>L</strong>anguage の略で、次のようになります 。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="dt">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>ページのタイトル<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> id</span><span class="op">=</span><span class="st">'first'</span><span class="dt">&gt;</span>見出し<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>いくつかのテキスト <span class="dv">&amp;amp;</span> <span class="dt">&lt;</span><span class="kw">b</span><span class="dt">&gt;</span>太字のテキスト。<span class="dt">&lt;/</span><span class="kw">b</span><span class="dt">&gt;&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">'myimg.png'</span><span class="ot"> width</span><span class="op">=</span><span class="st">'100'</span><span class="ot"> height</span><span class="op">=</span><span class="st">'100'</span><span class="dt">&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>HTML は、開始タグ（例：<code>&lt;tag&gt;</code>）、オプションの<strong>属性（attributes）</strong>（<code>id='first'</code>）、終了タグ（<code>&lt;/tag&gt;</code> など）、および<strong>内容（contents）</strong>（開始タグと終了タグの間のすべて）で構成される<strong>要素（elements）</strong>によって形成される階層構造を持っています 。<code>&lt;</code> と <code>&gt;</code> は開始タグと終了タグに使用されるため、直接書くことはできません 。代わりに、HTML の<strong>エスケープ（escapes）</strong>である <code>&amp;gt;</code>（より大きい）と <code>&amp;lt;</code>（より小さい）を使用する必要があります 。そして、これらのエスケープは <code>&amp;</code> を使用するため、文字通りのアンパサンドが必要な場合は <code>&amp;amp;</code> としてエスケープしなければなりません 。多種多様な HTML エスケープが存在しますが、rvest が自動的に処理してくれるため、あまり心配する必要はありません 。ウェブスクレイピングが可能なのは、スクレイピングしたいデータを含むほとんどのページが、一般的に一貫した構造を持っているからです 。</p>
+<section id="要素" class="level3" data-number="24.3.1"><h3 data-number="24.3.1" class="anchored" data-anchor-id="要素">
+<span class="header-section-number">24.3.1</span> 要素</h3>
+<p>HTML 要素は 100 種類以上あります。その中でも特に重要なものをいくつか挙げます。</p>
+<ul>
+<li>すべての HTML ページは <code>&lt;html&gt;</code> 要素の中にあり、2 つの子要素を持つ必要があります。それは、ページのタイトルのようなドキュメントのメタデータを含む <code>&lt;head&gt;</code> と、ブラウザで見えるコンテンツを含む <code>&lt;body&gt;</code> です 。</li>
+<li>
+<code>&lt;h1&gt;</code>（見出し1）、<code>&lt;section&gt;</code>（セクション）、<code>&lt;p&gt;</code>（段落）、<code>&lt;ol&gt;</code>（順序付きリスト）などのブロックタグは、ページの全体的な構造を形成します 。</li>
+<li>
+<code>&lt;b&gt;</code>（太字）、<code>&lt;i&gt;</code>（斜体）、<code>&lt;a&gt;</code>（リンク）などのインラインタグは、ブロックタグ内のテキストをフォーマットします 。</li>
+</ul>
+<p>見たことのないタグに遭遇した場合は、少しググればその機能を調べることができます 。また、ウェブプログラミングのほぼすべての側面を記述している <a href="https://developer.mozilla.org/ja/docs/Web/HTML">MDN Web Docs</a> も良い出発点です 。</p>
+<p>ほとんどの要素は、開始タグと終了タグの間に内容を持つことができます 。この内容はテキストである場合もあれば、さらなる要素である場合もあります。たとえば、次の HTML には、1 つの単語が太字になったテキストの段落が含まれています 。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  こんにちは！私の<span class="dt">&lt;</span><span class="kw">b</span><span class="dt">&gt;</span>名前<span class="dt">&lt;/</span><span class="kw">b</span><span class="dt">&gt;</span>はハドリーです。</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>子（children）</strong>とはそこに含まれる要素のことで、上の <code>&lt;p&gt;</code> 要素には 1 つの子要素である <code>&lt;b&gt;</code> 要素があります 。<code>&lt;b&gt;</code> 要素には子要素はありませんが、内容（テキストの「名前」）を持っています 。</p>
+</section><section id="属性" class="level3" data-number="24.3.2"><h3 data-number="24.3.2" class="anchored" data-anchor-id="属性">
+<span class="header-section-number">24.3.2</span> 属性</h3>
+<p>タグは、<code>name1='value1' name2='value2'</code> のような形式の、名前付きの<strong>属性（attributes）</strong>を持つことができます 。最も重要な属性の 2 つは <code>id</code> と <code>class</code> で、これらは CSS（Cascading Style Sheets）と組み合わせてページの視覚的な外見を制御するために使用されます 。これらはページからデータをスクレイピングする際にしばしば役立ちます 。また、属性はリンクの遷移先（<code>&lt;a&gt;</code> 要素の <code>href</code> 属性）や画像のソース（<code>&lt;img&gt;</code> 要素の <code>src</code> 属性）を記録するためにも使用されます 。</p>
+</section></section><section id="データの抽出" class="level2" data-number="24.4"><h2 data-number="24.4" class="anchored" data-anchor-id="データの抽出">
+<span class="header-section-number">24.4</span> データの抽出</h2>
+<p>スクレイピングを開始するには、スクレイピングしたいページの URL が必要です。通常はウェブブラウザからコピーできます 。次に、<code><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html()</a></code> を使ってそのページの HTML を R に読み込む必要があります 。これは <code>xml_document</code> オブジェクトを返し、それを rvest の関数を使って操作します 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="st">"http://rvest.tidyverse.org/"</span><span class="op">)</span></span>
+<span><span class="va">html</span></span>
+<span><span class="co">#&gt; {html_document}</span></span>
+<span><span class="co">#&gt; &lt;html lang="en"&gt;</span></span>
+<span><span class="co">#&gt; [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UT ...</span></span>
+<span><span class="co">#&gt; [2] &lt;body&gt;\n    &lt;a href="#container" class="visually-hidden-focusable"&gt;Ski ...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>rvest には、HTML をインラインで書くことができる関数も含まれています 。この章では、さまざまな rvest 関数がどのように機能するかを簡単な例で教えるために、これを多用します 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/minimal_html.html">minimal_html</a></span><span class="op">(</span><span class="st">"</span></span>
+<span><span class="st">  &lt;p&gt;これは段落です&lt;/p&gt;</span></span>
+<span><span class="st">  &lt;ul&gt;</span></span>
+<span><span class="st">    &lt;li&gt;これは箇条書きリストです&lt;/li&gt;</span></span>
+<span><span class="st">  &lt;/ul&gt;</span></span>
+<span><span class="st">"</span><span class="op">)</span></span>
+<span><span class="va">html</span></span>
+<span><span class="co">#&gt; {html_document}</span></span>
+<span><span class="co">#&gt; &lt;html&gt;</span></span>
+<span><span class="co">#&gt; [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UT ...</span></span>
+<span><span class="co">#&gt; [2] &lt;body&gt;\n&lt;p&gt;これは段落です&lt;/p&gt;\n  &lt;ul&gt;\n&lt;li&gt;これは箇条書きリストです&lt;/li&gt;\n  &lt;/ul&gt;\n&lt;/body&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>R に HTML を取り込んだら、次は関心のあるデータを抽出します 。まず、関心のある要素を特定するための CSS セレクタと、それらからデータを抽出するために使用できる rvest 関数について学びます 。次に、特別なツールがある HTML テーブルについて簡単に説明します 。</p>
+<section id="要素を見つける" class="level3" data-number="24.4.1"><h3 data-number="24.4.1" class="anchored" data-anchor-id="要素を見つける">
+<span class="header-section-number">24.4.1</span> 要素を見つける</h3>
+<p>CSS は Cascading Style Sheets の略で、HTML ドキュメントの視覚的なスタイリングを定義するためのツールです 。CSS には、<strong>CSS セレクタ</strong>と呼ばれる、ページ上の要素を選択するためのミニ言語が含まれています 。CSS セレクタは HTML 要素を特定するためのパターンを定義するもので、抽出したい要素を簡潔に記述する方法を提供するため、スクレイピングに役立ちます 。CSS セレクタについては <a href="#sec-css-selectors" class="quarto-xref"><span>Section 24.5</span></a> で詳しく説明しますが、幸いなことに、次の 3 つだけでかなりのことができます 。</p>
+<ul>
+<li>
+<code>p</code> は、すべての <code>&lt;p&gt;</code> 要素を選択します 。</li>
+<li>
+<code>.title</code> は、<code>class</code> が “title” であるすべての要素を選択します 。</li>
+<li>
+<code>#title</code> は、<code>id</code> 属性が “title” に等しい要素を選択します 。ID 属性はドキュメント内で一意である必要があるため、これは常に単一の要素のみを選択します 。</li>
+</ul>
+<p>これらのセレクタを簡単な例で試してみましょう。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/minimal_html.html">minimal_html</a></span><span class="op">(</span><span class="st">"</span></span>
+<span><span class="st">  &lt;h1&gt;これは見出しです&lt;/h1&gt;</span></span>
+<span><span class="st">  &lt;p id='first'&gt;これは段落です&lt;/p&gt;</span></span>
+<span><span class="st">  &lt;p class='important'&gt;これは重要な段落です&lt;/p&gt;</span></span>
+<span><span class="st">"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> を使って、セレクタに一致するすべての要素を見つけます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"p"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (2)}</span></span>
+<span><span class="co">#&gt; [1] &lt;p id="first"&gt;これは段落です&lt;/p&gt;</span></span>
+<span><span class="co">#&gt; [2] &lt;p class="important"&gt;これは重要な段落です&lt;/p&gt;</span></span>
+<span><span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">".important"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (1)}</span></span>
+<span><span class="co">#&gt; [1] &lt;p class="important"&gt;これは重要な段落です&lt;/p&gt;</span></span>
+<span><span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"#first"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (1)}</span></span>
+<span><span class="co">#&gt; [1] &lt;p id="first"&gt;これは段落です&lt;/p&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>もう一つの重要な関数は <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> で、これは常に入力と同じ数の出力を返します 。ドキュメント全体に適用すると、最初のマッチを返します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"p"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {html_node}</span></span>
+<span><span class="co">#&gt; &lt;p id="first"&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>要素に一致しないセレクタを使用した場合の <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> と <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> の間には重要な違いがあります 。<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> は長さ 0 のベクトルを返しますが、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> は欠損値を返します 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"b"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (0)}</span></span>
+<span><span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"b"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_missing}</span></span>
+<span><span class="co">#&gt; &lt;NA&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="選択の入れ子" class="level3" data-number="24.4.2"><h3 data-number="24.4.2" class="anchored" data-anchor-id="選択の入れ子">
+<span class="header-section-number">24.4.2</span> 選択の入れ子</h3>
+<p>ほとんどの場合、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> と <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> を組み合わせて使用します。通常は、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> を使って「観測値（observations）」となる要素を特定し、次に <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> を使って「変数（variables）」となる要素を見つけます 。簡単な例でこれを確認してみましょう。ここに、スター・ウォーズの 4 人のキャラクターに関する情報を各リスト項目（<code>&lt;li&gt;</code>）に含む順序なしリスト（<code>&lt;ul&gt;</code>）があります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/minimal_html.html">minimal_html</a></span><span class="op">(</span><span class="st">"</span></span>
+<span><span class="st">  &lt;ul&gt;</span></span>
+<span><span class="st">    &lt;li&gt;&lt;b&gt;C-3PO&lt;/b&gt; は、体重 &lt;span class='weight'&gt;167 kg&lt;/span&gt; の &lt;i&gt;ドロイド&lt;/i&gt; です&lt;/li&gt;</span></span>
+<span><span class="st">    &lt;li&gt;&lt;b&gt;R4-P17&lt;/b&gt; は &lt;i&gt;ドロイド&lt;/i&gt; です&lt;/li&gt;</span></span>
+<span><span class="st">    &lt;li&gt;&lt;b&gt;R2-D2&lt;/b&gt; は、体重 &lt;span class='weight'&gt;96 kg&lt;/span&gt; の &lt;i&gt;ドロイド&lt;/i&gt; です&lt;/li&gt;</span></span>
+<span><span class="st">    &lt;li&gt;&lt;b&gt;ヨーダ&lt;/b&gt; の体重は &lt;span class='weight'&gt;66 kg&lt;/span&gt; です&lt;/li&gt;</span></span>
+<span><span class="st">  &lt;/ul&gt;</span></span>
+<span><span class="st">  "</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> を使って、各要素が異なるキャラクターに対応するベクトルを作成できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">characters</span> <span class="op">&lt;-</span> <span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"li"</span><span class="op">)</span></span>
+<span><span class="va">characters</span></span>
+<span><span class="co">#&gt; {xml_nodeset (4)}</span></span>
+<span><span class="co">#&gt; [1] &lt;li&gt;\n&lt;b&gt;C-3PO&lt;/b&gt; は、体重 &lt;span class="weight"&gt;167 kg&lt;/span&gt; の &lt;i&gt;ドロイド&lt;/ ...</span></span>
+<span><span class="co">#&gt; [2] &lt;li&gt;\n&lt;b&gt;R4-P17&lt;/b&gt; は &lt;i&gt;ドロイド&lt;/i&gt; です&lt;/li&gt;</span></span>
+<span><span class="co">#&gt; [3] &lt;li&gt;\n&lt;b&gt;R2-D2&lt;/b&gt; は、体重 &lt;span class="weight"&gt;96 kg&lt;/span&gt; の &lt;i&gt;ドロイド&lt;/i ...</span></span>
+<span><span class="co">#&gt; [4] &lt;li&gt;\n&lt;b&gt;ヨーダ&lt;/b&gt; の体重は &lt;span class="weight"&gt;66 kg&lt;/span&gt; です&lt;/li&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>各キャラクターの名前を抽出するには、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> を使用します。なぜなら、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> の出力に適用した場合、要素ごとに 1 つのレスポンスを返すことが保証されているからです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">characters</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"b"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (4)}</span></span>
+<span><span class="co">#&gt; [1] &lt;b&gt;C-3PO&lt;/b&gt;</span></span>
+<span><span class="co">#&gt; [2] &lt;b&gt;R4-P17&lt;/b&gt;</span></span>
+<span><span class="co">#&gt; [3] &lt;b&gt;R2-D2&lt;/b&gt;</span></span>
+<span><span class="co">#&gt; [4] &lt;b&gt;ヨーダ&lt;/b&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>名前に関しては <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> と <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> の区別は重要ではありませんが、体重（weight）に関しては重要です 。体重の <code>&lt;span&gt;</code> がなくても、各キャラクターに対して 1 つの体重を取得したいからです 。それが <code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> の役割です。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">characters</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">".weight"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (4)}</span></span>
+<span><span class="co">#&gt; [1] &lt;span class="weight"&gt;167 kg&lt;/span&gt;</span></span>
+<span><span class="co">#&gt; [2] NA</span></span>
+<span><span class="co">#&gt; [3] &lt;span class="weight"&gt;96 kg&lt;/span&gt;</span></span>
+<span><span class="co">#&gt; [4] &lt;span class="weight"&gt;66 kg&lt;/span&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> は、<code>characters</code> の子であるすべての体重 <code>&lt;span&gt;</code> を見つけます 。これらは 3 つしかないため、名前と体重の対応関係が失われてしまいます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">characters</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">".weight"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; {xml_nodeset (3)}</span></span>
+<span><span class="co">#&gt; [1] &lt;span class="weight"&gt;167 kg&lt;/span&gt;</span></span>
+<span><span class="co">#&gt; [2] &lt;span class="weight"&gt;96 kg&lt;/span&gt;</span></span>
+<span><span class="co">#&gt; [3] &lt;span class="weight"&gt;66 kg&lt;/span&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="テキストと属性" class="level3" data-number="24.4.3"><h3 data-number="24.4.3" class="anchored" data-anchor-id="テキストと属性">
+<span class="header-section-number">24.4.3</span> テキストと属性</h3>
+<p><code><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2()</a></code> は、HTML 要素のプレーンテキストの内容を抽出します 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">characters</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"b"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "C-3PO"  "R4-P17" "R2-D2"  "ヨーダ"</span></span>
+<span></span>
+<span><span class="va">characters</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">".weight"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "167 kg" NA       "96 kg"  "66 kg"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>エスケープは自動的に処理されることに注意してください 。ソース HTML 内では HTML エスケープが見られますが、rvest から返されるデータ内では見られません 。</p>
+<p><code><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr()</a></code> は属性からデータを抽出します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/minimal_html.html">minimal_html</a></span><span class="op">(</span><span class="st">"</span></span>
+<span><span class="st">  &lt;p&gt;&lt;a href='https://en.wikipedia.org/wiki/Cat'&gt;猫&lt;/a&gt;&lt;/p&gt;</span></span>
+<span><span class="st">  &lt;p&gt;&lt;a href='https://en.wikipedia.org/wiki/Dog'&gt;犬&lt;/a&gt;&lt;/p&gt;</span></span>
+<span><span class="st">"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">html</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"p"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"a"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">"href"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "https://en.wikipedia.org/wiki/Cat" "https://en.wikipedia.org/wiki/Dog"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr()</a></code> は常に文字列を返すため、数値や日付を抽出している場合は、後処理が必要になります 。</p>
+</section><section id="テーブル" class="level3" data-number="24.4.4"><h3 data-number="24.4.4" class="anchored" data-anchor-id="テーブル">
+<span class="header-section-number">24.4.4</span> テーブル</h3>
+<p>運が良ければ、データはすでに HTML テーブルに保存されており、そのテーブルから読み取るだけという場合もあります 。ブラウザでテーブルを認識するのは通常簡単です。行と列の長方形の構造を持っており、Excel のようなツールにコピー＆ペーストできます 。HTML テーブルは、主に 4 つの要素、<code>&lt;table&gt;</code>、<code>&lt;tr&gt;</code>（テーブルの行）、<code>&lt;th&gt;</code>（テーブルの見出し）、および <code>&lt;td&gt;</code>（テーブルのデータ）から構築されます 。以下は、2 列 3 行の単純な HTML テーブルです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/minimal_html.html">minimal_html</a></span><span class="op">(</span><span class="st">"</span></span>
+<span><span class="st">  &lt;table class='mytable'&gt;</span></span>
+<span><span class="st">    &lt;tr&gt;&lt;th&gt;x&lt;/th&gt;   &lt;th&gt;y&lt;/th&gt;&lt;/tr&gt;</span></span>
+<span><span class="st">    &lt;tr&gt;&lt;td&gt;1.5&lt;/td&gt; &lt;td&gt;2.7&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span><span class="st">    &lt;tr&gt;&lt;td&gt;4.9&lt;/td&gt; &lt;td&gt;1.3&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span><span class="st">    &lt;tr&gt;&lt;td&gt;7.2&lt;/td&gt; &lt;td&gt;8.1&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span><span class="st">  &lt;/table&gt;</span></span>
+<span><span class="st">  "</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>rvest は、この種のデータを読み取る方法を知っている関数 <code><a href="https://rvest.tidyverse.org/reference/html_table.html">html_table()</a></code> を提供しています 。これは、ページ上で見つかったテーブルごとに 1 つの tibble を含むリストを返します 。<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element()</a></code> を使って、抽出したいテーブルを特定してください。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">".mytable"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_table.html">html_table</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span><span class="co">#&gt;       x     y</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1   1.5   2.7</span></span>
+<span><span class="co">#&gt; 2   4.9   1.3</span></span>
+<span><span class="co">#&gt; 3   7.2   8.1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>x</code> と <code>y</code> が自動的に数値に変換されていることに注意してください 。この自動変換は常に機能するとは限らないため、より複雑なシナリオでは <code>convert = FALSE</code> でオフにし、独自の変換を行うことができます 。</p>
+</section></section><section id="sec-css-selectors" class="level2" data-number="24.5"><h2 data-number="24.5" class="anchored" data-anchor-id="sec-css-selectors">
+<span class="header-section-number">24.5</span> 適切なセレクタを見つける</h2>
+<p>データに必要なセレクタを見極めることが、通常、問題の最も困難な部分です 。特定の（つまり、関心のないものを選択しない）かつ感度の高い（つまり、関心のあるものをすべて選択する）セレクタを見つけるために、しばしば実験を行う必要があります 。多くの試行錯誤がこのプロセスの通常の姿です 。</p>
+<p>このプロセスを支援するために利用可能な主なツールが 2 つあります。SelectorGadget と、ブラウザの開発者ツールです 。</p>
+<p><a href="https://rvest.tidyverse.org/articles/selectorgadget.html">SelectorGadget</a> は、提供された肯定的な例と否定的な例に基づいて CSS セレクタを自動的に生成する JavaScript のブックマークレットです 。常に機能するとは限りませんが、機能するときは魔法のようです 。</p>
+<p>すべてのモダンなブラウザには開発者向けのツールキットが付属していますが、普段使っているブラウザでなくても Chrome をお勧めします。ウェブ開発者ツールが非常に優れており、すぐに利用できるからです 。</p>
+<p>ページ上の要素を右クリックして <code>検証（Inspect）</code> をクリックします 。すると、クリックした要素を中心とした、HTML ページ全体の展開可能なビューが開きます 。これを使ってページを探索し、どのようなセレクタが機能しそうかの感覚をつかむことができます 。特に <code>class</code> 属性と <code>id</code> 属性に注目してください。これらはページの視覚的な構造を形成するためにしばしば使用されるため、探しているデータを抽出するための優れたツールになります 。</p>
+<p>要素ビューの中で要素を右クリックし、<code>セレクタをコピー（Copy as Selector）</code> を選択すると、関心のある要素を一意に特定するセレクタを生成することもできます 。</p>
+<p>もし SelectorGadget や Chrome の開発者ツールが生成した CSS セレクタが理解できない場合は、CSS セレクタを分かりやすい英語に翻訳してくれる <a href="https://kittygiraudel.github.io/selectors-explained/">Selectors Explained</a> を試してみてください 。これを頻繁に行うようになるなら、CSS セレクタ全般についてもっと学びたいと思うかもしれません 。楽しい <a href="https://flukeout.github.io/">CSS dinner</a> チュートリアルから始めて、<a href="https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Selectors">MDN web docs</a> を参照することをお勧めします 。</p>
+</section><section id="すべてをまとめる" class="level2" data-number="24.6"><h2 data-number="24.6" class="anchored" data-anchor-id="すべてをまとめる">
+<span class="header-section-number">24.6</span> すべてをまとめる</h2>
+<p>これらすべてをまとめて、いくつかのウェブサイトをスクレイピングしてみましょう 。これらの例を実行したときに、すでに機能しなくなっているリスクがあります。それがウェブスクレイピングの根本的な課題です 。サイトの構造が変われば、スクレイピングのコードも変えなければなりません 。</p>
+<section id="スターウォーズ" class="level3" data-number="24.6.1"><h3 data-number="24.6.1" class="anchored" data-anchor-id="スターウォーズ">
+<span class="header-section-number">24.6.1</span> スター・ウォーズ</h3>
+<p>rvest には <code><a href="https://rvest.tidyverse.org/articles/starwars.html">vignette("starwars")</a></code> に非常に簡単な例が含まれています。これは最小限の HTML を持つシンプルなページなので、始めるのに適した場所です 。今すぐそのページに移動し、「要素を検証」して、スター・ウォーズ映画のタイトルである見出しの一つを調べてみることをお勧めします 。キーボードやマウスを使って HTML の階層を探索し、各映画で使用されている共通の構造を感じ取れるか試してみてください 。</p>
+<p>各映画が次のような共通の構造を持っていることがわかるはずです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">section</span><span class="dt">&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">h2</span><span class="ot"> data-id</span><span class="op">=</span><span class="st">"1"</span><span class="dt">&gt;</span>ファントム・メナス<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>公開日: 1999-05-19<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>監督: <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"director"</span><span class="dt">&gt;</span>ジョージ・ルーカス<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"crawl"</span><span class="dt">&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>...<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>...<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>...<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>私たちの目標は、このデータを <code>title</code>（タイトル）、<code>year</code>（年）、<code>director</code>（監督）、<code>intro</code>（イントロ）という変数を持つ 7 行のデータフレームにすることです 。まず HTML を読み込み、すべての <code>&lt;section&gt;</code> 要素を抽出することから始めます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://rvest.tidyverse.org/articles/starwars.html"</span></span>
+<span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">section</span> <span class="op">&lt;-</span> <span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"section"</span><span class="op">)</span></span>
+<span><span class="va">section</span></span>
+<span><span class="co">#&gt; {xml_nodeset (7)}</span></span>
+<span><span class="co">#&gt; [1] &lt;section&gt;&lt;h2 data-id="1"&gt;\nThe Phantom Menace\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 1 ...</span></span>
+<span><span class="co">#&gt; [2] &lt;section&gt;&lt;h2 data-id="2"&gt;\nAttack of the Clones\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: ...</span></span>
+<span><span class="co">#&gt; [3] &lt;section&gt;&lt;h2 data-id="3"&gt;\nRevenge of the Sith\n&lt;/h2&gt;\n&lt;p&gt;\nReleased:  ...</span></span>
+<span><span class="co">#&gt; [4] &lt;section&gt;&lt;h2 data-id="4"&gt;\nA New Hope\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 1977-05-2 ...</span></span>
+<span><span class="co">#&gt; [5] &lt;section&gt;&lt;h2 data-id="5"&gt;\nThe Empire Strikes Back\n&lt;/h2&gt;\n&lt;p&gt;\nReleas ...</span></span>
+<span><span class="co">#&gt; [6] &lt;section&gt;&lt;h2 data-id="6"&gt;\nReturn of the Jedi\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 1 ...</span></span>
+<span><span class="co">#&gt; [7] &lt;section&gt;&lt;h2 data-id="7"&gt;\nThe Force Awakens\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 20 ...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これはページ上の 7 つの映画に一致する 7 つの要素を取得しており、セレクタとして <code>section</code> を使用するのが適切であることを示唆しています 。データは常にテキスト内にあるため、個々の要素を抽出するのは簡単です 。あとは適切なセレクタを見つけるだけです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">section</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"h2"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "The Phantom Menace"      "Attack of the Clones"   </span></span>
+<span><span class="co">#&gt; [3] "Revenge of the Sith"     "A New Hope"             </span></span>
+<span><span class="co">#&gt; [5] "The Empire Strikes Back" "Return of the Jedi"     </span></span>
+<span><span class="co">#&gt; [7] "The Force Awakens"</span></span>
+<span></span>
+<span><span class="va">section</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">".director"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "George Lucas"     "George Lucas"     "George Lucas"    </span></span>
+<span><span class="co">#&gt; [4] "George Lucas"     "Irvin Kershner"   "Richard Marquand"</span></span>
+<span><span class="co">#&gt; [7] "J. J. Abrams"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>各コンポーネントについてそれを行ったら、すべての結果を tibble にまとめることができます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  title <span class="op">=</span> <span class="va">section</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"h2"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  released <span class="op">=</span> <span class="va">section</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"p"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="st">"Released: "</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_datetime.html">parse_date</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  director <span class="op">=</span> <span class="va">section</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">".director"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  intro <span class="op">=</span> <span class="va">section</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">".crawl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 4</span></span>
+<span><span class="co">#&gt;   title                   released   director         intro                  </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                   &lt;date&gt;     &lt;chr&gt;            &lt;chr&gt;                  </span></span>
+<span><span class="co">#&gt; 1 The Phantom Menace      1999-05-19 George Lucas     "Turmoil has engulfed …</span></span>
+<span><span class="co">#&gt; 2 Attack of the Clones    2002-05-16 George Lucas     "There is unrest in th…</span></span>
+<span><span class="co">#&gt; 3 Revenge of the Sith     2005-05-19 George Lucas     "War! The Republic is …</span></span>
+<span><span class="co">#&gt; 4 A New Hope              1977-05-25 George Lucas     "It is a period of civ…</span></span>
+<span><span class="co">#&gt; 5 The Empire Strikes Back 1980-05-17 Irvin Kershner   "It is a dark time for…</span></span>
+<span><span class="co">#&gt; 6 Return of the Jedi      1983-05-25 Richard Marquand "Luke Skywalker has re…</span></span>
+<span><span class="co">#&gt; # ℹ 1 more row</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>後の分析で使いやすくするために、<code>released</code>（公開日）には少し追加の処理を行いました 。</p>
+</section><section id="imdb-のトップ映画" class="level3" data-number="24.6.2"><h3 data-number="24.6.2" class="anchored" data-anchor-id="imdb-のトップ映画">
+<span class="header-section-number">24.6.2</span> IMDb のトップ映画</h3>
+<p>次のタスクとして、もう少し難しいもの、インターネット映画データベース（IMDb）からトップ 250 の映画を抽出することに挑戦します 。この章を書いた時点では、ページは <a href="#fig-scraping-imdb" class="quarto-xref">Figure&nbsp;<span>24.1</span></a> のようになっていました。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-scraping-imdb" class="quarto-float quarto-figure quarto-figure-center anchored" alt="スクリーンショットには、「Rank and Title（順位とタイトル）」、「IMDb Rating（IMDb評価）」、 「Your Rating（あなたの評価）」という列を持つ表が表示されています。 トップ250のうち9つの映画が表示されています。トップ5は、 『ショーシャンクの空に』、『ゴッドファーザー』、『ダークナイト』、 『ゴッドファーザー PART II』、そして『12人の怒れる男』です。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-scraping-imdb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="screenshots/scraping-imdb.png" class="img-fluid figure-img" alt="スクリーンショットには、「Rank and Title（順位とタイトル）」、「IMDb Rating（IMDb評価）」、 「Your Rating（あなたの評価）」という列を持つ表が表示されています。 トップ250のうち9つの映画が表示されています。トップ5は、 『ショーシャンクの空に』、『ゴッドファーザー』、『ダークナイト』、 『ゴッドファーザー PART II』、そして『12人の怒れる男』です。" width="418">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scraping-imdb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.1: 2022-12-05に撮影された IMDb トップ映画ウェブページのスクリーンショット。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>このデータには明確な表構造があるため、<code><a href="https://rvest.tidyverse.org/reference/html_table.html">html_table()</a></code> から始める価値があります 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://web.archive.org/web/20220201012049/https://www.imdb.com/chart/top/"</span></span>
+<span><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">table</span> <span class="op">&lt;-</span> <span class="va">html</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_element</a></span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_table.html">html_table</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">table</span></span>
+<span><span class="co">#&gt; # A tibble: 250 × 5</span></span>
+<span><span class="co">#&gt;   ``    `Rank &amp; Title`                    `IMDb Rating` `Your Rating`   ``   </span></span>
+<span><span class="co">#&gt;   &lt;lgl&gt; &lt;chr&gt;                                     &lt;dbl&gt; &lt;chr&gt;           &lt;lgl&gt;</span></span>
+<span><span class="co">#&gt; 1 NA    "1.\n      The Shawshank Redempt…           9.2 "12345678910\n… NA   </span></span>
+<span><span class="co">#&gt; 2 NA    "2.\n      The Godfather\n      …           9.1 "12345678910\n… NA   </span></span>
+<span><span class="co">#&gt; 3 NA    "3.\n      The Godfather: Part I…           9   "12345678910\n… NA   </span></span>
+<span><span class="co">#&gt; 4 NA    "4.\n      The Dark Knight\n    …           9   "12345678910\n… NA   </span></span>
+<span><span class="co">#&gt; 5 NA    "5.\n      12 Angry Men\n       …           8.9 "12345678910\n… NA   </span></span>
+<span><span class="co">#&gt; 6 NA    "6.\n      Schindler's List\n   …           8.9 "12345678910\n… NA   </span></span>
+<span><span class="co">#&gt; # ℹ 244 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これにはいくつかの空の列が含まれていますが、全体としてテーブルからの情報をうまく捉えています 。しかし、使いやすくするためにはさらなる処理が必要です 。まず、列名を扱いやすいものに変更し、順位（rank）とタイトル（title）にある余分な空白を削除します 。<code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> を使って、これら 2 つの列の選択と名前変更を 1 ステップで行います 。次に、改行と余分なスペースを削除し、<a href="regexps.html#sec-extract-variables" class="quarto-xref"><span>Section 15.3.4</span></a> で学んだ <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_regex()</a></code> を適用して、タイトル、年、順位をそれぞれの変数に引き出します 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ratings</span> <span class="op">&lt;-</span> <span class="va">table</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
+<span>    rank_title_year <span class="op">=</span> <span class="va">`Rank &amp; Title`</span>,</span>
+<span>    rating <span class="op">=</span> <span class="va">`IMDb Rating`</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    rank_title_year <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">rank_title_year</span>, <span class="st">"\n +"</span>, <span class="st">" "</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_regex</a></span><span class="op">(</span></span>
+<span>    <span class="va">rank_title_year</span>,</span>
+<span>    patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>      rank <span class="op">=</span> <span class="st">"\\d+"</span>, <span class="st">"\\. "</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">".+"</span>, <span class="st">" +\\("</span>,</span>
+<span>      year <span class="op">=</span> <span class="st">"\\d+"</span>, <span class="st">"\\)"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">ratings</span></span>
+<span><span class="co">#&gt; # A tibble: 250 × 4</span></span>
+<span><span class="co">#&gt;   rank  title                    year  rating</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 1     The Shawshank Redemption 1994     9.2</span></span>
+<span><span class="co">#&gt; 2 2     The Godfather            1972     9.1</span></span>
+<span><span class="co">#&gt; 3 3     The Godfather: Part II   1974     9  </span></span>
+<span><span class="co">#&gt; 4 4     The Dark Knight          2008     9  </span></span>
+<span><span class="co">#&gt; 5 5     12 Angry Men             1957     8.9</span></span>
+<span><span class="co">#&gt; 6 6     Schindler's List         1993     8.9</span></span>
+<span><span class="co">#&gt; # ℹ 244 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ほとんどのデータがテーブルのセルから得られるこのような場合でも、生の HTML を見てみる価値はあります 。そうすれば、属性の一つを使用することで、少し余分なデータを追加できることがわかるでしょう 。これが、ページのソースを探索する（spelunking）ことに少し時間を費やす価値がある理由の一つです。余分なデータが見つかるかもしれませんし、少し簡単なパース経路が見つかるかもしれません 。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"td strong"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">"title"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "9.2 based on 2,536,415 user ratings"</span></span>
+<span><span class="co">#&gt; [2] "9.1 based on 1,745,675 user ratings"</span></span>
+<span><span class="co">#&gt; [3] "9.0 based on 1,211,032 user ratings"</span></span>
+<span><span class="co">#&gt; [4] "9.0 based on 2,486,931 user ratings"</span></span>
+<span><span class="co">#&gt; [5] "8.9 based on 749,563 user ratings"  </span></span>
+<span><span class="co">#&gt; [6] "8.9 based on 1,295,705 user ratings"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これを表データと組み合わせ、再び <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_regex()</a></code> を適用して、関心のあるデータを抽出できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ratings</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    rating_n <span class="op">=</span> <span class="va">html</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="st">"td strong"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">"title"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_regex</a></span><span class="op">(</span></span>
+<span>    <span class="va">rating_n</span>,</span>
+<span>    patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"[0-9.]+ based on "</span>,</span>
+<span>      number <span class="op">=</span> <span class="st">"[0-9,]+"</span>,</span>
+<span>      <span class="st">" user ratings"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    number <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_number.html">parse_number</a></span><span class="op">(</span><span class="va">number</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 250 × 5</span></span>
+<span><span class="co">#&gt;   rank  title                    year  rating  number</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 1     The Shawshank Redemption 1994     9.2 2536415</span></span>
+<span><span class="co">#&gt; 2 2     The Godfather            1972     9.1 1745675</span></span>
+<span><span class="co">#&gt; 3 3     The Godfather: Part II   1974     9   1211032</span></span>
+<span><span class="co">#&gt; 4 4     The Dark Knight          2008     9   2486931</span></span>
+<span><span class="co">#&gt; 5 5     12 Angry Men             1957     8.9  749563</span></span>
+<span><span class="co">#&gt; 6 6     Schindler's List         1993     8.9 1295705</span></span>
+<span><span class="co">#&gt; # ℹ 244 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section><section id="動的なサイト" class="level2" data-number="24.7"><h2 data-number="24.7" class="anchored" data-anchor-id="動的なサイト">
+<span class="header-section-number">24.7</span> 動的なサイト</h2>
+<p>これまでは、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> がブラウザで見えるものを返し、それをどうパースし、整然とした（tidy）データフレームにどうまとめるかに焦点を当ててきました 。しかし時折、<code><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements()</a></code> たちがブラウザで見えるものとは全く異なるものを返すサイトに突き当たることがあります 。多くの場合、それは JavaScript でページのコンテンツを動的に生成しているウェブサイトをスクレイピングしようとしているためです 。rvest は生の HTML をダウンロードし、JavaScript を実行しないため、現在のところこれらには対応していません 。このようなサイトをスクレイピングすることも可能ですが、rvest はよりコストのかかるプロセス、つまりすべての JavaScript の実行を含むウェブブラウザの完全なシミュレーションを使用する必要があります 。この機能は執筆時点では利用可能ではありませんが、現在積極的に取り組んでおり、あなたがこれを読む頃には利用可能になっているかもしれません 。これは、実際に Chrome ブラウザをバックグラウンドで実行する <a href="https://rstudio.github.io/chromote/index.html">chromote パッケージ</a> を使用し、人間がテキストを入力したりボタンをクリックしたりするように、サイトと対話するための追加ツールを提供します 。詳細は <a href="http://rvest.tidyverse.org/">rvest のウェブサイト</a> を確認してください。</p>
+</section><section id="まとめ" class="level2" data-number="24.8"><h2 data-number="24.8" class="anchored" data-anchor-id="まとめ">
+<span class="header-section-number">24.8</span> まとめ</h2>
+<p>この章では、ウェブページからデータをスクレイピングする理由、すべきでない理由、そしてその方法について学びました 。まず HTML の基本と、特定の要素を参照するための CSS セレクタの使用について学び、次に rvest パッケージを使って HTML から R へデータを取り出す方法を学びました。その後、2 つのケーススタディでウェブスクレイピングの実演を行いました。rvest パッケージのウェブサイトからスター・ウォーズ映画のデータをスクレイピングする単純なシナリオと、IMDb からトップ 250 の映画をスクレイピングするより複雑なシナリオです 。ウェブからデータをスクレイピングする技術的な詳細は複雑になることがありますが、法的および倫理的な考慮事項はさらに複雑になる可能性があります 。データスクレイピングを始める前に、これら両方について自分自身で学ぶことが重要です 。</p>
+<p>これで、本書のインポート（import）部分が終わりました。ここでは、データがある場所（スプレッドシート、データベース、JSON ファイル、ウェブサイト）から、R の整然とした形式へとデータを取り込むテクニックを学びました。次は、プログラミング言語としての R を最大限に活用するという新しいトピックに目を向ける時間です。</p>
+
+
+</section></main><!-- /main --><script>
+	document.addEventListener('keydown', function (e) {
+		// 入力フォームの中では無効化
+		if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+		if (e.key === 'ArrowLeft') {
+			// 前のページへの「リンク（aタグ）」を探してクリック
+			const prev = document.querySelector('.nav-page-previous a');
+			if (prev) prev.click();
+		} else if (e.key === 'ArrowRight') {
+			// 次のページへの「リンク（aタグ）」を探してクリック
+			const next = document.querySelector('.nav-page-next a');
+			if (next) next.click();
+		}
+	});
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r4ds\.hadley\.nz\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./rectangling.html" class="pagination-link" aria-label="階層データ">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">階層データ</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./program.html" class="pagination-link" aria-label="プログラミング">
+        <span class="nav-page-text">プログラミング</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>R for Data Science (2e) was written by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/webscraping.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>

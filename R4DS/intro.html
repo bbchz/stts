@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund">
+<title>はじめに – R for Data Science (2e)</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./whole-game.html" rel="next">
+<link href="./preface-2e.html" rel="prev">
+<link href="./cover.jpg" rel="icon" type="image/jpeg">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a8da12e74b29c2e7b17644f84b91567b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-674e3cc0c687a3cc22528ff3730883a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "-f"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script defer="" data-domain="r4ds.hadley.nz" src="https://plausible.io/js/plausible.js"></script><link rel="stylesheet" href="custom.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">はじめに</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Data Science (2e)</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/hadley/r4ds/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ようこそ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface-2e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第2版へのまえがき</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">はじめに</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./whole-game.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの全体像</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">データ可視化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ワークフロー：基本</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">データ変形</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-style.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ワークフロー：コードスタイル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-tidy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">データの整然化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-scripts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">ワークフロー：スクリプトとプロジェクト</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データのインポート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-help.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">ワークフロー：助けを求める</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">可視化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./layers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">レイヤー</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./EDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">探索的データ分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">共有</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データ変形</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logicals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">論理ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">数値ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">文字列</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regexps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">正規表現</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ファクター</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datetimes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">日付と時刻</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">欠損値</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">結合</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの読み込み</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./spreadsheets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Arrow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rectangling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">階層データ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./webscraping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">プログラミング</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">関数</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">反復</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./base-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">ベースRへのフィールドガイド</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./communicate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">共有</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto-formats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Quartoの出力形式</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#%E5%AD%A6%E3%81%B9%E3%82%8B%E3%81%93%E3%81%A8" id="toc-学べること" class="nav-link active" data-scroll-target="#%E5%AD%A6%E3%81%B9%E3%82%8B%E3%81%93%E3%81%A8">学べること</a></li>
+  <li><a href="#%E6%9C%AC%E6%9B%B8%E3%81%AE%E6%A7%8B%E6%88%90" id="toc-本書の構成" class="nav-link" data-scroll-target="#%E6%9C%AC%E6%9B%B8%E3%81%AE%E6%A7%8B%E6%88%90">本書の構成</a></li>
+  <li>
+<a href="#%E6%9C%AC%E6%9B%B8%E3%81%A7%E6%89%B1%E3%82%8F%E3%81%AA%E3%81%84%E3%81%93%E3%81%A8" id="toc-本書で扱わないこと" class="nav-link" data-scroll-target="#%E6%9C%AC%E6%9B%B8%E3%81%A7%E6%89%B1%E3%82%8F%E3%81%AA%E3%81%84%E3%81%93%E3%81%A8">本書で扱わないこと</a>
+  <ul class="collapse">
+<li><a href="#%E3%83%A2%E3%83%87%E3%83%AA%E3%83%B3%E3%82%B0" id="toc-モデリング" class="nav-link" data-scroll-target="#%E3%83%A2%E3%83%87%E3%83%AA%E3%83%B3%E3%82%B0">モデリング</a></li>
+  <li><a href="#%E3%83%93%E3%83%83%E3%82%B0%E3%83%87%E3%83%BC%E3%82%BF" id="toc-ビッグデータ" class="nav-link" data-scroll-target="#%E3%83%93%E3%83%83%E3%82%B0%E3%83%87%E3%83%BC%E3%82%BF">ビッグデータ</a></li>
+  <li><a href="#pythonjulia%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E8%A8%80%E8%AA%9E" id="toc-pythonjuliaその他の言語" class="nav-link" data-scroll-target="#pythonjulia%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E8%A8%80%E8%AA%9E">Python、Julia、その他の言語</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6" id="toc-前提条件" class="nav-link" data-scroll-target="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6">前提条件</a>
+  <ul class="collapse">
+<li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
+  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio">RStudio</a></li>
+  <li><a href="#tidyverse" id="toc-tidyverse" class="nav-link" data-scroll-target="#tidyverse">tidyverse</a></li>
+  <li><a href="#%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8" id="toc-その他のパッケージ" class="nav-link" data-scroll-target="#%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8">その他のパッケージ</a></li>
+  </ul>
+</li>
+  <li><a href="#r%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%AE%9F%E8%A1%8C" id="toc-rコードの実行" class="nav-link" data-scroll-target="#r%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%AE%9F%E8%A1%8C">Rコードの実行</a></li>
+  <li><a href="#%E8%AC%9D%E8%BE%9E" id="toc-謝辞" class="nav-link" data-scroll-target="#%E8%AC%9D%E8%BE%9E">謝辞</a></li>
+  <li><a href="#%E5%A5%A5%E4%BB%98" id="toc-奥付" class="nav-link" data-scroll-target="#%E5%A5%A5%E4%BB%98">奥付</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/intro.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span id="sec-intro" class="quarto-section-identifier">はじめに</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>データサイエンスは、生のデータを理解、洞察、そして知識へと変えることができるエキサイティングな分野です 。『R for Data Science』の目的は、データサイエンスを効率的かつ再現可能な形で実行するためのRの最も重要なツールを学び、その過程を楽しみながら身につけていただくことです 😃 。本書を読み終える頃には、Rの優れた機能を活用して、多種多様なデータサイエンスの課題に取り組むためのツールが手元に揃っているはずです 。</p>
+<section id="学べること" class="level2"><h2 class="anchored" data-anchor-id="学べること">学べること</h2>
+<p>データサイエンスは広大な分野であり、一冊の本ですべてをマスターすることは不可能です 。本書の狙いは、最も重要なツールの強固な基礎を築き、必要に応じてさらに深く学ぶためのリソースを見つけられるだけの知識を提供することにあります 。典型的なデータサイエンスプロジェクトのステップをモデル化したものが <a href="#fig-ds-diagram" class="quarto-xref">Figure&nbsp;<span>1</span></a> です 。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ds-diagram" class="quarto-float quarto-figure quarto-figure-center anchored" alt="データサイエンスのサイクルを表示する図：読み込み（Import） -> 整然化（Tidy） -> 理解（Understand）（変形、可視化、モデリングのサイクルフェーズを含む） -> 共有（Communicate）。これらすべてをプログラミング（Program）が囲んでいる。 ">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ds-diagram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="diagrams/data-science/base.png" class="img-fluid figure-img" alt="データサイエンスのサイクルを表示する図：読み込み（Import） -> 整然化（Tidy） -> 理解（Understand）（変形、可視化、モデリングのサイクルフェーズを含む） -> 共有（Communicate）。これらすべてをプログラミング（Program）が囲んでいる。 " width="535">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ds-diagram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: データサイエンスプロセスのモデルでは、まずデータの読み込み（Import）と整然化（Tidying）から始めます。 次に、変形（Transform）、可視化（Visualize）、モデリング（Model）の反復サイクルを通じてデータを理解します。 最後に、結果を他の人々に伝える（Communicate）ことでプロセスを完了します。
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>まず、データをRに<strong>読み込む（import）</strong>必要があります。これは通常、ファイル、データベース、またはウェブアプリケーションプログラミングインターフェース（API）に保存されているデータを取り込み、Rのデータフレームにロードすることを意味します 。データをRに取り込めなければ、データサイエンスを始めることはできません 。</p>
+<p>データを読み込んだら、それを<strong>整然化（tidy）</strong>するのが良い方法です 。データの整然化とは、データセットの持つ意味（セマンティクス）と保存形式が一致するように、一貫した形式で保存することを指します 。簡単に言えば、データが整然としているとき、各列は変数であり、各行は観測値となります 。構造が一貫していることで、異なる関数に適合させるためにデータ形式と格闘するのではなく、データに関する疑問に答えることに集中できるようになるため、整然としたデータは重要です 。</p>
+<p>データが整然としたら、次のステップは通常、それを<strong>変形（transform）</strong>することです 。変形には、特定の都市の人々や昨年のデータだけを抽出するといった関心のある観測値の絞り込み、距離と時間から速度を計算するといった既存の変数から新しい変数を作成すること、そして件数や平均値などの要約統計量を計算することが含まれます 。整然化と変形は合わせて<strong>ラングリング（wrangling）</strong>と呼ばれます。データを扱いやすい形にする作業は、しばしば格闘（wrangle）のように感じられるからです 。</p>
+<p>必要な変数が揃い、データが整然とした形になれば、知識を生み出すための2つの主要なエンジンである「可視化」と「モデリング」の出番です 。これらには相補的な長所と短所があるため、実際のデータ分析では両者の間を何度も行き来することになります 。</p>
+<p><strong>可視化（Visualization）</strong>は、本質的に人間中心の活動です。優れた可視化は、予想もしなかったことを示したり、データに対する新たな疑問を投げかけたりします 。また、問いが間違っていることや、別のデータを収集する必要があることを示唆してくれることもあります 。可視化は驚きを与えてくれますが、人間による解釈を必要とするため、大規模なスケーリングにはあまり向いていません 。</p>
+<p><strong>モデル（Models）</strong>は可視化を補完するツールです。問いが十分に精密になれば、モデルを使ってそれに答えることができます 。モデルは本質的に数学的または計算的なツールであるため、一般的にスケーリングに優れています 。スケーリングが難しい場合でも、通常は人間の脳を増やすよりもコンピューターを買い足す方が安上がりです 。しかし、すべてのモデルには仮定があり、その性質上、モデル自身が自分の仮定に疑問を持つことはできません 。つまり、モデルが根本的な驚きを与えてくれることはありません 。</p>
+<p>データサイエンスの最後のステップは、あらゆるデータ分析プロジェクトにおいて極めて重要な<strong>共有（communication）</strong>です 。モデルや可視化によってどれほど深くデータを理解できたとしても、その結果を他者に伝えることができなければ意味がありません 。</p>
+<p>これらすべてのツールを支えているのが<strong>プログラミング（programming）</strong>です。プログラミングは、データサイエンスプロジェクトのほぼすべてのパートで使用する横断的なツールです 。優れたデータサイエンティストになるためにプログラミングの達人である必要はありませんが、プログラミングを学ぶことは報われます。より良いプログラマーになることで、共通のタスクを自動化し、新しい問題をより簡単に解決できるようになるからです 。</p>
+<p>これらのツールはあらゆるプロジェクトで使用しますが、それだけでは不十分な場合もあります 。ここには「80対20の法則」が当てはまります。本書で学ぶツールを使えば、あらゆるプロジェクトの約80%に対処できますが、残りの20%に対処するには他のツールが必要になります 。本書を通じて、さらに詳しく学べるリソースを随時紹介していきます 。</p>
+</section><section id="本書の構成" class="level2"><h2 class="anchored" data-anchor-id="本書の構成">本書の構成</h2>
+<p>前述したデータサイエンスツールの説明は、分析でそれらを使用する順序にほぼ沿っています（もちろん、実際には何度もサイクルを繰り返します） 。しかし、私たちの経験上、データの読み込みと整然化を最初に学ぶのはあまり効率的ではありません。なぜなら、それらの作業は80%の時間は単調で退屈であり、残りの20%の時間は奇妙でフラストレーションが溜まるものだからです 。新しい科目を学び始める場所としては適切ではありません 。</p>
+<p>代わりに本書では、すでに読み込まれ整然化されたデータの可視化と変形から始めます 。そうすることで、自分自身のデータを取り込み、整然化する段階になったとき、その苦労に値する結果が待っていることを知っているため、モチベーションを高く保つことができるからです 。各章では、「まず意欲を高める例から始めて全体像を示し、その後に細部を深く掘り下げる」という一貫したパターンに従うようにしています 。本書の各セクションには、学んだことを練習するための演習問題が用意されています 。演習をスキップしたくなるかもしれませんが、実際の問題で練習することに勝る学習方法はありません 。</p>
+</section><section id="本書で扱わないこと" class="level2"><h2 class="anchored" data-anchor-id="本書で扱わないこと">本書で扱わないこと</h2>
+<p>本書でカバーしていない重要なトピックがいくつかあります 。できるだけ早く分析を始められるよう、エッセンスに冷徹なまでに焦点を絞ることが重要だと考えているからです 。そのため、すべての重要なトピックを網羅することはできません。</p>
+<section id="モデリング" class="level3"><h3 class="anchored" data-anchor-id="モデリング">モデリング</h3>
+<p>モデリングはデータサイエンスにとって非常に重要ですが、巨大なトピックであり、残念ながら本書で十分な解説を行うスペースがありません 。モデリングについてさらに詳しく学びたい場合は、私たちの同僚であるMax KuhnとJulia Silgeによる『<a href="https://www.tmwr.org">Tidy Modeling with R</a>』を強くお勧めします 。この本では、本書で使用するtidyverseパッケージと多くの慣習を共有している tidymodels ファミリーのパッケージについて学ぶことができます 。</p>
+</section><section id="ビッグデータ" class="level3"><h3 class="anchored" data-anchor-id="ビッグデータ">ビッグデータ</h3>
+<p>本書は、メモリに収まる程度の小規模なデータセットを主な対象としています 。小規模なデータでの経験なしにビッグデータに取り組むことはできないため、ここから始めるのが適切です 。本書で学ぶツールの大部分は、数百メガバイトのデータを容易に扱うことができ、少し注意を払えば数ギガバイトのデータも処理できます 。また、ビッグデータの保存によく使われるデータベースやParquetファイルからデータを取り出す方法も紹介します 。データセット全体を操作する必要はありません。関心のある問いに答えるためには、そのサブセットやサブサンプルがあれば十分だからです。</p>
+<p>もし日常的にさらに大規模なデータ（10〜100GBなど）を扱っているなら、<a href="https://github.com/Rdatatable/data.table">data.table</a> について学ぶことをお勧めします 。本書でこれを教えないのは、tidyverseとは異なるインターフェースを持ち、異なる慣習を学ぶ必要があるためです 。しかし、非常に高速であり、大規模なデータを扱う場合には、学習に時間を投資するだけの価値があるパフォーマンス上のメリットがあります 。</p>
+</section><section id="pythonjuliaその他の言語" class="level3"><h3 class="anchored" data-anchor-id="pythonjuliaその他の言語">Python、Julia、その他の言語</h3>
+<p>本書では、Python、Julia、またはデータサイエンスに有用なその他のプログラミング言語については一切学びません 。これはそれらのツールが劣っていると考えているからではありません。決してそんなことはありません！ 実際、ほとんどのデータサイエンスチームは複数の言語を組み合わせて使っており、多くの場合、少なくともRとPythonの両方を使用しています 。しかし、一度に一つのツールをマスターするのが最善であり、Rはそのスタート地点として最適だと私たちは強く信じています 。</p>
+</section></section><section id="前提条件" class="level2"><h2 class="anchored" data-anchor-id="前提条件">前提条件</h2>
+<p>本書を最大限に活用していただくために、読者の皆様についていくつかの仮定を置いています 。一般的な数値リテラシーがあり、基本的なプログラミング経験があれば助けになります 。プログラミングが全く初めての方は、Garrettによる『<a href="https://rstudio-education.github.io/hopr/">Hands on Programming with R</a>』が本書の貴重な副読本になるでしょう 。本書のコードを実行するには、R、RStudio、そして <strong>tidyverse</strong> と呼ばれるRパッケージのコレクション、およびその他のいくつかのパッケージの4つが必要です 。パッケージは、再現可能なRコードの基本単位です。再利用可能な関数、その使用方法を説明するドキュメント、およびサンプルデータが含まれています 。</p>
+<section id="r" class="level3"><h3 class="anchored" data-anchor-id="r">R</h3>
+<p>Rをダウンロードするには、CRAN（Comprehensive R Archive Network）のサイト <a href="https://cloud.r-project.org">https://cloud.r-project.org</a> にアクセスしてください 。Rの新しいメジャーバージョンは年に一度公開され、マイナーリリースは年に2〜3回あります 。定期的にアップデートすることをお勧めします。アップグレード（特にメジャーバージョンの場合、すべてのパッケージの再インストールが必要になるなど）は少し手間がかかることもありますが、先延ばしにすればするほど状況は悪化します 。本書では R 4.2.0 以降を推奨します。</p>
+</section><section id="rstudio" class="level3"><h3 class="anchored" data-anchor-id="rstudio">RStudio</h3>
+<p>RStudioはRプログラミングのための統合開発環境（IDE）であり、<a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a> からダウンロードできます 。RStudioは年に数回アップデートされ、新しいバージョンが出ると自動的に通知されるため、こまめにチェックする必要はありません 。最新の優れた機能を利用するために、定期的にアップグレードすることをお勧めします 。本書では、少なくとも RStudio 2022.02.0 以降を使用していることを確認してください 。</p>
+<dl>
+<dt>RStudioを起動すると（<a href="#fig-rstudio-console" class="quarto-xref">Figure&nbsp;<span>2</span></a>）、インターフェースに2つの主要な領域が表示されます。コンソール（Console）ペインと出力（Output）ペインです 。今のところ知っておくべきことは、コンソールペインにRコードを入力してEnterキーを押すと実行されるということだけです 。進めるにつれて、より詳しく学んでいきましょう！</dt>
+<dd>
+<p>RStudioのすべての機能についての包括的な概要を知りたい場合は、RStudioユーザーガイド（<a href="https://docs.posit.co/ide/user">https://docs.posit.co/ide/user</a>）を参照してください 。</p>
+</dd>
+</dl>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-rstudio-console" class="quarto-float quarto-figure quarto-figure-center anchored" alt="コンソール（Console）と出力（Output）のペインが強調されたRStudio IDE。">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-rstudio-console-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="diagrams/rstudio/console.png" class="img-fluid figure-img" alt="コンソール（Console）と出力（Output）のペインが強調されたRStudio IDE。" width="520">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rstudio-console-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: RStudio IDEには2つの主要な領域があります。左側のコンソールペインにRコードを入力し、右側の出力ペインでプロットなどを確認します。
+</figcaption></figure>
+</div>
+</div>
+</div>
+</section><section id="tidyverse" class="level3"><h3 class="anchored" data-anchor-id="tidyverse">tidyverse</h3>
+<p>また、いくつかのRパッケージをインストールする必要があります 。R<strong>パッケージ</strong>とは、base Rの機能を拡張する関数、データ、ドキュメントのコレクションです 。パッケージを使いこなすことが、Rを使いこなす鍵となります。本書で学ぶパッケージの大部分は、いわゆる tidyverse（タイディバース）の一部です 。tidyverseに含まれるすべてのパッケージは、データとRプログラミングに関する共通の哲学を共有しており、連携して動作するように設計されています 。</p>
+<p>以下の1行のコードで、tidyverse全体をインストールできます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>お使いのコンピューターのコンソールにこのコードを入力し、Enterキーを押して実行してください 。RがCRANからパッケージをダウンロードし、コンピューターにインストールします 。パッケージ内の関数やオブジェクト、ヘルプファイルは、<code><a href="https://rdrr.io/r/base/library.html">library()</a></code> でロードするまで使用できません 。インストールが完了したら、<code><a href="https://rdrr.io/r/base/library.html">library()</a></code> 関数を使ってロードできます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; ── Attaching core tidyverse packages ───────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class="co">#&gt; ✔ dplyr     1.1.4     ✔ readr     2.1.5</span></span>
+<span><span class="co">#&gt; ✔ forcats   1.0.1     ✔ stringr   1.5.2</span></span>
+<span><span class="co">#&gt; ✔ ggplot2   4.0.0     ✔ tibble    3.3.0</span></span>
+<span><span class="co">#&gt; ✔ lubridate 1.9.4     ✔ tidyr     1.3.1</span></span>
+<span><span class="co">#&gt; ✔ purrr     1.1.0     </span></span>
+<span><span class="co">#&gt; ── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span></span>
+<span><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span>
+<span><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これにより、tidyverseが dplyr, forcats, ggplot2, lubridate, purrr, readr, stringr, tibble, tidyr という9つのパッケージをロードしたことがわかります 。これらはほぼすべての分析で使用するため、tidyverseの<strong>コア（core）</strong>パッケージと見なされています 。tidyverseのパッケージは頻繁に変更されます。<code><a href="https://tidyverse.tidyverse.org/reference/tidyverse_update.html">tidyverse_update()</a></code> を実行することで、アップデートが利用可能かどうかを確認できます 。</p>
+</section><section id="その他のパッケージ" class="level3"><h3 class="anchored" data-anchor-id="その他のパッケージ">その他のパッケージ</h3>
+<p>tidyverse以外にも、別のドメインの問題を解決するため、あるいは異なる設計原則に基づいて作られた優れたパッケージが数多く存在します 。それらは単に「異なる」だけであり、劣っているわけではありません 。言い換えれば、tidyverseの補集合は「メッシーバース（しっちゃかめちゃかな世界）」ではなく、相互に関連する他の多くのパッケージ群なのです 。</p>
+<blockquote class="blockquote">
+<p><strong>【Geminiの補足】</strong>: 「messyverse」は、tidyverse（整然とした世界）の対義語として著者が作った造語です。日本語で言うところの「カオスな世界」といったニュアンスですが、Rの世界にはtidyverse以外にも洗練されたパッケージ群が多数存在することを、ユーモアを交えて表現しています。</p>
+</blockquote>
+<p>Rを使ったデータサイエンスプロジェクトに取り組むにつれ、新しいパッケージやデータに関する新しい考え方を学んでいくことになります 。本書でも、tidyverse以外のパッケージを多く使用します 。例えば、Rを学ぶ過程で興味深いデータセットを提供してくれる以下のパッケージなどです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"arrow"</span>, <span class="st">"babynames"</span>, <span class="st">"curl"</span>, <span class="st">"duckdb"</span>, <span class="st">"gapminder"</span>,</span>
+<span>    <span class="st">"ggrepel"</span>, <span class="st">"ggridges"</span>, <span class="st">"ggthemes"</span>, <span class="st">"hexbin"</span>, <span class="st">"janitor"</span>, <span class="st">"Lahman"</span>,</span>
+<span>    <span class="st">"leaflet"</span>, <span class="st">"maps"</span>, <span class="st">"nycflights13"</span>, <span class="st">"openxlsx"</span>, <span class="st">"palmerpenguins"</span>,</span>
+<span>    <span class="st">"repurrrsive"</span>, <span class="st">"tidymodels"</span>, <span class="st">"writexl"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>また、一回限りの例のために他のパッケージもいくつか使用します 。今すぐインストールする必要はありませんが、次のようなエラーが表示された場合は、</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggrepel.slowkow.com/">ggrepel</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in library(ggrepel) : there is no package called ‘ggrepel’</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>install.packages("ggrepel")</code> を実行してパッケージをインストールする必要があることを覚えておいてください 。</p>
+</section></section><section id="rコードの実行" class="level2"><h2 class="anchored" data-anchor-id="rコードの実行">Rコードの実行</h2>
+<p>前のセクションでは、Rコードを実行する例をいくつか示しました 。本書のコードは次のように表示されます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">1</span> <span class="op">+</span> <span class="fl">2</span></span>
+<span><span class="co">#&gt; [1] 3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これをご自身のコンソールで実行すると、次のようになります。</p>
+<pre><code>&gt; 1 + 2
+[1] 3</code></pre>
+<p>主な違いが2つあります 。コンソールでは、<strong>プロンプト</strong>と呼ばれる <code>&gt;</code> の後に入力しますが、本書ではプロンプトを表示していません 。本書では、出力結果の前に <code>#&gt;</code> を付けてコメントアウトしていますが、コンソールではコードの直後に表示されます 。電子書籍版をお読みであれば、これらの違いを気にすることなく、コードを簡単にコピーしてコンソールに貼り付けることができます 。</p>
+<p>本書では、コードを参照するために一貫した慣習を使用しています。</p>
+<ul>
+<li>関数はコードフォントで表示され、<code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> や <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code> のように後に括弧が続きます 。</li>
+<li>その他のRオブジェクト（データや関数の引数など）は、<code>flights</code> や <code>x</code> のように括弧なしのコードフォントで表示されます 。</li>
+<li>どのパッケージのオブジェクトであるかを明確にするために、<code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code> や <code><a href="https://rdrr.io/pkg/nycflights13/man/flights.html">nycflights13::flights</a></code> のように、パッケージ名の後に2つのコロン（<code>::</code>）を付けて表記することもあります 。これはRの正しいコード形式でもあります。</li>
+</ul></section><section id="謝辞" class="level2"><h2 class="anchored" data-anchor-id="謝辞">謝辞</h2>
+<p>本書はHadley, Mine, Garrettの3人だけで作られたものではなく、Rコミュニティの多くの人々との（対面およびオンラインでの）対話の結果として生まれました 。皆様との対話に深く感謝いたします。本当にありがとうございました！</p>
+<p>（中略：コントリビューター一覧の処理コード ）</p>
+<p>本書はオープンに執筆され、多くの人々がプルリクエストを通じて貢献してくださいました。GitHubのプルリクエストを通じて改善に貢献してくださった全 259 名の皆様に（ユーザー名のアルファベット順で）心より感謝申し上げます： @a-rosenberg, Tim Becker (@a2800276), Abinash Satapathy (@Abinashbunty), Adam Gruer (@adam-gruer), adi pradhan (@adidoit), A. s. (@Adrianzo), Aep Hidyatuloh (@aephidayatuloh), Andrea Gilardi (@agila5), Ajay Deonarine (@ajay-d), @AlanFeder, Daihe Sui (@alansuidaihe), @alberto-agudo, @AlbertRapp, @aleloi, pete (@alonzi), Alex (@ALShum), Andrew M. (@amacfarland), Andrew Landgraf (@andland), @andyhuynh92, Angela Li (@angela-li), Antti Rask (@AnttiRask), LOU Xun (@aquarhead), @ariespirgel, @august-18, Michael Henry (@aviast), Azza Ahmed (@azzaea), Steven Moran (@bambooforest), Brian G. Barkley (@BarkleyBG), Mara Averick (@batpigandme), Oluwafemi OYEDELE (@BB1464), Brent Brewington (@bbrewington), Bill Behrman (@behrman), Ben Herbertson (@benherbertson), Ben Marwick (@benmarwick), Ben Steinberg (@bensteinberg), Benjamin Yeh (@bentyeh), Betul Turkoglu (@betulturkoglu), Brandon Greenwell (@bgreenwell), Bianca Peterson (@BinxiePeterson), Birger Niklas (@BirgerNi), Brett Klamer (@bklamer), @boardtc, Christian (@c-hoh), Caddy (@caddycarine), Camille V Leonard (@camillevleonard), @canovasjm, Cedric Batailler (@cedricbatailler), Christina Wei (@christina-wei), Christian Mongeau (@chrMongeau), Cooper Morris (@coopermor), Colin Gillespie (@csgillespie), Rademeyer Vermaak (@csrvermaak), Chloe Thierstein (@cthierst), Chris Saunders (@ctsa), Abhinav Singh (@curious-abhinav), Curtis Alexander (@curtisalexander), Christian G. Warden (@cwarden), Charlotte Wickham (@cwickham), Kenny Darrell (@darrkj), David Kane (@davidkane9), David (@davidrsch), David Rubinger (@davidrubinger), David Clark (@DDClark), Derwin McGeary (@derwinmcgeary), Daniel Gromer (@dgromer), @Divider85, @djbirke, Danielle Navarro (@djnavarro), Russell Shean (@DOH-RPS1303), Zhuoer Dong (@dongzhuoer), Devin Pastoor (@dpastoor), @DSGeoff, Devarshi Thakkar (@dthakkar09), Julian During (@duju211), Dylan Cashman (@dylancashman), Dirk Eddelbuettel (@eddelbuettel), Edwin Thoen (@EdwinTh), Ahmed El-Gabbas (@elgabbas), Henry Webel (@enryH), Ercan Karadas (@ercan7), Eric Kitaif (@EricKit), Eric Watt (@ericwatt), Erik Erhardt (@erikerhardt), Etienne B. Racine (@etiennebr), Everett Robinson (@evjrob), @fellennert, Flemming Miguel (@flemmingmiguel), Floris Vanderhaeghe (@florisvdh), @funkybluehen, @gabrivera, Garrick Aden-Buie (@gadenbuie), Peter Ganong (@ganong123), Gerome Meyer (@GeroVanMi), Gleb Ebert (@gl-eb), Josh Goldberg (@GoldbergData), bahadir cankardes (@gridgrad), Gustav W Delius (@gustavdelius), Hao Chen (@hao-trivago), Harris McGehee (@harrismcgehee), @hendrikweisser, Hengni Cai (@hengnicai), Iain (@Iain-S), Ian Sealy (@iansealy), Ian Lyttle (@ijlyttle), Ivan Krukov (@ivan-krukov), Jacob Kaplan (@jacobkap), Jazz Weisman (@jazzlw), John Blischak (@jdblischak), John D. Storey (@jdstorey), Gregory Jefferis (@jefferis), Jeffrey Stevens (@JeffreyRStevens), 蒋雨蒙 (@JeldorPKU), Jennifer (Jenny) Bryan (@jennybc), Jen Ren (@jenren), Jeroen Janssens (@jeroenjanssens), @jeromecholewa, Janet Wesner (@jilmun), Jim Hester (@jimhester), JJ Chen (@jjchern), Jacek Kolacz (@jkolacz), Joanne Jang (@joannejang), @johannes4998, John Sears (@johnsears), @jonathanflint, Jon Calder (@jonmcalder), Jonathan Page (@jonpage), Jon Harmon (@jonthegeek), JooYoung Seo (@jooyoungseo), Justinas Petuchovas (@jpetuchovas), Jordan (@jrdnbradford), Jeffrey Arnold (@jrnold), Jose Roberto Ayala Solares (@jroberayalas), Joyce Robbins (@jtr13), @juandering, Julia Stewart Lowndes (@jules32), Sonja (@kaetschap), Kara Woo (@karawoo), Katrin Leinweber (@katrinleinweber), Karandeep Singh (@kdpsingh), Kevin Perese (@kevinxperese), Kevin Ferris (@kferris10), Kirill Sevastyanenko (@kirillseva), Jonathan Kitt (@KittJonathan), @koalabearski, Kirill Müller (@krlmlr), Rafał Kucharski (@kucharsky), Kevin Wright (@kwstat), Noah Landesberg (@landesbergn), Lawrence Wu (@lawwu), @lindbrook, Luke W Johnston (@lwjohnst86), Kara de la Marck (@MarckK), Kunal Marwaha (@marwahaha), Matan Hakim (@matanhakim), Matthias Liew (@MatthiasLiew), Matt Wittbrodt (@MattWittbrodt), Mauro Lepore (@maurolepore), Mark Beveridge (@mbeveridge), @mcewenkhundi, mcsnowface, PhD (@mcsnowface), Matt Herman (@mfherman), Michael Boerman (@michaelboerman), Mitsuo Shiota (@mitsuoxv), Matthew Hendrickson (@mjhendrickson), @MJMarshall, Misty Knight-Finley (@mkfin7), Mohammed Hamdy (@mmhamdy), Maxim Nazarov (@mnazarov), Maria Paula Caldas (@mpaulacaldas), Mustafa Ascha (@mustafaascha), Nelson Areal (@nareal), Nate Olson (@nate-d-olson), Nathanael (@nateaff), @nattalides, Ned Western (@NedJWestern), Nick Clark (@nickclark1000), @nickelas, Nirmal Patel (@nirmalpatel), Nischal Shrestha (@nischalshrestha), Nicholas Tierney (@njtierney), Jakub Nowosad (@Nowosad), Nick Pullen (@nstjhp), @olivier6088, Olivier Cailloux (@oliviercailloux), Robin Penfold (@p0bs), Pablo E. Garcia (@pabloedug), Paul Adamson (@padamson), Penelope Y (@penelopeysm), Peter Hurford (@peterhurford), Peter Baumgartner (@petzi53), Patrick Kennedy (@pkq), Pooya Taherkhani (@pooyataher), Y. Yu (@PursuitOfDataScience), Radu Grosu (@radugrosu), Ranae Dietzel (@Ranae), Ralph Straumann (@rastrau), Rayna M Harris (@raynamharris), @ReeceGoding, Robin Gertenbach (@rgertenbach), Jajo (@RIngyao), Riva Quiroga (@rivaquiroga), Richard Knight (@RJHKnight), Richard Zijdeman (@rlzijdeman), @robertchu03, Robin Kohrs (@RobinKohrs), Robin (@Robinlovelace), Emily Robinson (@robinsones), Rob Tenorio (@robtenorio), Rod Mazloomi (@RodAli), Rohan Alexander (@RohanAlexander), Romero Morais (@RomeroBarata), Albert Y. Kim (@rudeboybert), Saghir (@saghirb), Hojjat Salmasian (@salmasian), Jonas (@sauercrowd), Vebash Naidoo (@sciencificity), Seamus McKinsey (@seamus-mckinsey), @seanpwilliams, Luke Smith (@seasmith), Matthew Sedaghatfar (@sedaghatfar), Sebastian Kraus (@sekR4), Sam Firke (@sfirke), Shannon Ellis (@ShanEllis), @shoili, Christian Heinrich (@Shurakai), S’busiso Mkhondwane (@sibusiso16), SM Raiyyan (@sm-raiyyan), Jakob Krigovsky (@sonicdoe), Stephan Koenig (@stephan-koenig), Stephen Balogun (@stephenbalogun), Steven M. Mortimer (@StevenMMortimer), Stéphane Guillou (@stragu), Sulgi Kim (@sulgik), Sergiusz Bleja (@svenski), Tal Galili (@talgalili), Alec Fisher (@Taurenamo), Todd Gerarden (@tgerarden), Tom Godfrey (@thomasggodfrey), Tim Broderick (@timbroderick), Tim Waterhouse (@timwaterhouse), TJ Mahr (@tjmahr), Thomas Klebel (@tklebel), Tom Prior (@tomjamesprior), Terence Teo (@tteo), @twgardner2, Ulrik Lyngs (@ulyngs), Shinya Uryu (@uribo), Martin Van der Linden (@vanderlindenma), Walter Somerville (@waltersom), @werkstattcodes, Will Beasley (@wibeasley), Yihui Xie (@yihui), Yiming (Paul) Li (@yimingli), @yingxingwu, Hiroaki Yutani (@yutannihilation), Yu Yu Aung (@yuyu-aung), Zach Bogart (@zachbogart), @zeal626, Zeki Akyol (@zekiakyol)。</p>
+</section><section id="奥付" class="level2"><h2 class="anchored" data-anchor-id="奥付">奥付</h2>
+<p>本書のオンライン版は <a href="https://r4ds.hadley.nz">https://r4ds.hadley.nz</a> で公開されています 。紙の書籍が再版されるまでの間も、内容は進化し続けます 。本書のソースコードは <a href="https://github.com/hadley/r4ds" class="uri">https://github.com/hadley/r4ds</a> で入手可能です。本書は、テキストと実行可能なコードを組み合わせた書籍を簡単に作成できる <a href="https://quarto.org">Quarto</a> を使用して制作されています 。</p>
+
+
+</section></main><!-- /main --><script>
+	document.addEventListener('keydown', function (e) {
+		// 入力フォームの中では無効化
+		if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+		if (e.key === 'ArrowLeft') {
+			// 前のページへの「リンク（aタグ）」を探してクリック
+			const prev = document.querySelector('.nav-page-previous a');
+			if (prev) prev.click();
+		} else if (e.key === 'ArrowRight') {
+			// 次のページへの「リンク（aタグ）」を探してクリック
+			const next = document.querySelector('.nav-page-next a');
+			if (next) next.click();
+		}
+	});
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r4ds\.hadley\.nz\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./preface-2e.html" class="pagination-link" aria-label="第2版へのまえがき">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">第2版へのまえがき</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./whole-game.html" class="pagination-link" aria-label="データの全体像">
+        <span class="nav-page-text">データの全体像</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>R for Data Science (2e) was written by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/intro.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>

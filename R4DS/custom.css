@@ -1,0 +1,8 @@
+/* インラインコードのスタイル修正 */
+code:not(pre > code) {
+  color: #e83e8c;            /* コードの文字色（ピンク系。お好みで #f8f9fa などに変更可） */
+  background-color: #2b2b2b; /* 背景色（濃いグレー） */
+  padding: 0.2rem 0.4rem;    /* 余白の調整 */
+  border-radius: 0.3rem;     /* 角の丸み */
+  border: 1px solid #444;    /* 視認性を上げるための細い枠線 */
+}

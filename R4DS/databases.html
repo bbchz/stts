@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund">
+<title>21&nbsp; データベース – R for Data Science (2e)</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./arrow.html" rel="next">
+<link href="./spreadsheets.html" rel="prev">
+<link href="./cover.jpg" rel="icon" type="image/jpeg">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a8da12e74b29c2e7b17644f84b91567b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-674e3cc0c687a3cc22528ff3730883a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "-f"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script defer="" data-domain="r4ds.hadley.nz" src="https://plausible.io/js/plausible.js"></script><link rel="stylesheet" href="custom.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./import.html">データの読み込み</a></li><li class="breadcrumb-item"><a href="./databases.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Data Science (2e)</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/hadley/r4ds/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ようこそ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface-2e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第2版へのまえがき</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">はじめに</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./whole-game.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの全体像</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">データ可視化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ワークフロー：基本</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">データ変形</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-style.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ワークフロー：コードスタイル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-tidy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">データの整然化</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-scripts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">ワークフロー：スクリプトとプロジェクト</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データのインポート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow-help.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">ワークフロー：助けを求める</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./visualize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">可視化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./layers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">レイヤー</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./EDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">探索的データ分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">共有</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データ変形</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logicals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">論理ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">数値ベクトル</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">文字列</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regexps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">正規表現</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ファクター</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datetimes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">日付と時刻</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">欠損値</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">結合</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データの読み込み</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./spreadsheets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./databases.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Arrow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rectangling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">階層データ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./webscraping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ウェブスクレイピング</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">プログラミング</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">関数</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">反復</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./base-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">ベースRへのフィールドガイド</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./communicate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">共有</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto-formats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Quartoの出力形式</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB" id="toc-はじめに" class="nav-link active" data-scroll-target="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB"><span class="header-section-number">21.1</span> はじめに</a>
+  <ul class="collapse">
+<li><a href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6" id="toc-前提条件" class="nav-link" data-scroll-target="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="header-section-number">21.1.1</span> 前提条件</a></li>
+  </ul>
+</li>
+  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E5%9F%BA%E6%9C%AC" id="toc-データベースの基本" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E5%9F%BA%E6%9C%AC"><span class="header-section-number">21.2</span> データベースの基本</a></li>
+  <li>
+<a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A" id="toc-データベースへの接続" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A"><span class="header-section-number">21.3</span> データベースへの接続</a>
+  <ul class="collapse">
+<li><a href="#%E6%9C%AC%E6%9B%B8%E3%81%A7%E3%81%AF" id="toc-本書では" class="nav-link" data-scroll-target="#%E6%9C%AC%E6%9B%B8%E3%81%A7%E3%81%AF"><span class="header-section-number">21.3.1</span> 本書では</a></li>
+  <li><a href="#sec-load-data" id="toc-sec-load-data" class="nav-link" data-scroll-target="#sec-load-data"><span class="header-section-number">21.3.2</span> データのロード</a></li>
+  <li><a href="#dbi-%E3%81%AE%E5%9F%BA%E6%9C%AC" id="toc-dbi-の基本" class="nav-link" data-scroll-target="#dbi-%E3%81%AE%E5%9F%BA%E6%9C%AC"><span class="header-section-number">21.3.3</span> DBI の基本</a></li>
+  </ul>
+</li>
+  <li><a href="#dbplyr-%E3%81%AE%E5%9F%BA%E6%9C%AC" id="toc-dbplyr-の基本" class="nav-link" data-scroll-target="#dbplyr-%E3%81%AE%E5%9F%BA%E6%9C%AC"><span class="header-section-number">21.4</span> dbplyr の基本</a></li>
+  <li>
+<a href="#sql" id="toc-sql" class="nav-link" data-scroll-target="#sql"><span class="header-section-number">21.5</span> SQL</a>
+  <ul class="collapse">
+<li><a href="#sql-%E3%81%AE%E5%9F%BA%E6%9C%AC" id="toc-sql-の基本" class="nav-link" data-scroll-target="#sql-%E3%81%AE%E5%9F%BA%E6%9C%AC"><span class="header-section-number">21.5.1</span> SQL の基本</a></li>
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><span class="header-section-number">21.5.2</span> SELECT</a></li>
+  <li><a href="#from" id="toc-from" class="nav-link" data-scroll-target="#from"><span class="header-section-number">21.5.3</span> FROM</a></li>
+  <li><a href="#group-by" id="toc-group-by" class="nav-link" data-scroll-target="#group-by"><span class="header-section-number">21.5.4</span> GROUP BY</a></li>
+  <li><a href="#where" id="toc-where" class="nav-link" data-scroll-target="#where"><span class="header-section-number">21.5.5</span> WHERE</a></li>
+  <li><a href="#order-by" id="toc-order-by" class="nav-link" data-scroll-target="#order-by"><span class="header-section-number">21.5.6</span> ORDER BY</a></li>
+  <li><a href="#%E3%82%B5%E3%83%96%E3%82%AF%E3%82%A8%E3%83%AA" id="toc-サブクエリ" class="nav-link" data-scroll-target="#%E3%82%B5%E3%83%96%E3%82%AF%E3%82%A8%E3%83%AA"><span class="header-section-number">21.5.7</span> サブクエリ</a></li>
+  <li><a href="#%E7%B5%90%E5%90%88-joins" id="toc-結合-joins" class="nav-link" data-scroll-target="#%E7%B5%90%E5%90%88-joins"><span class="header-section-number">21.5.8</span> 結合 (Joins)</a></li>
+  <li><a href="#%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E5%8B%95%E8%A9%9E" id="toc-その他の動詞" class="nav-link" data-scroll-target="#%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E5%8B%95%E8%A9%9E"><span class="header-section-number">21.5.9</span> その他の動詞</a></li>
+  <li><a href="#%E7%B7%B4%E7%BF%92%E5%95%8F%E9%A1%8C" id="toc-練習問題" class="nav-link" data-scroll-target="#%E7%B7%B4%E7%BF%92%E5%95%8F%E9%A1%8C"><span class="header-section-number">21.5.10</span> 練習問題</a></li>
+  </ul>
+</li>
+  <li><a href="#sec-sql-expressions" id="toc-sec-sql-expressions" class="nav-link" data-scroll-target="#sec-sql-expressions"><span class="header-section-number">21.6</span> 関数の翻訳</a></li>
+  <li><a href="#%E3%81%BE%E3%81%A8%E3%82%81" id="toc-まとめ" class="nav-link" data-scroll-target="#%E3%81%BE%E3%81%A8%E3%82%81"><span class="header-section-number">21.7</span> まとめ</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/databases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./import.html">データの読み込み</a></li><li class="breadcrumb-item"><a href="./databases.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-import-databases" class="quarto-section-identifier"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">データベース</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="はじめに" class="level2" data-number="21.1"><h2 data-number="21.1" class="anchored" data-anchor-id="はじめに">
+<span class="header-section-number">21.1</span> はじめに</h2>
+<p>膨大な量のデータがデータベースに保存されているため、それらにアクセスする方法を知っておくことは不可欠です。 時には誰かに頼んで <code>.csv</code> ファイルにスナップショットをダウンロードしてもらうこともできますが、これではすぐに立ち行かなくなります。変更が必要になるたびに、他の人とコミュニケーションを取らなければならないからです。 必要なときに、必要なデータを取得するために、データベースに直接アクセスできるようになりたいと思うはずです。 この章では、まず DBI パッケージの基本を学びます。これを使用してデータベースに接続し、SQL[^databases-1] クエリでデータを取得する方法を学習します。 <strong>SQL</strong>（<strong>s</strong>tructured <strong>q</strong>uery <strong>l</strong>anguage の略）はデータベースの共通言語であり、すべてのデータサイエンティストが学ぶべき重要な言語です。 とはいえ、いきなり SQL から始めるのではなく、代わりに dbplyr を教えます。これは、dplyr のコードを SQL に翻訳してくれるツールです。 これを、SQL の最も重要な機能のいくつかを紹介するための手段として利用します。 この章を読み終える頃には SQL の達人になっているわけではありませんが、最も重要な構成要素を特定し、それらが何をするのかを理解できるようになります。 [^databases-1]: SQL は「エス・キュー・エル」または「シークェル」と発音されます。</p>
+<section id="前提条件" class="level3" data-number="21.1.1"><h3 data-number="21.1.1" class="anchored" data-anchor-id="前提条件">
+<span class="header-section-number">21.1.1</span> 前提条件</h3>
+<p>この章では、DBI と dbplyr を紹介します。 DBI は、データベースに接続して SQL を実行する低レベルのインターフェースです。 dbplyr は、dplyr のコードを SQL クエリに翻訳し、DBI を使用して実行する高レベルのインターフェースです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbplyr.tidyverse.org/">dbplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section><section id="データベースの基本" class="level2" data-number="21.2"><h2 data-number="21.2" class="anchored" data-anchor-id="データベースの基本">
+<span class="header-section-number">21.2</span> データベースの基本</h2>
+<p>最も単純なレベルでは、データベースをデータフレームの集合体、データベース用語でいうところの<strong>テーブル</strong>の集まりと考えることができます。 データフレームと同様に、データベースのテーブルは名前付きの列の集まりであり、列内のすべての値は同じ型です。 データフレームとデータベースのテーブルには、大きく分けて 3 つの違いがあります。</p>
+<ul>
+<li><p>データベースのテーブルはディスク上に保存され、いくらでも大きくすることができます。 データフレームはメモリ内に保存されるため、根本的な制限があります（ただし、その制限は多くの問題に対して依然として十分に大きいです）。</p></li>
+<li><p>データベースのテーブルには、ほとんどの場合インデックス（索引）があります。 本の索引と同じように、データベースのインデックスを使用すると、すべての行を確認することなく、目的の行をすばやく見つけることができます。 データフレームや tibble にはインデックスがありませんが、data.table にはあり、それが高速である理由の一つとなっています。</p></li>
+<li><p>ほとんどの古典的なデータベースは、既存のデータの分析ではなく、データの迅速な収集に最適化されています。 これらのデータベースは、R のように列ごとにデータを保存するのではなく、行ごとに保存されるため、<strong>行指向</strong>と呼ばれます。 最近では、既存のデータの分析を大幅に高速化する<strong>列指向</strong>データベースの開発が盛んに行われています。 データベースはデータベース管理システム（略して <strong>DBMS</strong>）によって運用されており、主に 3 つの形式があります。</p></li>
+<li><p><strong>クライアント・サーバー型</strong> DBMS は強力な中央サーバー上で動作し、自分のコンピュータ（クライアント）から接続します。 組織内の複数の人でデータを共有するのに適しています。 一般的なクライアント・サーバー型 DBMS には、PostgreSQL、MariaDB、SQL Server、Oracle などがあります。</p></li>
+<li><p><strong>クラウド型</strong> DBMS（Snowflake、Amazon の RedShift、Google の BigQuery など）は、クライアント・サーバー型 DBMS と似ていますが、クラウド上で動作します。 つまり、極めて大規模なデータセットを容易に扱うことができ、必要に応じて計算リソースを自動的に増強できます RedShift。</p></li>
+<li><p><strong>インプロセス型</strong> DBMS（SQLite や duckdb など）は、すべて自分のコンピュータ上で動作します。 あなたが主なユーザーである場合に、大規模なデータセットを扱うのに適しています。</p></li>
+</ul></section><section id="データベースへの接続" class="level2" data-number="21.3"><h2 data-number="21.3" class="anchored" data-anchor-id="データベースへの接続">
+<span class="header-section-number">21.3</span> データベースへの接続</h2>
+<p>R からデータベースに接続するには、一組のパッケージを使用します。</p>
+<ul>
+<li><p>DBI (<strong>d</strong>ata<strong>b</strong>ase <strong>i</strong>nterface) は常に使用します。これは、データベースへの接続、データのアップロード、SQL クエリの実行などのための汎用的な関数群を提供するためです。</p></li>
+<li><p>接続先の DBMS に合わせたパッケージも使用します。 このパッケージは、汎用的な DBI コマンドを、特定の DBMS に必要な具体的なコマンドに変換します。 通常、DBMS ごとに 1 つのパッケージがあります。例えば、PostgreSQL 用の RPostgres や MySQL 用の RMariaDB などです。 特定の DBMS 用のパッケージが見つからない場合は、通常 odbc パッケージを使用できます。 これは、多くの DBMS でサポートされている ODBC プロトコルを使用します。 odbc は、ODBC ドライバーをインストールし、odbc パッケージにその場所を教える必要があるため、少し設定が必要です。 具体的には、<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect()</a></code> を使用してデータベース接続を作成します。 最初の引数で DBMS を選択し<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>、2 番目以降の引数で接続方法（場所やアクセスに必要な資格情報など）を指定します。 次のコードは、いくつかの典型的な例を示しています。</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span></span>
+<span>  <span class="fu">RMariaDB</span><span class="fu">::</span><span class="fu">MariaDB</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  username <span class="op">=</span> <span class="st">"foo"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span></span>
+<span>  <span class="fu">RPostgres</span><span class="fu">::</span><span class="fu">Postgres</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  hostname <span class="op">=</span> <span class="st">"databases.mycompany.com"</span>,</span>
+<span>  port <span class="op">=</span> <span class="fl">1234</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>接続の詳細は DBMS ごとに大きく異なるため、残念ながらここではすべての詳細を網羅することはできません。 つまり、自分自身で少し調べる必要があります。 通常は、チーム内の他のデータサイエンティストに尋ねるか、DBA（<strong>d</strong>ata<strong>b</strong>ase <strong>a</strong>dministrator：データベース管理者）に相談するとよいでしょう。 最初の設定を正しく行うには、少し調整（そしておそらく Google 検索）が必要になることがよくありますが、通常は一度行うだけで済みます。</p>
+<section id="本書では" class="level3" data-number="21.3.1"><h3 data-number="21.3.1" class="anchored" data-anchor-id="本書では">
+<span class="header-section-number">21.3.1</span> 本書では</h3>
+<p>本書のためにクライアント・サーバー型やクラウド型の DBMS をセットアップするのは大変なので、代わりに R パッケージ内で完全に動作するインプロセス型 DBMS である duckdb を使用します。 DBI の魔法のおかげで、duckdb を使う場合と他の DBMS を使う場合の違いは、データベースへの接続方法だけです。 そのため、このコードを簡単に実行できるだけでなく、学んだことを他の場所で簡単に応用できるので、学習に最適です。 duckdb への接続は、デフォルトで R を終了すると削除される一時的なデータベースが作成されるため、特に簡単です。 これは、R を再起動するたびにクリーンな状態から始められることが保証されるため、学習には最適です。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html">duckdb</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>duckdb は、データサイエンティストのニーズに合わせて設計された高性能なデータベースです。 ここでは始めやすさから使用していますが、数ギガバイトのデータを非常に高速に処理する能力も備えています。 実際のデータ分析プロジェクトで duckdb を使用する場合は、永続的なデータベースを作成するために <code>dbdir</code> 引数を指定し、duckdb に保存場所を教える必要があります。 プロジェクト（<a href="workflow-scripts.html" class="quarto-xref"><span>Chapter 6</span></a>）を使用している場合は、現在のプロジェクトの <code>duckdb</code> ディレクトリに保存するのが妥当です。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html">duckdb</a></span><span class="op">(</span><span class="op">)</span>, dbdir <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="sec-load-data" class="level3" data-number="21.3.2"><h3 data-number="21.3.2" class="anchored" data-anchor-id="sec-load-data">
+<span class="header-section-number">21.3.2</span> データのロード</h3>
+<p>これは新しいデータベースなので、まずデータを追加する必要があります。 ここでは <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">DBI::dbWriteTable()</a></code> を使用して、ggplot2 から <code>mpg</code> と <code>diamonds</code> データセットを追加します。 <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable()</a></code> の最も単純な使い方は、データベース接続、データベース内に作成するテーブルの名前、およびデータのデータフレームという 3 つの引数を必要とします。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"mpg"</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="va"><a href="https://ggplot2.tidyverse.org/reference/mpg.html">mpg</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"diamonds"</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="va"><a href="https://ggplot2.tidyverse.org/reference/diamonds.html">diamonds</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>実際のプロジェクトで duckdb を使用する場合は、<code>duckdb_read_csv()</code> と <code>duckdb_register_arrow()</code> について学ぶことを強くお勧めします。 これらは、最初に R に読み込むことなく、データを duckdb に直接迅速にロードするための強力でパフォーマンスの高い方法を提供します。 <a href="iteration.html#sec-save-database" class="quarto-xref"><span>Section 26.4.1</span></a> では、複数のファイルをデータベースにロードするための便利な手法も紹介します。</p>
+</section><section id="dbi-の基本" class="level3" data-number="21.3.3"><h3 data-number="21.3.3" class="anchored" data-anchor-id="dbi-の基本">
+<span class="header-section-number">21.3.3</span> DBI の基本</h3>
+<p>他のいくつかの DBI 関数を使用して、データが正しくロードされたかを確認できます。<code><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables()</a></code> はデータベース内のすべてのテーブルをリストし<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>、<code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable()</a></code> はテーブルの内容を取得します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "diamonds" "mpg"</span></span>
+<span></span>
+<span><span class="va">con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span><span class="op">(</span><span class="st">"diamonds"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 53,940 × 10</span></span>
+<span><span class="co">#&gt;   carat cut       color clarity depth table price     x     y     z</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43</span></span>
+<span><span class="co">#&gt; 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31</span></span>
+<span><span class="co">#&gt; 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31</span></span>
+<span><span class="co">#&gt; 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63</span></span>
+<span><span class="co">#&gt; 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75</span></span>
+<span><span class="co">#&gt; 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48</span></span>
+<span><span class="co">#&gt; # ℹ 53,934 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable()</a></code> は <code>data.frame</code> を返すため、<code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> を使用して tibble に変換し、綺麗に表示されるようにします。 すでに SQL を知っている場合は、<code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code> を使用してデータベースでクエリを実行した結果を取得できます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">  SELECT carat, cut, clarity, color, price</span></span>
+<span><span class="st">  FROM diamonds</span></span>
+<span><span class="st">  WHERE price &gt; 15000</span></span>
+<span><span class="st">"</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">sql</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1,655 × 5</span></span>
+<span><span class="co">#&gt;   carat cut       clarity color price</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;   &lt;fct&gt; &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1  1.54 Premium   VS2     E     15002</span></span>
+<span><span class="co">#&gt; 2  1.19 Ideal     VVS1    F     15005</span></span>
+<span><span class="co">#&gt; 3  2.1  Premium   SI1     I     15007</span></span>
+<span><span class="co">#&gt; 4  1.69 Ideal     SI1     D     15011</span></span>
+<span><span class="co">#&gt; 5  1.5  Very Good VVS2    G     15013</span></span>
+<span><span class="co">#&gt; 6  1.73 Very Good VS1     G     15014</span></span>
+<span><span class="co">#&gt; # ℹ 1,649 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>これまで SQL を見たことがなくても、心配しないでください。 すぐに詳しく学べます。 しかし、よく読んでみると、diamonds データセットから 5 つの列を選択し、<code>price</code> が 15,000 より大きいすべての行を選択していることが推測できるかもしれません。</p>
+</section></section><section id="dbplyr-の基本" class="level2" data-number="21.4"><h2 data-number="21.4" class="anchored" data-anchor-id="dbplyr-の基本">
+<span class="header-section-number">21.4</span> dbplyr の基本</h2>
+<p>データベースに接続してデータをロードできたので、dbplyr について学び始めましょう。 dbplyr は dplyr の<strong>バックエンド</strong>です。つまり、引き続き dplyr のコードを書き続けますが、バックエンドがそれを異なる方法で実行します。 この場合、dbplyr は SQL に翻訳します。他のバックエンドには、<a href="https://r-datatable.com">data.table</a> に翻訳する <a href="https://dtplyr.tidyverse.org">dtplyr</a> や、複数のコアでコードを実行する <a href="https://multidplyr.tidyverse.org">multidplyr</a> などがあります。 dbplyr を使用するには、まず <code><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl()</a></code> を使用してデータベースのテーブルを表すオブジェクトを作成する必要があります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">diamonds_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"diamonds"</span><span class="op">)</span></span>
+<span><span class="va">diamonds_db</span></span>
+<span><span class="co">#&gt; # Source:   table&lt;diamonds&gt; [?? x 10]</span></span>
+<span><span class="co">#&gt; # Database: DuckDB 1.5.0 [777mi@Windows 10 x64:R 4.5.1/:memory:]</span></span>
+<span><span class="co">#&gt;   carat cut       color clarity depth table price     x     y     z</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43</span></span>
+<span><span class="co">#&gt; 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31</span></span>
+<span><span class="co">#&gt; 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31</span></span>
+<span><span class="co">#&gt; 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63</span></span>
+<span><span class="co">#&gt; 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75</span></span>
+<span><span class="co">#&gt; 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48</span></span>
+<span><span class="co">#&gt; # ℹ more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>データベースとやり取りする一般的な方法は、他に 2 つあります。 1 つ目は、多くの企業のデータベースは非常に大規模なため、すべてのテーブルを整理しておくための階層が必要になる場合です。 その場合、関心のあるテーブルを選択するために、スキーマ、あるいはカタログとスキーマを指定する必要があるかもしれません。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">diamonds_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="fu"><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">in_schema</a></span><span class="op">(</span><span class="st">"sales"</span>, <span class="st">"diamonds"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">diamonds_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="fu"><a href="https://dbplyr.tidyverse.org/reference/in_schema.html">in_catalog</a></span><span class="op">(</span><span class="st">"north_america"</span>, <span class="st">"sales"</span>, <span class="st">"diamonds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>もう 1 つは、独自の SQL クエリを出発点として使用したい場合です。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">diamonds_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="fu"><a href="https://dbplyr.tidyverse.org/reference/sql.html">sql</a></span><span class="op">(</span><span class="st">"SELECT * FROM diamonds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>このオブジェクトは<strong>遅延型（lazy）</strong>です。 これに対して dplyr の動詞を使用しても、dplyr は何もしません。単に実行したい一連の操作を記録し、必要になったときにのみ実行します。 例えば、次のパイプラインを見てみましょう。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">big_diamonds_db</span> <span class="op">&lt;-</span> <span class="va">diamonds_db</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">price</span> <span class="op">&gt;</span> <span class="fl">15000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">carat</span><span class="op">:</span><span class="va">clarity</span>, <span class="va">price</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">big_diamonds_db</span></span>
+<span><span class="co">#&gt; # Source:   SQL [?? x 5]</span></span>
+<span><span class="co">#&gt; # Database: DuckDB 1.5.0 [777mi@Windows 10 x64:R 4.5.1/:memory:]</span></span>
+<span><span class="co">#&gt;   carat cut       color clarity price</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;   &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1  1.54 Premium   E     VS2     15002</span></span>
+<span><span class="co">#&gt; 2  1.19 Ideal     F     VVS1    15005</span></span>
+<span><span class="co">#&gt; 3  2.1  Premium   I     SI1     15007</span></span>
+<span><span class="co">#&gt; 4  1.69 Ideal     D     SI1     15011</span></span>
+<span><span class="co">#&gt; 5  1.5  Very Good G     VVS2    15013</span></span>
+<span><span class="co">#&gt; 6  1.73 Very Good G     VS1     15014</span></span>
+<span><span class="co">#&gt; # ℹ more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>このオブジェクトがデータベースクエリを表していることは、上部に DBMS 名が表示されていることからわかります。また、列の数は示されていますが、通常、行の数はわかりません。 これは、総行数を確認するには通常クエリ全体を実行する必要があり、それを避けようとしているためです。 dplyr 関数の <code><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query()</a></code> を使うと、生成された SQL コードを確認できます。 dplyr を知っているなら、これは SQL を学ぶのに最適な方法です。 dplyr のコードを書き、dbplyr に SQL へ翻訳させ、2 つの言語がどのように対応しているかを確認してみてください。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">big_diamonds_db</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT carat, cut, color, clarity, price</span></span>
+<span><span class="co">#&gt; FROM diamonds</span></span>
+<span><span class="co">#&gt; WHERE (price &gt; 15000.0)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>すべてのデータを R に戻すには、<code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> を呼び出します。 舞台裏では、これが SQL を生成し、<code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code> を呼び出してデータを取得し、結果を tibble に変換します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">big_diamonds</span> <span class="op">&lt;-</span> <span class="va">big_diamonds_db</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">big_diamonds</span></span>
+<span><span class="co">#&gt; # A tibble: 1,655 × 5</span></span>
+<span><span class="co">#&gt;   carat cut       color clarity price</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;   &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1  1.54 Premium   E     VS2     15002</span></span>
+<span><span class="co">#&gt; 2  1.19 Ideal     F     VVS1    15005</span></span>
+<span><span class="co">#&gt; 3  2.1  Premium   I     SI1     15007</span></span>
+<span><span class="co">#&gt; 4  1.69 Ideal     D     SI1     15011</span></span>
+<span><span class="co">#&gt; 5  1.5  Very Good G     VVS2    15013</span></span>
+<span><span class="co">#&gt; 6  1.73 Very Good G     VS1     15014</span></span>
+<span><span class="co">#&gt; # ℹ 1,649 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>通常、dbplyr を使用してデータベースから必要なデータを選択し、後述する翻訳機能を使用して基本的なフィルタリングや集計を行います。 そして、R 独自の関数でデータを分析する準備ができたら、データを <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> してメモリ内の tibble を取得し、純粋な R のコードで作業を続けます。</p>
+</section><section id="sql" class="level2" data-number="21.5"><h2 data-number="21.5" class="anchored" data-anchor-id="sql">
+<span class="header-section-number">21.5</span> SQL</h2>
+<p>この章の残りの部分では、dbplyr を通じて SQL を少し学びます。 かなり型破りな SQL の入門編ですが、基本を素早く習得できることを願っています。 幸いなことに、dplyr を理解していれば、多くの概念が同じであるため、SQL をすぐに習得できる素晴らしい土台ができています。 nycflights13 パッケージでお馴染みの <code>flights</code> と <code>planes</code> を使って、dplyr と SQL の関係を探っていきます。 これらのデータセットを学習用データベースに取り込むのは簡単です。dbplyr には nycflights13 からデータベースにテーブルをコピーする関数が用意されているからです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/nycflights13.html">copy_nycflights13</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Creating table: airlines</span></span>
+<span><span class="co">#&gt; Creating table: airports</span></span>
+<span><span class="co">#&gt; Creating table: flights</span></span>
+<span><span class="co">#&gt; Creating table: planes</span></span>
+<span><span class="co">#&gt; Creating table: weather</span></span>
+<span><span class="va">flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"flights"</span><span class="op">)</span></span>
+<span><span class="va">planes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"planes"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="sql-の基本" class="level3" data-number="21.5.1"><h3 data-number="21.5.1" class="anchored" data-anchor-id="sql-の基本">
+<span class="header-section-number">21.5.1</span> SQL の基本</h3>
+<p>SQL の最上位コンポーネントは<strong>文（ステートメント）</strong>と呼ばれます。 一般的な文には、新しいテーブルを定義する <code>CREATE</code>、データを追加する <code>INSERT</code>、データを取得する <code>SELECT</code> などがあります。 ここでは、データサイエンティストがほぼ排他的に使用する <code>SELECT</code> 文（<strong>クエリ</strong>とも呼ばれます）に焦点を当てます。 クエリは<strong>句（クローズ）</strong>で構成されます。 重要な句は <code>SELECT</code>、<code>FROM</code>、<code>WHERE</code>、<code>ORDER BY</code>、<code>GROUP BY</code> の 5 つです。 すべてのクエリには <code>SELECT</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> 句と <code>FROM</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> 句が必要です。最も単純なクエリは <code>SELECT * FROM table</code> で、指定したテーブルからすべての列を選択します。 これは、加工されていないテーブルに対して dbplyr が生成するものです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT *</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="va">planes</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT *</span></span>
+<span><span class="co">#&gt; FROM planes</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>WHERE</code> と <code>ORDER BY</code> は、どの行を含めるか、およびそれらをどのように並べるかを制御します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dest</span> <span class="op">==</span> <span class="st">"IAH"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">dep_delay</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; WHERE (dest = 'IAH')</span></span>
+<span><span class="co">#&gt; ORDER BY dep_delay</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>GROUP BY</code> はクエリを集計に変換し、集約処理を行わせます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">dest</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>dep_delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">dep_delay</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT dest, AVG(dep_delay) AS dep_delay</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; GROUP BY dest</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>dplyr の動詞と SELECT 句の間には、2 つの重要な違いがあります。</p>
+<ul>
+<li>SQL では大文字と小文字は関係ありません。<code>select</code>、<code>SELECT</code>、さらには <code>SeLeCt</code> と書くこともできます。 本書では、テーブル名や変数名と区別するために、SQL のキーワードを大文字で書くという一般的な慣習に従います。</li>
+<li>SQL では順序が重要です。句は常に <code>SELECT</code>、<code>FROM</code>、<code>WHERE</code>、<code>GROUP BY</code>、<code>ORDER BY</code> の順序で書かなければなりません。 紛らわしいことに、この順序は句が実際に評価される順序（まず <code>FROM</code>、次に <code>WHERE</code>、<code>GROUP BY</code>、<code>SELECT</code>、そして <code>ORDER BY</code>）とは一致しません。 次のセクションでは、各句をさらに詳しく見ていきます。</li>
+</ul>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>SQL は標準規格ではありますが、非常に複雑であり、完全に準拠しているデータベースはありません。 本書で焦点を当てる主要なコンポーネントは DBMS 間で非常によく似ていますが、多くの細かなバリエーションが存在します。 幸いなことに、dbplyr はこの問題に対処するように設計されており、データベースごとに異なる翻訳を生成します。 完璧ではありませんが、継続的に改善されています。もし問題が発生した場合は、<a href="https://github.com/tidyverse/dbplyr/issues/">GitHub</a> で問題を報告して、私たちの改善を助けてください。</p>
+</div>
+</div>
+</div>
+</section><section id="select" class="level3" data-number="21.5.2"><h3 data-number="21.5.2" class="anchored" data-anchor-id="select">
+<span class="header-section-number">21.5.2</span> SELECT</h3>
+<p><code>SELECT</code> 句はクエリの主力であり、<code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate()</a></code>、そして次のセクションで学ぶように <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> と同じ役割を果たします。 <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate()</a></code> は、列がどこに表示されるか（または表示されないか）とその名前にのみ影響するため、<code>SELECT</code> への非常に直接的な翻訳を持ちます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">planes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">tailnum</span>, <span class="va">type</span>, <span class="va">manufacturer</span>, <span class="va">model</span>, <span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT tailnum, "type", manufacturer, model, "year"</span></span>
+<span><span class="co">#&gt; FROM planes</span></span>
+<span></span>
+<span><span class="va">planes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">tailnum</span>, <span class="va">type</span>, <span class="va">manufacturer</span>, <span class="va">model</span>, <span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>year_built <span class="op">=</span> <span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT tailnum, "type", manufacturer, model, "year" AS year_built</span></span>
+<span><span class="co">#&gt; FROM planes</span></span>
+<span></span>
+<span><span class="va">planes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">tailnum</span>, <span class="va">type</span>, <span class="va">manufacturer</span>, <span class="va">model</span>, <span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate</a></span><span class="op">(</span><span class="va">manufacturer</span>, <span class="va">model</span>, .before <span class="op">=</span> <span class="va">type</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT tailnum, manufacturer, model, "type", "year"</span></span>
+<span><span class="co">#&gt; FROM planes</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>この例は、SQL がどのようにリネームを行うかも示しています。 SQL の用語では、リネームは<strong>エイリアシング（別名定義）</strong>と呼ばれ、<code>AS</code> を使って行われます。 <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> とは異なり、古い名前が左側に、新しい名前が右側にあることに注意してください。 ::: callout-note 上記の例で <code>"year"</code> や <code>"type"</code> が二重引用符で囲まれていることに注目してください。 これは、これらが duckdb における<strong>予約語</strong>であるため、dbplyr が列名/テーブル名と SQL 演算子の混同を避けるために引用符で囲んでいるのです。 他のデータベースで作業する場合、duckdb のようにどの単語が予約語であるかを把握しているクライアントパッケージは一握りしかないため、安全のためにすべての変数名が引用符で囲まれているのを目にすることが多いでしょう。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="ot">"tailnum"</span>, <span class="ot">"type"</span>, <span class="ot">"manufacturer"</span>, <span class="ot">"model"</span>, <span class="ot">"year"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="ot">"planes"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>データベースシステムによっては、引用符の代わりにバッククォートを使用するものもあります。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> `tailnum`, `type`, `manufacturer`, `model`, `year`</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> `planes`</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>:::</p>
+<p><code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> の翻訳も同様に単純です。各変数が <code>SELECT</code> 内の新しい式になります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    speed <span class="op">=</span> <span class="va">distance</span> <span class="op">/</span> <span class="op">(</span><span class="va">air_time</span> <span class="op">/</span> <span class="fl">60</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*, distance / (air_time / 60.0) AS speed</span></span>
+<span><span class="co">#&gt; FROM flights</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>個々の構成要素（<code>/</code> など）の翻訳については、<a href="#sec-sql-expressions" class="quarto-xref"><span>Section 21.6</span></a> で詳しく説明します。</p>
+</section><section id="from" class="level3" data-number="21.5.3"><h3 data-number="21.5.3" class="anchored" data-anchor-id="from">
+<span class="header-section-number">21.5.3</span> FROM</h3>
+<p><code>FROM</code> 句はデータソースを定義します。 今のところは単一のテーブルしか使っていないので、あまり面白くありません。 結合（join）関数を扱うようになると、より複雑な例を見ることになります。</p>
+</section><section id="group-by" class="level3" data-number="21.5.4"><h3 data-number="21.5.4" class="anchored" data-anchor-id="group-by">
+<span class="header-section-number">21.5.4</span> GROUP BY</h3>
+<p><code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> は <code>GROUP BY</code><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> 句に、<code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> は <code>SELECT</code> 句に翻訳されます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">diamonds_db</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cut</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    avg_price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">price</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT cut, COUNT(*) AS n, AVG(price) AS avg_price</span></span>
+<span><span class="co">#&gt; FROM diamonds</span></span>
+<span><span class="co">#&gt; GROUP BY cut</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://dplyr.tidyverse.org/reference/context.html">n()</a></code> と <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code> の翻訳で何が起きているかについては、<a href="#sec-sql-expressions" class="quarto-xref"><span>Section 21.6</span></a> で詳しく説明します。</p>
+</section><section id="where" class="level3" data-number="21.5.5"><h3 data-number="21.5.5" class="anchored" data-anchor-id="where">
+<span class="header-section-number">21.5.5</span> WHERE</h3>
+<p><code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> は <code>WHERE</code> 句に翻訳されます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dest</span> <span class="op">==</span> <span class="st">"IAH"</span> <span class="op">|</span> <span class="va">dest</span> <span class="op">==</span> <span class="st">"HOU"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; WHERE (dest = 'IAH' OR dest = 'HOU')</span></span>
+<span></span>
+<span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">arr_delay</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">arr_delay</span> <span class="op">&lt;</span> <span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; WHERE (arr_delay &gt; 0.0 AND arr_delay &lt; 20.0)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ここで注目すべき重要な点がいくつかあります。</p>
+<ul>
+<li>
+<code>|</code> は <code>OR</code> に、<code>&amp;</code> は <code>AND</code> になります。</li>
+<li>SQL では比較に <code>==</code> ではなく <code>=</code> を使用します。 SQL には代入がないため、混乱の余地はありません。</li>
+<li>SQL では文字列に <code>""</code> ではなく <code>''</code> のみを使用します。 SQL では、<code>""</code> は R の <code>``</code> のように変数を特定するために使用されます。 もう一つの便利な SQL 演算子は <code>IN</code> です。これは R の <code>%in%</code> に非常によく似ています。</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dest</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"IAH"</span>, <span class="st">"HOU"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; WHERE (dest IN ('IAH', 'HOU'))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>SQL では <code>NA</code> の代わりに <code>NULL</code> を使用します。 <code>NULL</code> は <code>NA</code> と似たような挙動をします。 主な違いは、比較や算術演算においては「伝染」しますが、集計時には黙って除外される点です。 dbplyr は、この挙動に初めて遭遇したときに注意を促してくれます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">dest</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">arr_delay</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Missing values are always removed in SQL aggregation functions.</span></span>
+<span><span class="co">#&gt; Use `na.rm = TRUE` to silence this warning</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span><span class="co">#&gt; # Source:   SQL [?? x 2]</span></span>
+<span><span class="co">#&gt; # Database: DuckDB 1.5.0 [777mi@Windows 10 x64:R 4.5.1/:memory:]</span></span>
+<span><span class="co">#&gt;   dest   delay</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 CLT    7.36 </span></span>
+<span><span class="co">#&gt; 2 MDW   12.4  </span></span>
+<span><span class="co">#&gt; 3 SDF   12.7  </span></span>
+<span><span class="co">#&gt; 4 LAS    0.258</span></span>
+<span><span class="co">#&gt; 5 IAH    4.24 </span></span>
+<span><span class="co">#&gt; 6 CAK   19.7  </span></span>
+<span><span class="co">#&gt; # ℹ more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>NULL</code> の仕組みについて詳しく知りたい場合は、Markus Winand による “<a href="https://modern-sql.com/concept/three-valued-logic">The Three-Valued Logic of SQL</a>” が参考になるでしょう。 一般的に、R で <code>NA</code> に対して使う関数を使用して <code>NULL</code> を扱うことができます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">dep_delay</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; WHERE (NOT((dep_delay IS NULL)))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>この SQL クエリは、dbplyr の欠点の一つを浮き彫りにしています。SQL としては正しいのですが、手書きするほどシンプルではありません。 この場合、括弧を外して、より読みやすい特別な演算子を使用することもできます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="ot">"dep_delay"</span> <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>summarize を使用して作成した変数を <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> すると、dbplyr は <code>WHERE</code> 句ではなく <code>HAVING</code> 句を生成することに注意してください。 これは SQL の特異性の一つです。<code>WHERE</code> は <code>SELECT</code> や <code>GROUP BY</code> の前に評価されるため、SQL にはそれらの後に評価される別の句が必要なのです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">diamonds_db</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cut</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT cut, COUNT(*) AS n</span></span>
+<span><span class="co">#&gt; FROM diamonds</span></span>
+<span><span class="co">#&gt; GROUP BY cut</span></span>
+<span><span class="co">#&gt; HAVING (COUNT(*) &gt; 100.0)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="order-by" class="level3" data-number="21.5.6"><h3 data-number="21.5.6" class="anchored" data-anchor-id="order-by">
+<span class="header-section-number">21.5.6</span> ORDER BY</h3>
+<p>行の並び替えは、<code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> から <code>ORDER BY</code> 句へと直接翻訳されます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">dep_delay</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT flights.*</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; ORDER BY "year", "month", "day", dep_delay DESC</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code><a href="https://dplyr.tidyverse.org/reference/desc.html">desc()</a></code> が <code>DESC</code> に翻訳されていることに注目してください。これも、SQL から直接名前が採用された多くの dplyr 関数の一つです。</p>
+</section><section id="サブクエリ" class="level3" data-number="21.5.7"><h3 data-number="21.5.7" class="anchored" data-anchor-id="サブクエリ">
+<span class="header-section-number">21.5.7</span> サブクエリ</h3>
+<p>dplyr パイプラインを単一の <code>SELECT</code> 文に翻訳することができず、サブクエリを使用しなければならない場合があります。 <strong>サブクエリ</strong>とは、通常のテーブルの代わりに、<code>FROM</code> 句でデータソースとして使用されるクエリのことです。 dbplyr は通常、SQL の制限を回避するためにサブクエリを使用します。 例えば、<code>SELECT</code> 句内の式では、作成したばかりの列を参照することができません。 つまり、次のような（愚直な）dplyr パイプラインは 2 つのステップで実行される必要があります。最初の（内部）クエリが <code>year1</code> を計算し、次に 2 番目の（外部）クエリが <code>year2</code> を計算できるようにします。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    year1 <span class="op">=</span> <span class="va">year</span> <span class="op">+</span> <span class="fl">1</span>,</span>
+<span>    year2 <span class="op">=</span> <span class="va">year1</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT q01.*, year1 + 1.0 AS year2</span></span>
+<span><span class="co">#&gt; FROM (</span></span>
+<span><span class="co">#&gt;   SELECT flights.*, "year" + 1.0 AS year1</span></span>
+<span><span class="co">#&gt;   FROM flights</span></span>
+<span><span class="co">#&gt; ) q01</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>作成したばかりの変数を <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> しようとした場合にも、これを目にするでしょう。 <code>WHERE</code> は <code>SELECT</code> よりも後に書かれますが、評価されるのは先であることを思い出してください。そのため、この（愚直な）例ではサブクエリが必要になります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>year1 <span class="op">=</span> <span class="va">year</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">year1</span> <span class="op">==</span> <span class="fl">2014</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT q01.*</span></span>
+<span><span class="co">#&gt; FROM (</span></span>
+<span><span class="co">#&gt;   SELECT flights.*, "year" + 1.0 AS year1</span></span>
+<span><span class="co">#&gt;   FROM flights</span></span>
+<span><span class="co">#&gt; ) q01</span></span>
+<span><span class="co">#&gt; WHERE (year1 = 2014.0)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>dbplyr がまだその翻訳を最適化する方法を知らないため、必要のない場所でサブクエリを作成することもあります。 dbplyr が時間の経過とともに改善されるにつれて、このようなケースは少なくなりますが、完全になくなることはないでしょう。</p>
+</section><section id="結合-joins" class="level3" data-number="21.5.8"><h3 data-number="21.5.8" class="anchored" data-anchor-id="結合-joins">
+<span class="header-section-number">21.5.8</span> 結合 (Joins)</h3>
+<p>dplyr の結合に慣れているなら、SQL の結合も非常によく似ています。 以下に簡単な例を示します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">planes</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>year_built <span class="op">=</span> <span class="va">year</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">tailnum</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT</span></span>
+<span><span class="co">#&gt;   flights.*,</span></span>
+<span><span class="co">#&gt;   planes."year" AS year_built,</span></span>
+<span><span class="co">#&gt;   "type",</span></span>
+<span><span class="co">#&gt;   manufacturer,</span></span>
+<span><span class="co">#&gt;   model,</span></span>
+<span><span class="co">#&gt;   engines,</span></span>
+<span><span class="co">#&gt;   seats,</span></span>
+<span><span class="co">#&gt;   speed,</span></span>
+<span><span class="co">#&gt;   engine</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; LEFT JOIN planes</span></span>
+<span><span class="co">#&gt;   ON (flights.tailnum = planes.tailnum)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ここで注目すべき主な点は構文です。SQL の結合は、<code>FROM</code> 句のサブ句を使用して追加のテーブルを取り込み、<code>ON</code> を使用してテーブルがどのように関連しているかを定義します。 dplyr の関数名は SQL と密接に関連しているため、<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join()</a></code>、<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">full_join()</a></code> に相当する SQL を容易に推測できます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> flights.<span class="op">*</span>, <span class="ot">"type"</span>, manufacturer, model, engines, seats, speed</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> flights</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> planes <span class="kw">ON</span> (flights.tailnum <span class="op">=</span> planes.tailnum)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> flights.<span class="op">*</span>, <span class="ot">"type"</span>, manufacturer, model, engines, seats, speed</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> flights</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RIGHT</span> <span class="kw">JOIN</span> planes <span class="kw">ON</span> (flights.tailnum <span class="op">=</span> planes.tailnum)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> flights.<span class="op">*</span>, <span class="ot">"type"</span>, manufacturer, model, engines, seats, speed</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> flights</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="kw">FULL</span> <span class="kw">JOIN</span> planes <span class="kw">ON</span> (flights.tailnum <span class="op">=</span> planes.tailnum)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>データベースのデータを扱う場合、多くの結合が必要になるでしょう。 それは、データベースのテーブルが高度に正規化された形式で保存されていることが多いためです。各「事実」は 1 か所に保存されており、分析のために完全なデータセットを保持するには、主キーと外部キーで接続された複雑なテーブルネットワークをナビゲートする必要があります。 このような状況に遭遇した場合、Tobias Schieferdecker、Kirill Müller、Darko Bergant による <a href="https://cynkra.github.io/dm/">dm パッケージ</a>が救世主となります。 これは、DBA が提供することが多い制約を使用してテーブル間の接続を自動的に判断し、何が起きているかを確認できるように接続を可視化し、あるテーブルを別のテーブルに接続するために必要な結合を生成してくれます。</p>
+</section><section id="その他の動詞" class="level3" data-number="21.5.9"><h3 data-number="21.5.9" class="anchored" data-anchor-id="その他の動詞">
+<span class="header-section-number">21.5.9</span> その他の動詞</h3>
+<p>dbplyr は <code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code>、<code>slice_*()</code>、<code><a href="https://generics.r-lib.org/reference/setops.html">intersect()</a></code> などの他の動詞や、<code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code>、<code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider()</a></code> などの tidyr 関数の翻訳も増やしています。 現在利用可能な全セットを確認する最も簡単な方法は、dbplyr のウェブサイト <a href="https://dbplyr.tidyverse.org/reference/">https://dbplyr.tidyverse.org/reference/</a> を訪れることです。</p>
+</section><section id="練習問題" class="level3" data-number="21.5.10"><h3 data-number="21.5.10" class="anchored" data-anchor-id="練習問題">
+<span class="header-section-number">21.5.10</span> 練習問題</h3>
+<ol type="1">
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code> は何に翻訳されますか？ <code><a href="https://rdrr.io/r/utils/head.html">head()</a></code> はどうですか？</li>
+<li>次の各 SQL クエリが何をするか説明し、dbplyr を使用してそれらを再現してみてください。</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> flights</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> dep_delay <span class="op">&lt;</span> arr_delay</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="op">*</span>, distance <span class="op">/</span> (air_time <span class="op">/</span> <span class="dv">60</span>) <span class="kw">AS</span> speed</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> flights</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section></section><section id="sec-sql-expressions" class="level2" data-number="21.6"><h2 data-number="21.6" class="anchored" data-anchor-id="sec-sql-expressions">
+<span class="header-section-number">21.6</span> 関数の翻訳</h2>
+<p>これまでは、dplyr の動詞がクエリの各句にどのように翻訳されるかという全体像に焦点を当ててきました。 ここでは少しズームインして、個々の列を操作する R 関数の翻訳について説明します。例えば、<code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> で <code>mean(x)</code> を使用すると何が起こるでしょうか？ 何が起きているかを確認しやすくするために、<code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> または <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> を実行して生成された SQL を表示する 2 つの補助関数を使用します。 これにより、いくつかのバリエーションを探索し、集計と変換がどのように異なるかを確認しやすくなります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">summarize_query</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">mutate_query</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">...</span>, .keep <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>まずは集計から見ていきましょう！ 以下のコードを見ると、<code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code> のような一部の集計関数は比較的単純な翻訳になりますが、<code><a href="https://rdrr.io/r/stats/median.html">median()</a></code> のような他の関数ははるかに複雑であることがわかります。 統計では一般的でも、データベースではあまり一般的ではない操作ほど、複雑になる傾向があります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarize_query</span><span class="op">(</span></span>
+<span>    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">arr_delay</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">arr_delay</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; `summarise()` has grouped output by "year" and "month". You can override</span></span>
+<span><span class="co">#&gt; using the `.groups` argument.</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT</span></span>
+<span><span class="co">#&gt;   "year",</span></span>
+<span><span class="co">#&gt;   "month",</span></span>
+<span><span class="co">#&gt;   "day",</span></span>
+<span><span class="co">#&gt;   AVG(arr_delay) AS mean,</span></span>
+<span><span class="co">#&gt;   MEDIAN(arr_delay) AS median</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; GROUP BY "year", "month", "day"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>集計関数を <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> の中で使用すると、いわゆる<strong>ウィンドウ（window）</strong>関数に変換されるため、翻訳がより複雑になります。 SQL では、通常の集約関数の後に <code>OVER</code> を追加することで、ウィンドウ関数に変換します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate_query</span><span class="op">(</span></span>
+<span>    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">arr_delay</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT</span></span>
+<span><span class="co">#&gt;   "year",</span></span>
+<span><span class="co">#&gt;   "month",</span></span>
+<span><span class="co">#&gt;   "day",</span></span>
+<span><span class="co">#&gt;   AVG(arr_delay) OVER (PARTITION BY "year", "month", "day") AS mean</span></span>
+<span><span class="co">#&gt; FROM flights</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>SQL では <code>GROUP BY</code> 句は集計専用に使用されるため、ここではグルーピングが <code>GROUP BY</code> 句から <code>OVER</code> に移動していることがわかります。 ウィンドウ関数には、前方または後方を確認するすべての関数が含まれます。例えば、それぞれ「前」または「次」の値を確認する <code><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lead()</a></code> や <code><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag()</a></code> などです。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">dest</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">time_hour</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate_query</span><span class="op">(</span></span>
+<span>    lead <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lead</a></span><span class="op">(</span><span class="va">arr_delay</span><span class="op">)</span>,</span>
+<span>    lag <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">arr_delay</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT</span></span>
+<span><span class="co">#&gt;   dest,</span></span>
+<span><span class="co">#&gt;   LEAD(arr_delay, 1, NULL) OVER (PARTITION BY dest ORDER BY time_hour) AS lead,</span></span>
+<span><span class="co">#&gt;   LAG(arr_delay, 1, NULL) OVER (PARTITION BY dest ORDER BY time_hour) AS lag</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="co">#&gt; ORDER BY time_hour</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ここでは、SQL テーブルには固有の順序がないため、データを <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> しておくことが重要です。 実際、<code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> を使用しないと、実行するたびに行が異なる順序で返される可能性があります。 ウィンドウ関数の場合、順序付けの情報が繰り返されることに注意してください。メインクエリの <code>ORDER BY</code> 句は、ウィンドウ関数に自動的には適用されません。 もう一つの重要な SQL 関数は <code>CASE WHEN</code> です。これは、<code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code> や、それが直接着想を与えた dplyr 関数である <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> の翻訳として使用されます。 以下にいくつかの簡単な例を示します。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate_query</span><span class="op">(</span></span>
+<span>    description <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">arr_delay</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">"delayed"</span>, <span class="st">"on-time"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT CASE WHEN (arr_delay &gt; 0.0) THEN 'delayed' WHEN NOT (arr_delay &gt; 0.0) THEN 'on-time' END AS description</span></span>
+<span><span class="co">#&gt; FROM flights</span></span>
+<span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate_query</span><span class="op">(</span></span>
+<span>    description <span class="op">=</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>        <span class="va">arr_delay</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">5</span> <span class="op">~</span> <span class="st">"early"</span>,</span>
+<span>        <span class="va">arr_delay</span> <span class="op">&lt;</span> <span class="fl">5</span> <span class="op">~</span> <span class="st">"on-time"</span>,</span>
+<span>        <span class="va">arr_delay</span> <span class="op">&gt;=</span> <span class="fl">5</span> <span class="op">~</span> <span class="st">"late"</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT CASE</span></span>
+<span><span class="co">#&gt; WHEN (arr_delay &lt; -5.0) THEN 'early'</span></span>
+<span><span class="co">#&gt; WHEN (arr_delay &lt; 5.0) THEN 'on-time'</span></span>
+<span><span class="co">#&gt; WHEN (arr_delay &gt;= 5.0) THEN 'late'</span></span>
+<span><span class="co">#&gt; END AS description</span></span>
+<span><span class="co">#&gt; FROM flights</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>CASE WHEN</code> は、R から SQL へ直接的な翻訳がない他のいくつかの関数にも使用されます。 その良い例が <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code> です。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">flights</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate_query</span><span class="op">(</span></span>
+<span>    description <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span></span>
+<span>      <span class="va">arr_delay</span>,</span>
+<span>      breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"early"</span>, <span class="st">"on-time"</span>, <span class="st">"late"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt;</span></span>
+<span><span class="co">#&gt; SELECT CASE</span></span>
+<span><span class="co">#&gt; WHEN (arr_delay &lt;= -5.0) THEN 'early'</span></span>
+<span><span class="co">#&gt; WHEN (arr_delay &lt;= 5.0) THEN 'on-time'</span></span>
+<span><span class="co">#&gt; WHEN (arr_delay &gt; 5.0) THEN 'late'</span></span>
+<span><span class="co">#&gt; END AS description</span></span>
+<span><span class="co">#&gt; FROM flights</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>dbplyr は一般的な文字列や日付時刻の操作関数も翻訳します。これについては <code><a href="https://dbplyr.tidyverse.org/articles/translation-function.html">vignette("translation-function", package = "dbplyr")</a></code> で詳しく学ぶことができます。 dbplyr の翻訳は決して完璧ではなく、まだ翻訳されていない R 関数も多くありますが、dbplyr はほとんどの場合に使用する関数を驚くほどよくカバーしています。</p>
+</section><section id="まとめ" class="level2" data-number="21.7"><h2 data-number="21.7" class="anchored" data-anchor-id="まとめ">
+<span class="header-section-number">21.7</span> まとめ</h2>
+<p>この章では、データベースからデータにアクセスする方法を学びました。 おなじみの dplyr コードを記述し、それを自動的に SQL に翻訳できる dplyr の「バックエンド」である dbplyr に焦点を当てました。 その翻訳を利用して SQL を少し学びました。 SQL はデータを扱うための言語として最も一般的に使用されているため、SQL を少しでも学んでおくことは重要です。SQL を知っていれば、R を使用しない他のデータ関係者とのコミュニケーションが容易になります。</p>
+<p>この章を終えて SQL についてさらに詳しく学びたい場合は、次の 2 つをお勧めします。</p>
+<ul>
+<li>Renée M. P. Teate による <a href="https://sqlfordatascientists.com"><em>SQL for Data Scientists</em></a> は、データサイエンティストのニーズに合わせて特別に設計された SQL の入門書であり、実際の組織で遭遇するような高度に相互接続されたデータの例が含まれています。</li>
+<li>Anthony DeBarros による <a href="https://www.practicalsql.com"><em>Practical SQL</em></a> は、データジャーナリスト（説得力のあるストーリーを語ることに特化したデータサイエンティスト）の視点から書かれており、データベースへのデータの取り込みや独自の DBMS の運用について詳しく説明されています。 次の章では、大規模なデータを扱うためのもう一つの dplyr バックエンドである arrow について学びます。 Arrow はディスク上の大きなファイルを扱うように設計されており、データベースを補完する自然な存在です。</li>
+</ul>
+
+
+</section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+<ol>
+<li id="fn1"><p>通常、クライアントパッケージから使用する関数はこれだけなので、<code><a href="https://rdrr.io/r/base/library.html">library()</a></code> でパッケージ全体を読み込むのではなく、<code>::</code> を使ってその関数だけを取り出すことをお勧めします。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>少なくとも、表示権限があるすべてのテーブルです。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>紛らわしいことに、文脈によって <code>SELECT</code> は文であったり句であったりします。 この混乱を避けるため、通常は <code>SELECT</code> 文の代わりに <code>SELECT</code> クエリという言葉を使います。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>まあ、厳密には <code>SELECT 1+1</code> のように基本的な計算を行うクエリを書くことができるので、<code>SELECT</code> だけが必要です。 しかし、（常にそうであるように）データを扱いたい場合は、<code>FROM</code> 句も必要になります。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>これは偶然ではありません。dplyr の関数名は SQL 句から着想を得たものです。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script>
+	document.addEventListener('keydown', function (e) {
+		// 入力フォームの中では無効化
+		if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+		if (e.key === 'ArrowLeft') {
+			// 前のページへの「リンク（aタグ）」を探してクリック
+			const prev = document.querySelector('.nav-page-previous a');
+			if (prev) prev.click();
+		} else if (e.key === 'ArrowRight') {
+			// 次のページへの「リンク（aタグ）」を探してクリック
+			const next = document.querySelector('.nav-page-next a');
+			if (next) next.click();
+		}
+	});
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r4ds\.hadley\.nz\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./spreadsheets.html" class="pagination-link" aria-label="スプレッドシート">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">スプレッドシート</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./arrow.html" class="pagination-link" aria-label="Arrow">
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Arrow</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>R for Data Science (2e) was written by Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hadley/r4ds/edit/main/databases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hadley/r4ds/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>
