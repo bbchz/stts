@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; 環境 (Environments) – Rではじめるプログラミング</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./slots.html" rel="next">
+<link href="./modifying.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a8da12e74b29c2e7b17644f84b91567b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-674e3cc0c687a3cc22528ff3730883a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./cards.html">プロジェクト2：トランプ</a></li><li class="breadcrumb-item"><a href="./environments.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">環境 (Environments)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Rではじめるプログラミング</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">はじめに</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">まえがき</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">プロジェクト1：重み付きのサイコロ</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">プロジェクト1：重み付きのサイコロ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">基本的な知識</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">パッケージとヘルプページ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">プロジェクト2：トランプ</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cards.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第2部</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Rオブジェクト</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rの記法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./modifying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">値の変更</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./environments.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">環境 (Environments)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">プロジェクト3：スロットマシン</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">(第3部) 第3部</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./programs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">プログラム</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">S3</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">ループ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./speed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">速度</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">付録</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a1-starting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">(APPENDIX) 付録</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a2-packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a3-updating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Rとパッケージの更新</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a4-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Rでのデータの読み込みと保存</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a5-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Rコードのデバッグ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#環境-environments" id="toc-環境-environments" class="nav-link active" data-scroll-target="#環境-environments"><span class="header-section-number">7.1</span> 環境 (Environments)</a></li>
+  <li><a href="#環境の操作" id="toc-環境の操作" class="nav-link" data-scroll-target="#環境の操作"><span class="header-section-number">7.2</span> 環境の操作</a>
+  <ul class="collapse">
+  <li><a href="#アクティブな環境" id="toc-アクティブな環境" class="nav-link" data-scroll-target="#アクティブな環境"><span class="header-section-number">7.2.1</span> アクティブな環境</a></li>
+  </ul></li>
+  <li><a href="#スコープ規則-scoping-rules" id="toc-スコープ規則-scoping-rules" class="nav-link" data-scroll-target="#スコープ規則-scoping-rules"><span class="header-section-number">7.3</span> スコープ規則 (Scoping Rules)</a></li>
+  <li><a href="#代入-assignment" id="toc-代入-assignment" class="nav-link" data-scroll-target="#代入-assignment"><span class="header-section-number">7.4</span> 代入 (Assignment)</a></li>
+  <li><a href="#評価-evaluation" id="toc-評価-evaluation" class="nav-link" data-scroll-target="#評価-evaluation"><span class="header-section-number">7.5</span> 評価 (Evaluation)</a></li>
+  <li><a href="#クロージャ-closures" id="toc-クロージャ-closures" class="nav-link" data-scroll-target="#クロージャ-closures"><span class="header-section-number">7.6</span> クロージャ (Closures)</a></li>
+  <li><a href="#まとめ" id="toc-まとめ" class="nav-link" data-scroll-target="#まとめ"><span class="header-section-number">7.7</span> まとめ</a></li>
+  <li><a href="#プロジェクト2のまとめ" id="toc-プロジェクト2のまとめ" class="nav-link" data-scroll-target="#プロジェクト2のまとめ"><span class="header-section-number">7.8</span> プロジェクト2のまとめ</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./cards.html">プロジェクト2：トランプ</a></li><li class="breadcrumb-item"><a href="./environments.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">環境 (Environments)</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-environments" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">環境 (Environments)</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>デッキの準備が整い、ブラックジャック（あるいはハーツやウォー）をプレイする準備ができました。しかし、あなたの <code>shuffle</code>（シャッフル）関数と <code>deal</code>（配る）関数は十分な出来でしょうか？残念ながらそうではありません。例えば、<code>deal</code> は何度も同じカードを配ってしまいます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>(deck)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## face   suit value</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## king spades    13</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>(deck)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## face   suit value</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## king spades    13</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>(deck)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## face   suit value</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">## king spades    13</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>そして、<code>shuffle</code> 関数は実際には <code>deck</code> 自体をシャッフルしていません（シャッフルされた <code>deck</code> のコピーを返しているだけです）。要するに、どちらの関数も <code>deck</code> を使用していますが、どちらも <code>deck</code> を操作していません。私たちはこれらに <code>deck</code> を操作してほしいと考えています。</p>
+<p>これらの関数を修正するには、Rが <code>deck</code> のようなオブジェクトをどのように保存し、探し出し、操作するのかを学ぶ必要があります。Rはこれらすべてを「環境 (Environment)」システムを利用して行います。</p>
+<section id="環境-environments" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="環境-environments"><span class="header-section-number">7.1</span> 環境 (Environments)</h2>
+<p>コンピュータがファイルをどのように保存しているか考えてみてください。すべてのファイルはフォルダに保存され、各フォルダは別のフォルダに保存され、階層的なファイルシステムを形成しています。コンピュータがファイルを開こうとする場合、まずこのファイルシステムの中でファイルを探す必要があります。</p>
+<p>Finderなどのウィンドウを開くと、ファイルシステムを確認できます。例えば、<a href="#fig-folders" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> は私のコンピュータのファイルシステムの一部を示しています。膨大な数のフォルダがあります。その中の一つに <em>Documents</em> というサブフォルダがあり、その中に <em>ggsubplot</em> というサブフォルダがあり、さらにその中に <em>inst</em>、<em>doc</em> と続き、最後に <em>manual.pdf</em> というファイルがあります。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-folders" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-folders-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0601.png" class="img-fluid figure-img" width="678">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-folders-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: コンピュータはファイルをフォルダとサブフォルダの階層に整理します。ファイルを見るには、ファイルシステム上のどこに保存されているかを見つける必要があります。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Rも同様のシステムを使用してRオブジェクトを保存します。各オブジェクトは「環境 (Environment)」の中に保存されます。これはコンピュータ上のフォルダに似た、リストのようなオブジェクトです。各環境は「親環境 (Parent environment)」（一つ上の階層の環境）に接続されており、環境の階層構造を形成しています。</p>
+<p><code>pryr</code> パッケージの <code>parenvs</code> 関数（注：この本が最初に出版された際、<code>parenvs</code> は <code>pryr</code> パッケージに含まれていました）を使用して、Rの環境システムを確認できます。<code>parenvs(all = TRUE)</code> は、現在のRセッションで使用されている環境のリストを返します。実際の出力は、ロードされているパッケージによってセッションごとに異なります。以下は私の現在のセッションの出力です。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pryr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parenvs</span>(<span class="at">all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="do">##    label                            name</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1  &lt;environment: R_GlobalEnv&gt;       ""</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 2  &lt;environment: package:pryr&gt;  "package:pryr"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="do">## 3  &lt;environment: 0x7fff3321c388&gt;    "tools:rstudio"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 4  &lt;environment: package:stats&gt;     "package:stats"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 5  &lt;environment: package:graphics&gt;  "package:graphics"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 6  &lt;environment: package:grDevices&gt; "package:grDevices"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 7  &lt;environment: package:utils&gt;     "package:utils"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 8  &lt;environment: package:datasets&gt;  "package:datasets"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 9  &lt;environment: package:methods&gt;   "package:methods"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 &lt;environment: 0x7fff3193dab0&gt;    "Autoloads"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="do">## 11 &lt;environment: base&gt;              ""</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="do">## 12 &lt;environment: R_EmptyEnv&gt;        ""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>この出力を解釈するには少し想像力が必要です。そこで、環境をフォルダのシステムとして可視化してみましょう（<a href="#fig-environments" class="quarto-xref">Figure&nbsp;<span>7.2</span></a>）。環境ツリーは次のように考えることができます。最も低いレベルの環境は <code>R_GlobalEnv</code> という名前で、<code>package:pryr</code> という環境の中に保存され、それがさらに <code>0x7fff3321c388</code> という環境の中に保存され……というように続き、最終的に最高レベルの環境である <code>R_EmptyEnv</code> に到達します。<code>R_EmptyEnv</code> は、親環境を持たない唯一のR環境です。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-environments" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-environments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0602.png" class="img-fluid figure-img" width="578">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-environments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: RはRオブジェクトを、コンピュータのフォルダシステムに似た環境ツリーに保存します。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>これはあくまで比喩であることを忘れないでください。Rの環境はRAMメモリ上に存在し、ファイルシステム上に存在するわけではありません。また、Rの環境は技術的に「お互いの中に」保存されているわけではありません。各環境が親環境に接続されているため、Rの環境ツリーを上に辿って検索することが容易になっています。しかし、この接続は一方通行です。ある環境を見て、その「子」が何であるかを知る方法はありません。つまり、Rの環境ツリーを下に辿って検索することはできません。しかし他の点では、Rの環境システムはファイルシステムと非常によく似た働きをします。</p>
+</section>
+<section id="環境の操作" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="環境の操作"><span class="header-section-number">7.2</span> 環境の操作</h2>
+<p>Rには、環境ツリーを探索するために使用できるいくつかのヘルパー関数が備わっています。まず、<code>as.environment</code> を使用してツリー内の任意の環境を参照できます。<code>as.environment</code> は、環境名（文字列として）を受け取り、対応する環境を返します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.environment</span>(<span class="st">"package:stats"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: package:stats&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="do">## attr(,"name")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "package:stats"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">## attr(,"path")</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "/Library/Frameworks/R.framework/Versions/3.0/Resources/library/stats"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>ツリー内の3つの環境には、それぞれ専用のアクセサ関数があります。これらは、グローバル環境 (<code>R_GlobalEnv</code>)、ベース環境 (<code>base</code>)、および空環境 (<code>R_EmptyEnv</code>) です。これらは次のように参照できます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">globalenv</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">baseenv</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: base&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">emptyenv</span>()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="do">##&lt;environment: R_EmptyEnv&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>次に、<code>parent.env</code> を使用して、ある環境の親を調べることができます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parent.env</span>(<span class="fu">globalenv</span>())</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: package:pryr&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="do">## attr(,"name")</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "package:pryr"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="do">## attr(,"path")</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "/Library/Frameworks/R.framework/Versions/3.0/Resources/library/pryr"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>空環境が、親を持たない唯一のR環境であることに注目してください。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parent.env</span>(<span class="fu">emptyenv</span>())</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Error in parent.env(emptyenv()) : the empty environment has no parent</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>ls</code> または <code>ls.str</code> を使用して、環境に保存されているオブジェクトを表示できます。<code>ls</code> はオブジェクト名のみを返しますが、<code>ls.str</code> は各オブジェクトの構造についても少し表示します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>(<span class="fu">emptyenv</span>())</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## character(0)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>(<span class="fu">globalenv</span>())</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  "deal"    "deck"    "deck2"   "deck3"   "deck4"   "deck5"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  "die"     "gender"  "hand"    "lst"     "mat"     "mil"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  "new"     "now"     "shuffle" "vec"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>空環境は――驚くことではありませんが――空です。ベース環境には多すぎてここではリストアップできないほどのオブジェクトがあります。そしてグローバル環境には、いくつか見覚えのある顔があります。ここは、あなたがこれまでに作成したすべてのオブジェクトがRによって保存されている場所です。</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>RStudioの環境ペインには、グローバル環境内のすべてのオブジェクトが表示されます。</p>
+</div>
+</div>
+<p>Rの <code>$</code> 構文を使用して、特定の環境内のオブジェクトにアクセスできます。例えば、グローバル環境から <code>deck</code> にアクセスできます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">globalenv</span>()<span class="sc">$</span>deck, <span class="dv">3</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  king spades    13</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="do">## queen spades    12</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  jack spades    11</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>また、<code>assign</code> 関数を使用して、オブジェクトを特定の環境に保存できます。まず <code>assign</code> に新しいオブジェクトの名前（文字列として）を与え、次にその値を、最後に保存先の環境を与えます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="st">"new"</span>, <span class="st">"Hello Global"</span>, <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">globalenv</span>()<span class="sc">$</span>new</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="do">## "Hello Global"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>assign</code> が <code>&lt;-</code> と同様に機能することに注目してください。指定した環境に同じ名前のオブジェクトがすでに存在する場合、<code>assign</code> は許可を求めることなくそれを上書きします。これにより <code>assign</code> はオブジェクトの更新に便利ですが、心痛の原因になる可能性も秘めています。</p>
+<p>環境ツリーを探索できるようになったところで、Rがそれをどのように使用しているかを調べてみましょう。Rは環境ツリーと密接に連携して、オブジェクトの検索、オブジェクトの保存、および関数の評価を行います。Rがこれらの各タスクをどのように行うかは、現在の「アクティブな環境」によって決まります。</p>
+<section id="アクティブな環境" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="アクティブな環境"><span class="header-section-number">7.2.1</span> アクティブな環境</h3>
+<p>いかなる瞬間においても、Rは単一の環境と密接に連携しています。Rは（新しく作成された場合）この環境にオブジェクトを保存し、（呼び出された場合）この環境を起点として既存のオブジェクトを検索します。この特別な環境を「アクティブな環境 (Active environment)」と呼ぶことにします。アクティブな環境は通常グローバル環境ですが、関数を実行する際には変化することがあります。</p>
+<p><code>environment</code> を使用して、現在のアクティブな環境を確認できます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;</span>environment<span class="sc">:</span> R_GlobalEnv<span class="sc">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>グローバル環境はRにおいて特別な役割を果たします。これは、コマンドラインで実行するすべてのコマンドにとってのアクティブな環境です。その結果、コマンドラインで作成したオブジェクトはすべてグローバル環境に保存されます。グローバル環境は、あなたのユーザーワークスペース（作業領域）と考えることができます。</p>
+<p>コマンドラインでオブジェクトを呼び出すと、Rはまずグローバル環境でそのオブジェクトを探します。しかし、そこにない場合はどうなるでしょうか？その場合、Rは一連の規則に従ってオブジェクトを検索します。</p>
+</section>
+</section>
+<section id="スコープ規則-scoping-rules" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="スコープ規則-scoping-rules"><span class="header-section-number">7.3</span> スコープ規則 (Scoping Rules)</h2>
+<p>Rはオブジェクトを検索するために、特別な規則セットに従います。これらはRの「スコープ規則 (Scoping Rules)」として知られており、あなたはすでにそのうちのいくつかに出会っています。</p>
+<ol type="1">
+<li>Rは現在のアクティブな環境でオブジェクトを探す。</li>
+<li>コマンドラインで作業する場合、アクティブな環境はグローバル環境である。したがって、コマンドラインで呼び出すオブジェクトはグローバル環境で検索される。</li>
+</ol>
+<p>さらに、アクティブな環境にオブジェクトが見つからない場合にどうなるかを説明する3番目の規則があります。</p>
+<ol start="3" type="1">
+<li>Rがある環境でオブジェクトを見つけられない場合、Rはその環境の親環境を探し、次に親の親を探し……というように、オブジェクトが見つかるか空環境に到達するまで繰り返す。</li>
+</ol>
+<p>したがって、コマンドラインでオブジェクトを呼び出すと、Rはグローバル環境を探します。そこで見つからない場合、Rはグローバル環境の親を探し、さらにその親を探し、というように、オブジェクトが見つかるまで環境ツリーを上に辿っていきます（<a href="#fig-path" class="quarto-xref">Figure&nbsp;<span>7.3</span></a> 参照）。どの環境にもオブジェクトが見つからない場合、Rはオブジェクトが見つからないというエラーを返します。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-path" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0603.png" class="img-fluid figure-img" width="713">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: Rはアクティブな環境（ここではグローバル環境）で名前によってオブジェクトを検索します。そこで見つからない場合は、アクティブな環境の親、さらにその親へと、オブジェクトが見つかるか環境がなくなるまで検索を続けます。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>関数もRにおけるオブジェクトの一種であることを思い出してください。Rは関数も他のオブジェクトと同様に、環境ツリーを名前で検索することで保存・検索します。</p>
+</div>
+</div>
+</section>
+<section id="代入-assignment" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="代入-assignment"><span class="header-section-number">7.4</span> 代入 (Assignment)</h2>
+<p>オブジェクトに値を代入すると、Rはアクティブな環境にそのオブジェクト名で値を保存します。アクティブな環境に同じ名前のオブジェクトがすでに存在する場合、Rはそれを上書きします。</p>
+<p>例えば、グローバル環境に <code>new</code> というオブジェクトが存在するとします。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">## "Hello Global"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>次のコマンドで、<code>new</code> という名前の新しいオブジェクトをグローバル環境に保存できます。その結果、Rは古いオブジェクトを上書きします。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>new <span class="ot">&lt;-</span> <span class="st">"Hello Active"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>new</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="do">## "Hello Active"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!-- リンクを修正 -->
+<p>この仕組みは、Rが関数を実行するたびにジレンマを引き起こします。多くの関数は、その仕事を遂行するために一時的なオブジェクトを保存します。例えば、「<a href="https://www.google.com/search?q=%23basics">プロジェクト1：重み付けされたサイコロ</a>」の <code>roll</code> 関数は、<code>die</code> と <code>dice</code> というオブジェクトを保存していました。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>roll <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  die <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dice <span class="ot">&lt;-</span> <span class="fu">sample</span>(die, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(dice)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Rはこれらのテンポラリオブジェクトをアクティブな環境に保存しなければなりませんが、もしそうすると、既存のオブジェクトを上書きしてしまう可能性があります。関数の作成者は、あなたのアクティブな環境にどの名前がすでに存在するかを事前に予測することはできません。Rはこのリスクをどのように回避しているのでしょうか？Rは、関数を評価するたびに、そのための新しいアクティブな環境を作成します。</p>
+</section>
+<section id="評価-evaluation" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="評価-evaluation"><span class="header-section-number">7.5</span> 評価 (Evaluation)</h2>
+<p>Rは、関数を評価する<strong>たびに</strong>新しい環境を作成します。Rはこの新しい環境を、関数の実行中のアクティブな環境として使用し、実行が終わると関数を呼び出した元の環境に結果を持って戻ります。これらの新しい環境を「実行時環境 (Runtime environment)」と呼ぶことにしましょう。Rが実行時に関数を評価するために作成するからです。</p>
+<p>Rの実行時環境を探索するために、次の関数を使用してみましょう。私たちは、その環境がどのような見た目か、親環境はどこか、どのようなオブジェクトが含まれているかを知りたいと考えています。<code>show_env</code> はそれを教えてくれるように設計されています。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>show_env <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">ran.in =</span> <span class="fu">environment</span>(),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">parent =</span> <span class="fu">parent.env</span>(<span class="fu">environment</span>()),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">objects =</span> <span class="fu">ls.str</span>(<span class="fu">environment</span>()))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>show_env</code> 自体も関数ですので、<code>show_env()</code> を呼び出すと、Rはそれを評価するための実行時環境を作成します。<code>show_env</code> の結果は、その実行時環境の名前、親、および含まれるオブジェクトを教えてくれます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_env</span>()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## $ran.in</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff711d12e28&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="do">## $parent</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="do">## $objects</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>結果から、Rが <code>show_env()</code> を実行するために <code>0x7ff711d12e28</code> という名前の新しい環境を作成したことがわかります。その環境にはオブジェクトはなく、その親は <code>global environment</code>（グローバル環境）でした。したがって、<code>show_env</code> の実行に関しては、Rの環境ツリーは <a href="#fig-tree" class="quarto-xref">Figure&nbsp;<span>7.4</span></a> のようになっていました。</p>
+<p>もう一度 <code>show_env</code> を実行してみましょう。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_env</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">## $ran.in</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff715f49808&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">## $parent</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="do">## $objects</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>今回は、<code>show_env</code> は新しい環境 <code>0x7ff715f49808</code> で実行されました。Rは関数を実行するたびに新しい環境を作成します。<code>0x7ff715f49808</code> 環境は <code>0x7ff711d12e28</code> と全く同じように見えます。空であり、同じグローバル環境を親として持っています。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0604.png" class="img-fluid figure-img" width="700">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.4: Rはshow_envを実行するために新しい環境を作成します。この環境はグローバル環境の子となります。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>次に、Rがどの環境を実行時環境の親として使用するかを考えてみましょう。</p>
+<p>Rは、関数の実行時環境を、その関数が<strong>最初に作成された</strong>環境に接続します。この環境は関数の生涯において重要な役割を果たします。なぜなら、その関数のすべての実行時環境が、それを親として使用するからです。この環境を「起点環境 (Origin environment)」と呼ぶことにしましょう。関数に対して <code>environment</code> を実行することで、その関数の起点環境を調べることができます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span>(show_env)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>show_env</code> の起点環境はグローバル環境です。なぜなら、私たちはコマンドラインで <code>show_env</code> を作成したからです。しかし、起点環境が必ずしもグローバル環境である必要はありません。例えば、<code>parenvs</code> の環境は <code>pryr</code> パッケージです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span>(parenvs)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: namespace:pryr&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>言い換えれば、実行時環境の親は常にグローバル環境であるとは限りません。それは、その関数が最初に定義された環境になります。</p>
+<p>最後に、実行時環境に含まれるオブジェクトを見てみましょう。現時点では、<code>show_env</code> の実行時環境にはオブジェクトが含まれていませんが、これを修正するのは簡単です。<code>show_env</code> のコード本体の中でいくつかオブジェクトを作成させるだけです。Rは <code>show_env</code> によって作成されたすべてのオブジェクトを実行時環境に保存します。なぜなら、それらのオブジェクトが作成される際、実行時環境がアクティブな環境になっているからです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>show_env <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  c <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">ran.in =</span> <span class="fu">environment</span>(),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">parent =</span> <span class="fu">parent.env</span>(<span class="fu">environment</span>()),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">objects =</span> <span class="fu">ls.str</span>(<span class="fu">environment</span>()))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>今度は <code>show_env</code> を実行すると、Rは <code>a</code>, <code>b</code>, <code>c</code> を実行時環境に保存します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_env</span>()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="do">## $ran.in</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff712312cd0&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="do">## $parent</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="do">## $objects</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="do">## a :  num 1</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="do">## b :  num 2</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="do">## c :  num 3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>このようにして、Rは関数が上書きすべきでないものを上書きしないように保証しています。関数によって作成されたオブジェクトは、安全で邪魔にならない実行時環境に保存されます。</p>
+<p>Rはまた、実行時環境に2番目のタイプのオブジェクトを配置します。関数に引数がある場合、Rは各引数を実行時環境にコピーします。引数は、引数名と同じ名前を持ち、ユーザーが引数に提供した値と同じ値を持つオブジェクトとして現れます。これにより、関数が各引数を見つけて使用できるようになります。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="st">"take me to your runtime"</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>show_env <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">x =</span> foo){</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">ran.in =</span> <span class="fu">environment</span>(),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">parent =</span> <span class="fu">parent.env</span>(<span class="fu">environment</span>()),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">objects =</span> <span class="fu">ls.str</span>(<span class="fu">environment</span>()))</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">show_env</span>()</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="do">## $ran.in</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff712398958&gt;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="do">## $parent</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="do">## $objects</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="do">## x :  chr "take me to your runtime"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>これらすべてを組み合わせて、Rがどのように関数を評価するかを見てみましょう。関数を呼び出す前、Rは「呼び出し環境 (Calling environment)」と呼ばれるアクティブな環境で作業しています。これは、関数を呼び出した環境のことです。</p>
+<p>その後、あなたが関数を呼び出します。Rはそれに応えて新しい実行時環境をセットアップします。この環境は、その関数の起点環境の子となります。Rは関数の各引数を実行時環境にコピーし、その後、実行時環境を新しいアクティブな環境にします。</p>
+<p>次に、Rは関数の本体にあるコードを実行します。コードがオブジェクトを作成する場合、Rはそれをアクティブな（つまり実行時の）環境に保存します。コードがオブジェクトを呼び出す場合、Rはそのスコープ規則を使用してそれらを検索します。Rは実行時環境を検索し、次に実行時環境の親（これは起点環境になります）、さらに起点環境の親、というように検索していきます。呼び出し環境は検索パス上にない可能性があることに注意してください。通常、関数は引数のみを呼び出し、Rはそれらを実行中のアクティブな環境で見つけることができます。</p>
+<p>最後に、Rは関数の実行を終了します。アクティブな環境を呼び出し環境に戻します。これで、Rは関数を呼び出したコード行にある他のすべてのコマンドを実行します。したがって、関数の結果を <code>&lt;-</code> でオブジェクトに保存する場合、その新しいオブジェクトは呼び出し環境に保存されます。</p>
+<p>まとめると、Rはオブジェクトを環境システムに保存します。いかなる瞬間においても、Rは単一のアクティブな環境と密接に連携しています。新しいオブジェクトはその環境に保存され、既存のオブジェクトを探す際にはその環境を起点とします。Rのアクティブな環境は通常グローバル環境ですが、Rは関数を安全に実行するなどの目的のためにアクティブな環境を調整します。</p>
+<p>この知識を、<code>deal</code> 関数と <code>shuffle</code> 関数の修正にどのように活かせるでしょうか？</p>
+<p>まず、ウォーミングアップの質問から始めましょう。次のようにコマンドラインで <code>deal</code> を再定義したとします。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>deal <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  deck[<span class="dv">1</span>, ]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>この <code>deal</code> は引数を取らず、グローバル環境にある <code>deck</code> オブジェクトを呼び出すことに注目してください。</p>
+<blockquote class="blockquote">
+<p><strong>練習問題：dealは動作するか？</strong></p>
+<p>新しいバージョンの <code>deal</code> を <code>deal()</code> のように呼び出したとき、Rは <code>deck</code> を見つけて結果を返すことができるでしょうか？</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>解答例</strong> はい、<code>deal</code> は以前と同様に動作します。Rは <code>deal</code> を、グローバル環境の子である実行時環境で実行します。なぜグローバル環境の子になるのでしょうか？それは、私たちが <code>deal</code> をグローバル環境で定義したため、グローバル環境が <code>deal</code> の起点環境になるからです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span>(deal)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: R_GlobalEnv&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</blockquote>
+<p><code>deal</code> が <code>deck</code> を呼び出すと、Rは <code>deck</code> オブジェクトを検索する必要があります。Rのスコープ規則により、<a href="#fig-deal" class="quarto-xref">Figure&nbsp;<span>7.5</span></a> に示すように、グローバル環境にある <code>deck</code> に辿り着きます。その結果、<code>deal</code> は期待通りに動作します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  king spades    13</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-deal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-deal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0605.png" class="img-fluid figure-img" width="746">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.5: Rはdealの実行時環境の親を調べることでdeckを見つけます。親はdealの起点環境であるグローバル環境です。ここでRはdeckのコピーを見つけます。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>では、配ったカードを <code>deck</code> から削除するように <code>deal</code> 関数を修正しましょう。今の <code>deal</code> は <code>deck</code> の一番上のカードを返しますが、デッキからカードを削除することはありません。その結果、<code>deal</code> は常に同じカードを返します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  king spades    13</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  king spades    13</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>あなたはすでに、<code>deck</code> の一番上のカードを削除するためのRの構文を知っています。次のコードは、<code>deck</code> のそのままのコピーを保存し、その後、一番上のカードを削除します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>DECK <span class="ot">&lt;-</span> deck</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>deck <span class="ot">&lt;-</span> deck[<span class="sc">-</span><span class="dv">1</span>, ]</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(deck, <span class="dv">3</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="do">## queen spades    12</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  jack spades    11</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   ten spades    10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>これを <code>deal</code> に追加してみましょう。ここでは、<code>deal</code> は <code>deck</code> の一番上のカードを保存し（そして最終的に返し）ます。その間に、<code>deck</code> からカードを削除します……。本当にそうなるでしょうか？</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>deal <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  card <span class="ot">&lt;-</span> deck[<span class="dv">1</span>, ]</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  deck <span class="ot">&lt;-</span> deck[<span class="sc">-</span><span class="dv">1</span>, ]</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  card</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>このコードはうまく機能しません。なぜなら、Rが <code>deck &lt;- deck[-1, ]</code> を実行する際、Rは実行時環境にいるからです。グローバルな <code>deck</code> を <code>deck[-1, ]</code> で上書きする代わりに、<code>deal</code> は実行時環境の中に、少し変更された <code>deck</code> のコピーを作成するだけです（<a href="#fig-second-deck" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> 参照）。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-second-deck" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-second-deck-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0606.png" class="img-fluid figure-img" width="590">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-second-deck-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.6: deal関数はグローバル環境でdeckを検索しますが、実行時環境内にdeckという名前の新しいオブジェクトとしてdeck[-1, ]を保存します。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>練習問題：deckを上書きする</strong></p>
+<p><code>deal</code> の <code>deck &lt;- deck[-1, ]</code> の行を書き換えて、グローバル環境の <code>deck</code> という名前のオブジェクトに <code>deck[-1, ]</code> を<strong>代入</strong>するようにしてください。ヒント： <code>assign</code> 関数を検討してください。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>解答例</strong> <code>assign</code> 関数を使用すれば、オブジェクトを特定の環境に代入できます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>deal <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  card <span class="ot">&lt;-</span> deck[<span class="dv">1</span>, ]</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(<span class="st">"deck"</span>, deck[<span class="sc">-</span><span class="dv">1</span>, ], <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  card</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</blockquote>
+<p>これで <code>deal</code> はようやくグローバルな <code>deck</code> をクリーンアップ（更新）するようになり、現実世界と同じようにカードを配ることができるようになります。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="do">## queen spades    12</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="do">## face  suit value</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="do">## jack spades    11</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="do">## face  suit value</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  ten spades    10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>次に、<code>shuffle</code> 関数に目を向けましょう。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>shuffle <span class="ot">&lt;-</span> <span class="cf">function</span>(cards) {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  random <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="at">size =</span> <span class="dv">52</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  cards[random, ]</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>shuffle(deck)</code> は <code>deck</code> オブジェクト自体をシャッフルするのではなく、<code>deck</code> オブジェクトをシャッフルしたコピーを返します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(deck, <span class="dv">3</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  nine spades     9</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="do">## eight spades     8</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">## seven spades     7</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">shuffle</span>(deck)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(deck, <span class="dv">3</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="do">##  nine spades     9</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="do">## eight spades     8</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="do">## seven spades     7</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(a, <span class="dv">3</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="do">##  face     suit value</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="do">##   ace diamonds     1</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="do">## seven    clubs     7</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="do">##   two    clubs     2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>この挙動には2つの望ましくない点があります。第一に、<code>shuffle</code> が <code>deck</code> のシャッフルに失敗していること。第二に、<code>shuffle</code> が返すコピーには、すでに配られたカードが欠けている可能性があることです。<code>shuffle</code> が、配られたカードをデッキに戻してからシャッフルするようになれば、より良くなります。これは、現実世界でカードをシャッフルする際に起こることと同じです。</p>
+<blockquote class="blockquote">
+<p><strong>練習問題：shuffleを書き換える</strong></p>
+<p>グローバル環境にある <code>deck</code> のコピーを、同じくグローバル環境にある完全なコピーである <code>DECK</code> をシャッフルしたバージョンで置き換えるように <code>shuffle</code> を書き換えてください。新しいバージョンの <code>shuffle</code> は引数を取らず、出力も返さないようにします。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>解答例</strong> <code>deck</code> を更新したのと同じ方法で <code>shuffle</code> を更新できます。次のバージョンがその役割を果たします。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>shuffle <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  random <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="at">size =</span> <span class="dv">52</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(<span class="st">"deck"</span>, DECK[random, ], <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</blockquote>
+<p><code>DECK</code> は <code>shuffle</code> の起点環境であるグローバル環境に存在するため、<code>shuffle</code> は実行時に <code>DECK</code> を見つけることができます。Rはまず <code>shuffle</code> の実行時環境で <code>DECK</code> を探し、次に出発点であるグローバル環境（ここに <code>DECK</code> が保存されています）を探します。</p>
+<p><code>shuffle</code> の2行目は、<code>DECK</code> を並べ替えたコピーを作成し、それをグローバル環境に <code>deck</code> として保存します。これにより、以前のシャッフルされていないバージョンの <code>deck</code> が上書きされます。</p>
+</section>
+<section id="クロージャ-closures" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="クロージャ-closures"><span class="header-section-number">7.6</span> クロージャ (Closures)</h2>
+<p>私たちのシステムはついに動作するようになりました。例えば、カードをシャッフルしてからブラックジャックの手札を配ることができます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shuffle</span>()</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="do">## queen hearts    12</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  face   suit value</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="do">## eight hearts     8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>しかし、このシステムは <code>deck</code> と <code>DECK</code> がグローバル環境に存在することを要求します。この環境では多くのことが行われるため、<code>deck</code> が誤って変更されたり削除されたりする可能性があります。</p>
+<p><code>deck</code> を、Rが関数を実行するために作成するような、安全で邪魔にならない場所に保存できればより良いでしょう。実際、<code>deck</code> を実行時環境に保存するのはそれほど悪いアイデアではありません。</p>
+<p><code>deck</code> を引数として受け取り、<code>deck</code> のコピーを <code>DECK</code> として保存する関数を作成できます。その関数はまた、独自の <code>deal</code> と <code>shuffle</code> のコピーを保存することもできます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>setup <span class="ot">&lt;-</span> <span class="cf">function</span>(deck) {</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  DECK <span class="ot">&lt;-</span> deck</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  DEAL <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    card <span class="ot">&lt;-</span> deck[<span class="dv">1</span>, ]</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assign</span>(<span class="st">"deck"</span>, deck[<span class="sc">-</span><span class="dv">1</span>, ], <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    card</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  SHUFFLE <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    random <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="at">size =</span> <span class="dv">52</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assign</span>(<span class="st">"deck"</span>, DECK[random, ], <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>setup</code> を実行すると、Rはこれらのオブジェクトを保存するための実行時環境を作成します。その環境は <a href="#fig-closure1" class="quarto-xref">Figure&nbsp;<span>7.7</span></a> のようになります。</p>
+<p>これで、これらすべてはグローバル環境の子である安全な場所に収まりました。しかし、これでは安全すぎて使いにくい状態です。<code>setup</code> に <code>DEAL</code> と <code>SHUFFLE</code> を返させて、私たちが使用できるようにしましょう。これを行う最善の方法は、関数をリストとして返すことです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>setup <span class="ot">&lt;-</span> <span class="cf">function</span>(deck) {</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  DECK <span class="ot">&lt;-</span> deck</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  DEAL <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    card <span class="ot">&lt;-</span> deck[<span class="dv">1</span>, ]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assign</span>(<span class="st">"deck"</span>, deck[<span class="sc">-</span><span class="dv">1</span>, ], <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    card</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  SHUFFLE <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    random <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="at">size =</span> <span class="dv">52</span>)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assign</span>(<span class="st">"deck"</span>, DECK[random, ], <span class="at">envir =</span> <span class="fu">globalenv</span>())</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">deal =</span> DEAL, <span class="at">shuffle =</span> SHUFFLE)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>cards <span class="ot">&lt;-</span> <span class="fu">setup</span>(deck)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-closure1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-closure1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0607.png" class="img-fluid figure-img" width="782">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-closure1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.7: setupを実行すると、deckとDECKが邪魔にならない場所に保存され、DEALとSHUFFLE関数が作成されます。これらの各オブジェクトは、親がグローバル環境である環境に保存されます。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>次に、リストの各要素をグローバル環境の専用オブジェクトに保存できます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>deal <span class="ot">&lt;-</span> cards<span class="sc">$</span>deal</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>shuffle <span class="ot">&lt;-</span> cards<span class="sc">$</span>shuffle</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>これで、以前と同様に <code>deal</code> と <code>shuffle</code> を実行できます。各オブジェクトには、元の <code>deal</code> および <code>shuffle</code> と同じコードが含まれています。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>deal</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="do">## function() {</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="do">##     card &lt;- deck[1, ]</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="do">##     assign("deck", deck[-1, ], envir = globalenv())</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="do">##     card</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   }</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff7169c3390&gt;</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>shuffle</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="do">## function(){</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     random &lt;- sample(1:52, size = 52)</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     assign("deck", DECK[random, ], envir = globalenv())</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  }</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff7169c3390&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>ただし、関数には一つ重要な違いがあります。それらの起点環境はもはやグローバル環境ではありません（<code>deal</code> と <code>shuffle</code> は現在そこに保存されていますが）。それらの起点環境は、あなたが <code>setup</code> を実行したときにRが作成した実行時環境です。そこがRが <code>DEAL</code> と <code>SHUFFLE</code> を作成した場所であり、それが新しい <code>deal</code> と <code>shuffle</code> にコピーされたのです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span>(deal)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff7169c3390&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span>(shuffle)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;environment: 0x7ff7169c3390&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>なぜこれが重要なのでしょうか？なぜなら、今 <code>deal</code> や <code>shuffle</code> を実行すると、Rは <code>0x7ff7169c3390</code> を親として使用する実行時環境で関数を評価するからです。<code>DECK</code> と <code>deck</code> はこの親環境にあるため、<code>deal</code> と <code>shuffle</code> は実行時にそれらを見つけることができます。<code>DECK</code> と <code>deck</code> は関数の検索パス上にありますが、それ以外の点では邪魔にならない場所に置かれています（<a href="#fig-closure2" class="quarto-xref">Figure&nbsp;<span>7.8</span></a> 参照）。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-closure2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-closure2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0608.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-closure2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.8: これで、dealとshuffleは、保護されたdeckとDECKを検索パスに持つ環境で実行されるようになります。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>この配置は「クロージャ (Closure)」と呼ばれます。<code>setup</code> の実行時環境が、<code>deal</code> 関数と <code>shuffle</code> 関数を「包囲 (Enclose)」しています。<code>deal</code> と <code>shuffle</code> の両方は包囲環境にあるオブジェクトと密接に連携できますが、それ以外のものはほとんど連携できません。包囲環境は、他のどのR関数や環境にとっても検索パス上にありません。</p>
+<p><code>deal</code> と <code>shuffle</code> が依然としてグローバル環境の <code>deck</code> オブジェクトを更新していることにお気づきかもしれません。心配しないでください、これからそれを変更します。私たちは、<code>deal</code> と <code>shuffle</code> がそれぞれの実行時環境の親（包囲）環境にあるオブジェクトのみを排他的に操作するようにしたいと考えています。各関数がグローバル環境を参照して <code>deck</code> を更新する代わりに、<a href="#fig-closure3" class="quarto-xref">Figure&nbsp;<span>7.9</span></a> に示すように、実行時に親環境を参照するように変更できます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>setup <span class="ot">&lt;-</span> <span class="cf">function</span>(deck) {</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  DECK <span class="ot">&lt;-</span> deck</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  DEAL <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    card <span class="ot">&lt;-</span> deck[<span class="dv">1</span>, ]</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assign</span>(<span class="st">"deck"</span>, deck[<span class="sc">-</span><span class="dv">1</span>, ], <span class="at">envir =</span> <span class="fu">parent.env</span>(<span class="fu">environment</span>()))</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    card</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  SHUFFLE <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    random <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="at">size =</span> <span class="dv">52</span>)</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assign</span>(<span class="st">"deck"</span>, DECK[random, ], <span class="at">envir =</span> <span class="fu">parent.env</span>(<span class="fu">environment</span>()))</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">deal =</span> DEAL, <span class="at">shuffle =</span> SHUFFLE)</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>cards <span class="ot">&lt;-</span> <span class="fu">setup</span>(deck)</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>deal <span class="ot">&lt;-</span> cards<span class="sc">$</span>deal</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>shuffle <span class="ot">&lt;-</span> cards<span class="sc">$</span>shuffle</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-closure3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-closure3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0609.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-closure3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.9: コードを変更すると、dealとshuffleはグローバル環境を更新する（左）のではなく、親環境を更新する（右）ようになります。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>ついに、自己完結型のカードゲームが完成しました。グローバルな <code>deck</code> のコピーを好きなだけ削除（または修正）しても、依然としてカードをプレイできます。<code>deal</code> と <code>shuffle</code> は、保護された清浄な <code>deck</code> のコピーを使用します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(deck)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">shuffle</span>()</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="do">## face   suit value</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  ace hearts     1</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">deal</span>()</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="do">## face  suit value</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="do">## jack clubs    11</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>ブラックジャック！</p>
+</section>
+<section id="まとめ" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="まとめ"><span class="header-section-number">7.7</span> まとめ</h2>
+<p>Rはオブジェクトを、コンピュータのファイルシステムに似た環境システムに保存します。このシステムを理解すれば、Rがどのようにオブジェクトを検索するかを予測できます。コマンドラインでオブジェクトを呼び出すと、Rはグローバル環境でオブジェクトを探し、次にグローバル環境の親を探し、というように、環境ツリーを一つずつ上に辿って検索します。</p>
+<p>関数の中からオブジェクトを呼び出す場合、Rは少し異なる検索パスを使用します。関数を実行すると、Rはコマンドを実行するための新しい環境を作成します。この環境は、その関数が最初に定義された環境の子になります。これはグローバル環境である場合もありますが、そうでない場合もあります。この挙動を利用して、保護された環境にあるオブジェクトにリンクされた関数である「クロージャ (Closure)」を作成できます。</p>
+<p>Rの環境システムに慣れてくれば、今回のようにエレガントな結果を生み出すためにそれを利用できるようになります。しかし、環境システムを理解することの真の価値は、R関数がどのようにその仕事をしているかを知ることにあります。この知識を使えば、関数が期待通りに動作しないときに何が間違っているのかを突き止めることができます。</p>
+</section>
+<section id="プロジェクト2のまとめ" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="プロジェクト2のまとめ"><span class="header-section-number">7.8</span> プロジェクト2のまとめ</h2>
+<p>これで、Rにロードするデータセットとその値を完全に制御できるようになりました。データをRオブジェクトとして保存し、データ値を自在に取得・操作し、さらにはRがコンピュータのメモリ内でオブジェクトをどのように保存・検索するかを予測することさえできます。</p>
+<p>まだ気づいていないかもしれませんが、あなたの専門知識は、あなたを強力な「コンピュータによって拡張されたデータユーザー」にしています。Rを使用すれば、手作業では扱いきれないような大規模なデータセットを保存し、操作することができます。これまでは小さなデータセットである <code>deck</code> しか扱ってきませんでしたが、コンピュータのメモリに収まるあらゆるデータセットに対して、同じテクニックを使用できます。</p>
+<!-- リンクを修正 -->
+<p>しかし、データの保存は、データサイエンティストとして直面する唯一の物流タスクではありません。コンピュータなしでは困難なほど複雑、あるいは反復的なタスクをデータに対して行いたいと思うことがよくあるでしょう。既存のR関数やパッケージでできることもありますが、そうでないこともあります。コンピュータが従うべき独自のプログラムを書くことができれば、データサイエンティストとして最も多才になれます。Rはそれを助けてくれます。準備ができたら、「<a href="https://www.google.com/search?q=%23slots">プロジェクト3：スロットマシン</a>」で、Rでプログラムを書くための最も有用なスキルを学びましょう。</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+
+	document.addEventListener('keydown', function (e) {
+
+		// 入力フォームの中では無効化
+
+		if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+
+
+		if (e.key === 'ArrowLeft') {
+
+			// 前のページへの「リンク（aタグ）」を探してクリック
+
+			const prev = document.querySelector('.nav-page-previous a');
+
+			if (prev) prev.click();
+
+		} else if (e.key === 'ArrowRight') {
+
+			// 次のページへの「リンク（aタグ）」を探してクリック
+
+			const next = document.querySelector('.nav-page-next a');
+
+			if (next) next.click();
+
+		}
+
+	});
+
+</script>
+
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./modifying.html" class="pagination-link" aria-label="値の変更">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">値の変更</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./slots.html" class="pagination-link" aria-label="(第3部) 第3部">
+        <span class="nav-page-text">(第3部) 第3部</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

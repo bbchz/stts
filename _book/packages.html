@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; パッケージとヘルプページ – Rではじめるプログラミング</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./cards.html" rel="next">
+<link href="./basics.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a8da12e74b29c2e7b17644f84b91567b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-674e3cc0c687a3cc22528ff3730883a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dice.html">プロジェクト1：重み付きのサイコロ</a></li><li class="breadcrumb-item"><a href="./packages.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">パッケージとヘルプページ</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Rではじめるプログラミング</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">はじめに</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">まえがき</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">プロジェクト1：重み付きのサイコロ</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">プロジェクト1：重み付きのサイコロ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">基本的な知識</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./packages.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">パッケージとヘルプページ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">プロジェクト2：トランプ</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cards.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第2部</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Rオブジェクト</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rの記法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./modifying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">値の変更</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./environments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">環境 (Environments)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">プロジェクト3：スロットマシン</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">(第3部) 第3部</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./programs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">プログラム</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./s3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">S3</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">ループ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./speed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">速度</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">付録</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a1-starting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">(APPENDIX) 付録</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a2-packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a3-updating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Rとパッケージの更新</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a4-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Rでのデータの読み込みと保存</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a5-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Rコードのデバッグ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#パッケージ" id="toc-パッケージ" class="nav-link active" data-scroll-target="#パッケージ"><span class="header-section-number">3.1</span> パッケージ</a>
+  <ul class="collapse">
+  <li><a href="#install.packages" id="toc-install.packages" class="nav-link" data-scroll-target="#install.packages"><span class="header-section-number">3.1.1</span> install.packages</a></li>
+  <li><a href="#library" id="toc-library" class="nav-link" data-scroll-target="#library"><span class="header-section-number">3.1.2</span> library</a></li>
+  </ul></li>
+  <li><a href="#ヘルプページを活用する" id="toc-ヘルプページを活用する" class="nav-link" data-scroll-target="#ヘルプページを活用する"><span class="header-section-number">3.2</span> ヘルプページを活用する</a>
+  <ul class="collapse">
+  <li><a href="#ヘルプページの構成" id="toc-ヘルプページの構成" class="nav-link" data-scroll-target="#ヘルプページの構成"><span class="header-section-number">3.2.1</span> ヘルプページの構成</a></li>
+  <li><a href="#さらなる助けを得るには" id="toc-さらなる助けを得るには" class="nav-link" data-scroll-target="#さらなる助けを得るには"><span class="header-section-number">3.2.2</span> さらなる助けを得るには</a></li>
+  </ul></li>
+  <li><a href="#まとめ" id="toc-まとめ" class="nav-link" data-scroll-target="#まとめ"><span class="header-section-number">3.3</span> まとめ</a></li>
+  <li><a href="#プロジェクト1のまとめ" id="toc-プロジェクト1のまとめ" class="nav-link" data-scroll-target="#プロジェクト1のまとめ"><span class="header-section-number">3.4</span> プロジェクト1のまとめ</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dice.html">プロジェクト1：重み付きのサイコロ</a></li><li class="breadcrumb-item"><a href="./packages.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">パッケージとヘルプページ</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-packages" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">パッケージとヘルプページ</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>ペアのサイコロをシミュレートする関数ができました。ここで、少し状況を面白くするために、自分に有利なようにサイコロに重みを付けてみましょう。「胴元（カジノ）は常に勝つ」と言いますよね？低い数字よりも高い数字が少しだけ頻繁に出るように設定してみましょう。</p>
+<p>サイコロに重みを付ける前に、まずそのサイコロが公正（フェア）であることを確認する必要があります。そのために役立つ2つのツールが「<strong>反復（Repetition）</strong>」と「<strong>可視化（Visualization）</strong>」です。偶然にも、これら2つのツールはデータサイエンスの世界における最も強力な武器でもあります。</p>
+<p>サイコロのロールを繰り返すには <code>replicate</code> という関数を使用し、その結果を可視化するには <code>qplot</code> という関数を使用します。<code>qplot</code> はRをダウンロードしたときに最初から入っているわけではありません。<code>qplot</code> は独立したRパッケージに含まれています。Rの最も有用なツールの多くはRパッケージとして提供されているため、まずはRパッケージとは何か、そしてそれをどのように使うかを見てみましょう。</p>
+<section id="パッケージ" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="パッケージ"><span class="header-section-number">3.1</span> パッケージ</h2>
+<p>Rで独自の関数を書いているのはあなただけではありません。多くの教授、プログラマー、統計学者が、データの分析を支援するツールを設計するためにRを使用しています。そして、彼らはこれらのツールを誰でも無料で使えるように公開しています。これらのツールを使うには、ダウンロードするだけで済みます。これらは「パッケージ（Package）」と呼ばれる、あらかじめ組み立てられた関数とオブジェクトのコレクションとして提供されます。<a href="a2-packages.md">付録2：Rパッケージ</a> にはパッケージのダウンロードと更新に関する詳細な手順がありますが、ここではその基本を見ていきましょう。</p>
+<p>ここでは、簡単なグラフを作成するために <code>qplot</code> 関数を使用します。<code>qplot</code> は、グラフ作成のための人気パッケージである <strong>ggplot2</strong> に含まれています。<code>qplot</code> や ggplot2 パッケージ内の他の機能を使う前に、まずパッケージをダウンロードしてインストールする必要があります。</p>
+<section id="install.packages" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="install.packages"><span class="header-section-number">3.1.1</span> install.packages</h3>
+<p>各Rパッケージは、R本体をホストしているのと同じウェブサイトである <a href="http://cran.r-project.org">http://cran.r-project.org</a> にホストされています。しかし、Rパッケージをダウンロードするためにわざわざそのサイトを訪れる必要はありません。Rのコマンドラインから直接ダウンロードできます。手順は以下の通りです：</p>
+<ul>
+<li>RStudioを開きます。</li>
+<li>インターネットに接続されていることを確認します。</li>
+<li>コマンドラインで <code>install.packages("ggplot2")</code> を実行します。</li>
+</ul>
+<p>これだけです。Rがウェブサイトにアクセスし、ggplot2をダウンロードし、ハードドライブ内のRが認識できる場所にインストールします。これで ggplot2 パッケージが手に入りました。他のパッケージをインストールしたい場合は、コード内の <code>ggplot2</code> を目的のパッケージ名に置き換えてください。</p>
+</section>
+<section id="library" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="library"><span class="header-section-number">3.1.2</span> library</h3>
+<p>パッケージをインストールしただけでは、その関数がすぐに使えるようになるわけではありません。単にハードドライブに保存されただけです。RのセッションでRパッケージを使用するには、次に <code>library("ggplot2")</code> というコマンドで読み込む必要があります。別のパッケージを読み込みたい場合は、<code>ggplot2</code> をそのパッケージ名に置き換えてください。</p>
+<p>これが何をするのか、実験して確かめてみましょう。まず、Rに <code>qplot</code> 関数を表示するよう求めてみます。Rは <code>qplot</code> を見つけることができません。なぜなら <code>qplot</code> はまだ読み込んでいない ggplot2 パッケージの中に存在するからです。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>qplot</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Error: object 'qplot' not found</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>では、ggplot2 パッケージを読み込みます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>指示通りに <code>install.packages</code> でインストールしていれば、問題なく動作するはずです。結果やメッセージが表示されなくても心配しないでください。パッケージの読み込みにおいて「便りがないのは良い便り」です。また、メッセージが表示されても心配しないでください。ggplot2 は時々、役立つ起動メッセージを表示します。「Error（エラー）」という文字が表示されない限り、順調です。</p>
+<p>これで <code>qplot</code> の表示を求めると、Rはかなりの量のコードを表示します（<code>qplot</code> は長い関数です）。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>qplot</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">## (かなりの量のコード)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><a href="https://www.google.com/search?q=%23packages2">付録2：Rパッケージ</a> には、パッケージの取得と使用に関するさらに詳細な情報があります。Rのパッケージシステムに慣れていない場合は、一読することをお勧めします。覚えておくべき最も重要な点は、<strong>パッケージのインストールは一度だけでよいが、新しいRセッションで使いたいときはその都度 <code>library</code> で読み込む必要がある</strong>ということです。RStudioを閉じるたびに、Rはすべてのパッケージをアンロード（解除）します。</p>
+<p>それでは、読み込んだ <code>qplot</code> を使ってみましょう。<code>qplot</code> は「クイック・プロット（Quick Plot）」を作成します。長さの等しい2つのベクトルを <code>qplot</code> に渡すと、散布図を描画してくれます。<code>qplot</code> は最初のベクトルをx値の集合として、2番目のベクトルをy値の集合として使用します。グラフはRStudioウィンドウの右下ペインにある「Plots」タブに表示されます。</p>
+<p>次のコードは、<a href="#fig-qplot" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> に示すグラフを作成します。これまでは <code>:</code> 演算子で数値のシーケンスを作成してきましたが、<code>c</code> 関数を使って数値のベクトルを作成することもできます。ベクトルに入れたいすべての数値をカンマで区切って <code>c</code> に渡します。<code>c</code> は「concatenate（連結）」の略ですが、「collect（集める）」や「combine（組み合わせる）」と考えてもよいでしょう。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.8</span>, <span class="sc">-</span><span class="fl">0.6</span>, <span class="sc">-</span><span class="fl">0.4</span>, <span class="sc">-</span><span class="fl">0.2</span>, <span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>x</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## -1.0 -0.8 -0.6 -0.4 -0.2  0.0  0.2  0.4  0.6  0.8  1.0</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x<span class="sc">^</span><span class="dv">3</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>y</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="do">## -1.000 -0.512 -0.216 -0.064 -0.008  0.000  0.008</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  0.064  0.216  0.512  1.000</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(x, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-qplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-qplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0201.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: qplot は、2つのベクトルを与えると散布図を作成します。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>ベクトルを <code>x</code> や <code>y</code> と命名する必要はありません。例を分かりやすくするためにそうしただけです。<a href="#fig-qplot" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> でわかるように、散布図はx値とy値に従ってプロットされた点の集合です。ベクトル <code>x</code> と <code>y</code> を合わせると、11個の点の集合を表しています。Rはどのようにして <code>x</code> と <code>y</code> の値を対応させてこれらの点を作ったのでしょうか？それは、<a href="basics.html#fig-elementwise" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> で見た「要素ごとの実行」によるものです。</p>
+<p>散布図は2つの変数間の関係を可視化するのに便利です。しかし、ここでは別の種類のグラフである「<strong>ヒストグラム（Histogram）</strong>」を使用します。ヒストグラムは単一の変数の分布を可視化するもので、各xの値においていくつのデータポイントが存在するかを表示します。</p>
+<p>理解を深めるためにヒストグラムを見てみましょう。<code>qplot</code> にプロット用のベクトルを<strong>1つだけ</strong>与えると、ヒストグラムが作成されます。次のコードは <a href="#fig-hist" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> の左側のグラフを作成します（右側のグラフについてはすぐに説明します）。グラフを同じ見た目にするために、追加の引数 <code>binwidth = 1</code> を使用してください。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(x, <span class="at">binwidth =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-hist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0202.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: qplot は、単一のベクトルを与えるとヒストグラムを作成します。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>このグラフは、区間 <code>[1, 2)</code> に1つの値が含まれていることを、その区間の上に高さ1の棒を置くことで示しています。同様に、区間 <code>[2, 3)</code> に3つの値があることを高さ3の棒で、区間 <code>[3, 4)</code> に2つの値があることを高さ2の棒で示しています。これらの区間において、角括弧 <code>[</code> はその数値が区間に含まれることを意味し、丸括弧 <code>)</code> はその数値が<strong>含まれない</strong>ことを意味します。</p>
+<p>別のヒストグラムを試してみましょう。次のコードは <a href="#fig-hist" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> の右側のグラフを作成します。<code>x2</code> の中に値が1であるポイントが5つあることに注目してください。ヒストグラムは、区間 <code>x2 = [1, 2)</code> の上に高さ5の棒をプロットすることでこれを表示しています。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(x2, <span class="at">binwidth =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p><strong>練習問題：ヒストグラムの可視化</strong></p>
+<p><code>x3</code> を以下のベクトルとします。</p>
+<p><code>x3 &lt;- c(0, 1, 1, 2, 2, 2, 3, 3, 4)</code></p>
+<p><code>x3</code> のヒストグラムがどのようになるか想像してみてください。ヒストグラムのビン幅（bin width）を1と仮定します。棒はいくつできるでしょうか？それらはどこに現れるでしょうか？それぞれの高さはどれくらいになるでしょうか？</p>
+<p>想像できたら、<code>binwidth = 1</code> を指定して <code>x3</code> のヒストグラムをプロットし、正解かどうか確認してください。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>解答例</strong> <code>qplot(x3, binwidth = 1)</code> で <code>x3</code> のヒストグラムを作成できます。ヒストグラムは対称なピラミッドのような形になります。中央の棒は高さ3になり、<code>[2, 3)</code> の上に表示されます。ぜひ自分で試して確認してください。</p>
+</blockquote>
+<p>ヒストグラムを使えば、<code>x</code> の異なる値がどれくらい一般的（あるいは珍しいか）を視覚的に表示できます。高い棒で覆われている数値は、低い棒で覆われている数値よりも一般的であることを意味します。</p>
+<p>サイコロの正確さを確認するために、ヒストグラムをどのように利用できるでしょうか？</p>
+<p>サイコロを何度も振って結果を記録し続けると、特定の数値が他の数値よりも多く発生することが予想されます。これは、2つのサイコロを足して特定の合計を作る組み合わせの数が、数値によって異なるためです（<a href="#fig-probs" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> 参照）。</p>
+<p>サイコロを何度も振ってその結果を <code>qplot</code> でプロットすれば、ヒストグラムは各合計がどれくらいの頻度で現れたかを示してくれます。最も頻繁に発生した合計は最も高い棒になります。サイコロが公正であれば、ヒストグラムは <a href="#fig-probs" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> に示すパターンに似るはずです。</p>
+<p>ここで <code>replicate</code> の出番です。<code>replicate</code> は、Rのコマンドを何度も繰り返す簡単な方法を提供します。使い方は、まず <code>replicate</code> に繰り返したい回数を与え、次に繰り返したいコマンドを与えます。<code>replicate</code> はコマンドを複数回実行し、結果をベクトルとして保存します。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">replicate</span>(<span class="dv">3</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 2 2</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">replicate</span>(<span class="dv">10</span>, <span class="fu">roll</span>())</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 3  7  5  3  6  2  3  8 11  7</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-probs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-probs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0203.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-probs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: 個々のサイコロの組み合わせは、それぞれ同じ頻度で発生するはずです。その結果、ある合計値は他の合計値よりも頻繁に発生します。公正なサイコロであれば、各合計値はその合計を作る組み合わせの数に比例して現れるはずです。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>最初の10回のロールのヒストグラムは、おそらく <a href="#fig-probs" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> に示したパターンには見えないでしょう。なぜでしょうか？そこにはランダム性が強く働いているからです。現実世界でサイコロを使うのは、それらが優れた乱数生成器だからであることを思い出してください。長期的な頻度のパターンは、<strong>長期的に見たとき</strong>にのみ現れます。そこで、10,000回のサイコロロールをシミュレートして結果をプロットしてみましょう。心配いりません。<code>qplot</code> と <code>replicate</code> なら余裕で処理できます。結果は <a href="#fig-fair" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> のようになります。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">roll</span>())</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(rolls, <span class="at">binwidth =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>この結果は、サイコロが公正であることを示唆しています。長期的には、各数値はそれを生成する組み合わせの数に比例して発生しています。</p>
+<p>さて、どうすればこの結果に偏り（バイアス）を持たせることができるでしょうか？先ほどのパターンが発生するのは、個々のサイコロの基礎となる組み合わせ（例：(3, 4)）がすべて同じ頻度で発生するからです。もし、どちらかのサイコロで6が出る確率を高めることができれば、6を含む組み合わせは、6を含まない組み合わせよりも頻繁に発生するようになります。組み合わせ (6, 6) が最も多く発生することになります。これにより、合計が12になる確率が7になる確率を上回ることはありませんが、結果を高い数値の方へ歪ませることができます。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-fair" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fair-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0204.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fair-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: 作成したサイコロの挙動は、公正であることを示唆しています。7が他のどの数字よりも頻繁に発生し、頻度は各数字を作る組み合わせの数に比例して減少しています。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>言い換えれば、公正なサイコロで特定の数字が出る確率は1/6です。これを、6未満の各数字が出る確率を1/8に変更し、6が出る確率を3/8に増やしてほしいのです。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">数値</th>
+<th style="text-align: left;">公正な確率</th>
+<th style="text-align: left;">重み付けされた確率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1/6</td>
+<td style="text-align: left;">1/8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1/6</td>
+<td style="text-align: left;">1/8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">1/6</td>
+<td style="text-align: left;">1/8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">1/6</td>
+<td style="text-align: left;">1/8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">1/6</td>
+<td style="text-align: left;">1/8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">1/6</td>
+<td style="text-align: left;">3/8</td>
+</tr>
+</tbody>
+</table>
+<p><code>sample</code> 関数に新しい引数を追加することで、確率を変更できます。その引数が何であるかは教えません。代わりに、<code>sample</code> 関数のヘルプページを案内します。Rの関数にはヘルプページがあるのかって？もちろんです。その読み方を学びましょう。</p>
+</section>
+</section>
+<section id="ヘルプページを活用する" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="ヘルプページを活用する"><span class="header-section-number">3.2</span> ヘルプページを活用する</h2>
+<p>Rのコアには1,000以上の関数があり、新しいR関数も常に作成されています。これらすべてを暗記して学習するのは大変な量です！幸いなことに、各R関数には専用のヘルプページがあり、関数名の前に疑問符 <code>?</code> を付けて入力することでアクセスできます。例えば、以下の各コマンドはヘルプページを開きます。ページはRStudioの右下ペインにある「Help」タブに表示されます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>?sqrt</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>?log10</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>?sample</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>ヘルプページには、各関数が何をするのかについての有用な情報が含まれています。これらのヘルプページはコードのドキュメントとしても機能するため、読むのは少し苦労するかもしれません。多くの場合、その関数をすでに理解していて助けを必要としない人向けに書かれているように見えるからです。</p>
+<p>これに困惑しないでください。ヘルプページから多くのことを得るには、意味のわかる情報をスキャンし、残りはざっと読み飛ばすのがコツです。このテクニックを使えば、必然的に各ヘルプページの最も役立つ部分、つまり「一番下」にたどり着くでしょう。そこには、ほぼすべてのヘルプページで、その関数を実際に動かしてみるサンプルコード（Examples）が含まれています。このコードを実行することは、例を通して学ぶための素晴らしい方法です。</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>関数がRパッケージに含まれている場合、そのパッケージを読み込んでいない限り、Rはそのヘルプページを見つけることができません。</p>
+</div>
+</div>
+<section id="ヘルプページの構成" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="ヘルプページの構成"><span class="header-section-number">3.2.1</span> ヘルプページの構成</h3>
+<p>各ヘルプページはいくつかのセクションに分かれています。セクションの内容はページによって異なりますが、通常は以下のような役立つトピックが含まれています。</p>
+<p><strong>Description</strong>（説明） - 関数が何をするのかについての短い要約。</p>
+<p><strong>Usage</strong>（用法） - 関数の入力方法の例。関数の各引数が、Rが期待する順番で表示されます（引数名を使わない場合）。</p>
+<p><strong>Arguments</strong>（引数） - 関数が取る各引数のリスト、Rが期待する情報の種類、および関数がその情報をどのように扱うか。</p>
+<p><strong>Details</strong>（詳細） - 関数の詳細な説明と動作の仕組み。このセクションでは、著者が関数を使う際に知っておくべき注意点を伝えることもあります。</p>
+<p><strong>Value</strong>（戻り値） - 関数を実行したときに返される内容の説明。</p>
+<p><strong>See Also</strong>（関連項目） - 関連するR関数の短いリスト。</p>
+<p><strong>Examples</strong>（例） - 実際に関数を使用する例で、動作が保証されているコード。ヘルプページの例のセクションは通常、関数のいくつかの異なる使用方法を示しています。これにより、関数で何ができるかのアイデアが得られます。</p>
+<p>関数のヘルプページを探したいが関数名を忘れてしまった場合は、キーワードで検索できます。これを行うには、Rのコマンドラインで疑問符を2つ <code>??</code> 書き、その後にキーワードを入力します。Rはキーワードに関連するヘルプページへのリンクのリストを表示します。これは「ヘルプページのためのヘルプページ」と考えることができます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>??log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>sample</code> のヘルプページを見てみましょう。目的は、サンプリングプロセスに含まれる確率を変更するのに役立ちそうな何かを探すことです。ここではヘルプページ全体を再現はしませんが（おいしい部分だけ抜き出します）、自分のコンピュータで一緒に確認してください。</p>
+<p>まず、ヘルプページを開きます。RStudioでプロットが表示されたのと同じペイン（ただしHelpタブ）に表示されます。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>?sample</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>何が見えますか？一番上から見ていきましょう。</p>
+<pre><code>Random Samples and Permutations
+
+Description
+    sample takes a sample of the specified size from the elements of x using
+either with or without replacement.</code></pre>
+<p>ここまでは順調です。これはすでに知っている内容です。次のセクション「Usage」に、手がかりとなりそうなものがあります。<code>prob</code> という名前の引数が言及されています。</p>
+<pre><code>Usage
+    sample(x, size, replace = FALSE, prob = NULL)</code></pre>
+<p>「Arguments」セクションまでスクロールすると、<code>prob</code> の説明は<strong>非常に</strong>有望に聞こえます。</p>
+<pre><code>A vector of probability weights for obtaining the elements of the vector being
+sampled.
+（サンプリングされるベクトルの要素を取得するための、確率の重みのベクトル。）</code></pre>
+<p>「Details」セクションが私たちの疑いを確信に変えてくれます。この場合、どのように進めればよいかも教えてくれています。</p>
+<pre><code>The optional prob argument can be used to give a vector of weights for obtaining
+the elements of the vector being sampled. They need not sum to one, but they
+should be nonnegative and not all zero.
+（オプションの prob 引数を使用して、サンプリングされるベクトルの要素を取得するための重みのベクトルを指定できます。それらの合計が1である必要はありませんが、非負であり、かつすべてがゼロであってはなりません。）</code></pre>
+<p>このヘルプページには書かれていませんが、これらの重みは、サンプリングされる要素と「要素ごと」に対応付けられます。最初の重みは最初の要素、2番目の重みは2番目の要素、という具合です。これはRにおける一般的な慣習です。</p>
+<p>さらに読み進めると：</p>
+<pre><code>If replace is true, Walker's alias method (Ripley, 1987) is used...</code></pre>
+<p>さて、この辺りでざっと読み飛ばし始めてよいでしょう。サイコロに重みを付ける方法を理解するのに十分な情報が得られました。</p>
+<blockquote class="blockquote">
+<p><strong>練習問題：ペアのサイコロを振る</strong></p>
+<p>以下の <code>roll</code> 関数を書き換えて、重み付けされたペアのサイコロを振るようにしてください。</p>
+</blockquote>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>roll <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  die <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  dice <span class="ot">&lt;-</span> <span class="fu">sample</span>(die, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(dice)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p><code>roll</code> 内部の <code>sample</code> 関数に <code>prob</code> 引数を追加する必要があります。この引数は、1から5までの数字を確率1/8で、6の数字を確率3/8でサンプリングするように <code>sample</code> に伝える必要があります。</p>
+<p>完了したら、続きの解答例を読んでください。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>解答例</strong> サイコロに重みを付けるには、次のように <code>sample</code> に重みのベクトルを持つ <code>prob</code> 引数を追加します。</p>
+</blockquote>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>roll <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  die <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  dice <span class="ot">&lt;-</span> <span class="fu">sample</span>(die, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">8</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(dice)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>これにより、<code>roll</code> は1から5を確率1/8で、6を確率3/8で選択するようになります。</p>
+<p>以前のバージョンの <code>roll</code> を新しい関数で上書きします（コマンドラインで上記のコードスニペットを実行してください）。次に、新しいサイコロの長期的な挙動を可視化します。<a href="#fig-weighted" class="quarto-xref">Figure&nbsp;<span>3.5</span></a> に、元の結果と並べて表示しています。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">roll</span>())</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(rolls, <span class="at">binwidth =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>これにより、サイコロに効果的に重み付けができたことが確認できました。低い数字よりも高い数字がはるかに頻繁に発生しています。驚くべきことは、この挙動は長期的な頻度を調べたときにのみ明らかになるということです。単一のロールでは、サイコロはランダムに振る舞っているように見えます。これは「カタンの開拓者たち」をプレイしているときには朗報かもしれませんが（友達にはサイコロを失くしたと言いましょう）、データを分析する立場からすると不気味です。なぜなら、短期的には誰も気づかないうちに、偏り（バイアス）が簡単に発生し得ることを意味しているからです。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-weighted" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-weighted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/hopr_0205.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-weighted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.5: 合計値の大きい数字が小さい数字よりもはるかに頻繁に発生しているため、サイコロが高い数字に明らかに偏っていることがわかります。
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="さらなる助けを得るには" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="さらなる助けを得るには"><span class="header-section-number">3.2.2</span> さらなる助けを得るには</h3>
+<p>Rには、<a href="http://bit.ly/r-help">R-help メーリングリスト</a> で助けを求めることができる非常に活発なユーザーコミュニティもあります。リストに質問をメールで送ることができますが、あなたの質問がすでに回答されている可能性が高いです。<a href="http://bit.ly/R_archives">アーカイブ</a> を検索して確認してください。</p>
+<p>R-help リストよりもさらに優れたものは <a href="http://stackoverflow.com">Stack Overflow</a> です。これはプログラマーが質問に答え、ユーザーが役立つ回答をランク付けできるウェブサイトです。個人的には、Stack Overflow の形式の方が R-help メーリングリストよりもユーザーフレンドリー（そして回答者も人間として親しみやすい）だと感じています。自分で質問を投稿することも、Rに関連するすでに回答された30,000以上の質問を検索することもできます。</p>
+<p>最も素晴らしいのは <a href="http://community.rstudio.com">community.rstudio.com</a> です。ここはRに関連する質問を共有するためのフレンドリーで包括的な場所です。community.rstudio.com はRに特化した非常に活発なフォーラムです。Rパッケージについて質問すると、そのパッケージの作者が現れて答えてくれても驚かないでください。</p>
+<p>R-help リスト、Stack Overflow、および community.rstudio.com のいずれにおいても、質問と一緒に「<strong>再現可能な例（Reproducible example）</strong>」を提供すれば、より有用な回答が得られる可能性が高まります。これは、ユーザーが実行してあなたが直面しているバグや疑問を確認できる、短いコードスニペットを貼り付けることを意味します。</p>
+</section>
+</section>
+<section id="まとめ" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="まとめ"><span class="header-section-number">3.3</span> まとめ</h2>
+<p>Rのパッケージとヘルプページは、あなたをより生産的なプログラマーにしてくれます。 <a href="basics.html" class="quarto-xref"><span>Chapter 2</span></a> で見たように、Rは特定のことを行うための独自の関数を書く力を与えてくれますが、多くの場合、あなたが書きたい関数はすでにRパッケージの中に存在しています。教授、プログラマー、科学者たちがあなたのために13,000以上のパッケージを開発しており、それらを使うことで貴重なプログラミング時間を節約できます。パッケージを使用するには、<code>install.packages</code> で一度コンピュータにインストールし、新しいRセッションごとに <code>library</code> で読み込む必要があります。</p>
+<p>Rのヘルプページは、Rやそのパッケージに含まれる関数を使いこなす助けになります。Rのすべての関数とデータセットには独自のヘルプページがあります。ヘルプページには高度な内容が含まれていることが多いですが、関数の使い方を学ぶための貴重なヒントや例も含まれています。</p>
+<p>これで、習うより慣れろの精神でRを学ぶのに十分な知識が身に付きました。これがRを学ぶ最良の方法です。独自のRコマンドを作成し、実行し、私が説明していないことを理解する必要があるときには助けを求めることができます。次の2つのプロジェクトを読み進めながら、Rで自分のアイデアを実験してみることをお勧めします。</p>
+</section>
+<section id="プロジェクト1のまとめ" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="プロジェクト1のまとめ"><span class="header-section-number">3.4</span> プロジェクト1のまとめ</h2>
+<p>このプロジェクトであなたが行ったことは、単に不正行為やギャンブルを可能にしただけではありません。コンピュータに対してRという言語で話しかける方法を学びました。Rは英語、スペイン語、ドイツ語のような言語ですが、人間ではなくコンピュータと対話するためのものです。</p>
+<p>R言語の名詞である「オブジェクト（Object）」に出会いました。そして、関数が動詞であることも（引数は副詞のようなものだと言えるでしょう）推測できたはずです。関数とオブジェクトを組み合わせることで、完全な思考を表現できます。思考を論理的な順序でつなぎ合わせることで、雄弁で、時には芸術的なステートメントを構築できます。その意味で、Rは他の言語とそれほど違いはありません。</p>
+<p>Rは人間の言語ともう一つの特徴を共有しています。Rコマンドの語彙を増やさない限り、Rを話すことが快適に感じられることはありません。幸い、恥ずかしがる必要はありません。あなたがRを話すのを「聞く」のはコンピュータだけです。コンピュータはあまり寛容ではありませんが、決してあなたを裁くことはしません。心配はいりません。この本の終わりまでに、あなたのRの語彙は飛躍的に広がるでしょう。</p>
+<p>Rが使えるようになった今、データサイエンスを行うためにRを使うエキスパートになる時が来ました。データサイエンスの基礎は、大量のデータを保存し、必要に応じてその値を呼び出す能力です。そこから、データの操作、可視化、モデリングなど、すべてが始まります。しかし、データセットを暗記して頭の中に保存することは容易ではありません。また、紙に書いて保存するのも効率的ではありません。大量のデータを保存する唯一の効率的な方法はコンピュータを使うことです。実際、過去30年間のコンピュータの発展は、蓄積できるデータの種類や分析手法を完全に変えました。一言で言えば、コンピュータによるデータ保存が、私たちが「データサイエンス」と呼ぶ科学の革命を推し進めたのです。</p>
+<p>「[プロジェクト2：トランプ]」では、Rを使ってデータセットをコンピュータのメモリに保存する方法と、保存したデータを取得・操作する方法を学ぶことで、あなたをこの革命の一部へと導きます。</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+
+	document.addEventListener('keydown', function (e) {
+
+		// 入力フォームの中では無効化
+
+		if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+
+
+		if (e.key === 'ArrowLeft') {
+
+			// 前のページへの「リンク（aタグ）」を探してクリック
+
+			const prev = document.querySelector('.nav-page-previous a');
+
+			if (prev) prev.click();
+
+		} else if (e.key === 'ArrowRight') {
+
+			// 次のページへの「リンク（aタグ）」を探してクリック
+
+			const next = document.querySelector('.nav-page-next a');
+
+			if (next) next.click();
+
+		}
+
+	});
+
+</script>
+
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./basics.html" class="pagination-link" aria-label="基本的な知識">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">基本的な知識</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./cards.html" class="pagination-link" aria-label="第2部">
+        <span class="nav-page-text">第2部</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
